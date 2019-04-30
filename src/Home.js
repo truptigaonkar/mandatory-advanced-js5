@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Table } from 'reactstrap';
+import { Breadcrumb, BreadcrumbItem, Table } from 'reactstrap';
 import { Helmet } from 'react-helmet';
+import './Home.css'
 
 function Home() {
   /*
@@ -20,6 +21,11 @@ function Home() {
       <Helmet>
         <title>Home</title>
       </Helmet>
+      <Breadcrumb tag="nav" listTag="div">
+        <BreadcrumbItem tag="a" href="#">Home</BreadcrumbItem>
+        <BreadcrumbItem tag="a" href="#">My Folders</BreadcrumbItem>
+        <BreadcrumbItem tag="span" active>Test1</BreadcrumbItem>
+      </Breadcrumb>
       <Table>
         <thead>
           <tr>
