@@ -11,6 +11,8 @@ import { Dropbox } from 'dropbox';
 //                                        this should be used with Babel, but this creates an error because 'Dropbox' has already been declared.
 import fetch from 'isomorphic-fetch';
 
+let ACCESS_TOKEN = 'u0siLycEZIAAAAAAAAAAPtXA74B-RQ190iCIQcSdrFgwdMBEE2zvsziKG3-QAbSA';
+
 const h3Style = {
   marginTop: "60px"
 }
@@ -44,15 +46,34 @@ const Start = (props) => (
     </Helmet>
 
     <h3 style={h3Style}>File Hosting Service</h3>
-    <Button color="success" onClick={props.onClickConnect}>Connect</Button>{' '}
+    <Button color="success" onClick={props.onClickGetFolders}>Connect</Button>{' '}
   </>
 );
 
 
 
 function App() {
-  function onClickConnect(event) {
-    console.log('connecting');
+  function onClickGetFolders(event) {
+    //Creating an instance of the dropbox object
+    let dropbox = new Dropbox({accessToken: ACCESS_TOKEN});
+
+    //Testing out that the correct account is linked
+    dropbox.usersGetCurrentAccount()
+    .then(function(response) {
+      console.log(response);
+    })
+    .catch(function(error) {
+      console.error(error);
+    });
+
+    //Fetching all folders
+    dropbox.filesListFolder({path: ''})
+    .then(function(response) {
+      console.log(response.entries);
+    })
+    .catch(function(error) {
+      console.error(error);
+    });
   }
 
   return (
@@ -62,7 +83,7 @@ function App() {
           <Link to="/"><img src={logoImage} style={logoStyle} /></Link>
           <h1 style={headerStyle}>TeaCup</h1>
         </nav>
-        <Start onClickConnect={onClickConnect}/>
+        <Start onClickGetFolders={onClickGetFolders}/>
         <Route exact path="/" component={Home} />
         <Route path="/favorite" component={Favorite} />
       </Router>
