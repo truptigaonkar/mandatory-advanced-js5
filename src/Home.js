@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 import { Breadcrumb, BreadcrumbItem, Table } from 'reactstrap';
 import { Helmet } from 'react-helmet';
-import './Home.css'
+import './Home.css';
+import { Dropbox } from 'dropbox';
+
+let ACCESS_TOKEN = 'u0siLycEZIAAAAAAAAAAPtXA74B-RQ190iCIQcSdrFgwdMBEE2zvsziKG3-QAbSA';
 
 function Home() {
   /*
@@ -16,6 +19,28 @@ function Home() {
     return <Redirect to="/start" />;
   }
   */
+
+ const [data, updateData] = useState({});
+
+ useEffect(() => {
+
+   let dropbox = new Dropbox({accessToken: ACCESS_TOKEN});
+
+      //Fetching all folders
+      dropbox.filesListFolder({path: ''})
+      .then(function(response) {
+        console.log("Folder list: ", response.entries);
+        console.log("Single folder list name: ", response.entries[0].name);
+        updateData(response.entries);
+      })
+      .catch(function(error) {
+        console.error(error);
+      });
+
+
+ }, []);
+
+
   return (
     <>
       <Helmet>
@@ -38,16 +63,25 @@ function Home() {
           </tr>
         </thead>
         <tbody>
-          <tr>
+          {/* <tr>
             <td><i class="material-icons">folder</i></td>
             <td>hej.txt</td>
             <td>30 kB</td>
             <td>2019-04-29 12:00</td>
             <td><i class="material-icons">more_horiz</i></td>
             <td><i class="material-icons">star</i></td>
-          </tr>
+          </tr> */}
+
+{/* 
+          
+          {data.entries.map((file) => (
+              <tr key={file.id}>
+              <td>{file[".tag"]}</td>
+              </tr>
+            ))}  */}
         </tbody>
-      </Table>
+      </Table> 
+
     </>
   );
 }
