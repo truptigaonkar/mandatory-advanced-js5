@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { Button } from 'reactstrap';
 import './App.css';
@@ -12,6 +12,7 @@ import { Dropbox } from 'dropbox';
 import fetch from 'isomorphic-fetch';
 
 let ACCESS_TOKEN = 'u0siLycEZIAAAAAAAAAAPtXA74B-RQ190iCIQcSdrFgwdMBEE2zvsziKG3-QAbSA';
+let CLIENT_ID = '708xp4tm8gf03u3';
 
 const h3Style = {
   marginTop: "60px"
@@ -46,14 +47,14 @@ const Start = (props) => (
     </Helmet>
 
     <h3 style={h3Style}>File Hosting Service</h3>
-    <Button color="success" onClick={props.onClickGetFolders}>Connect</Button>{' '}
+    <Button color="success" onClick={props.onClickLogin}>Connect</Button>{' '}
   </>
 );
 
 
 
 function App() {
-  function onClickGetFolders(event) {
+  function onClickLoginOnTestAccount(event) {
     //Creating an instance of the dropbox object
     let dropbox = new Dropbox({accessToken: ACCESS_TOKEN});
 
@@ -76,6 +77,19 @@ function App() {
     });
   }
 
+  function onClickLogin(event) {
+    console.log('Redirecting...');
+
+    //Creating dropbox object
+    let dropbox = new Dropbox({clientId: CLIENT_ID});
+
+    //Getting authentication url
+    let authUrl = dropbox.getAuthenticationUrl('http://localhost:8080/auth');
+
+    //Redirecting
+    window.location.href = authUrl;
+  }
+
   return (
     <div className="App">
       <Router>
@@ -83,7 +97,7 @@ function App() {
           <Link to="/"><img src={logoImage} style={logoStyle} /></Link>
           <h1 style={headerStyle}>TeaCup</h1>
         </nav>
-        <Start onClickGetFolders={onClickGetFolders}/>
+        <Start onClickLogin={onClickLogin}/>
         <Route exact path="/" component={Home} />
         <Route path="/favorite" component={Favorite} />
       </Router>
