@@ -97,8 +97,8 @@ function App() {
           <Link to="/"><img src={logoImage} style={logoStyle} /></Link>
           <h1 style={headerStyle}>TeaCup</h1>
         </nav>
-        <Start onClickLogin={onClickLogin}/>
         <Route exact path="/" component={Home} />
+        <Route path="/start" component={Start} onClickGetFolders={onClickGetFolders}/>
         <Route path="/favorite" component={Favorite} />
       </Router>
     </div >
