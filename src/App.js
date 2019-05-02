@@ -40,21 +40,9 @@ const headerStyle = {
   top: "20px"
 }
 
-const Start = (props) => (
-  <>
-    <Helmet>
-      <title>Start</title>
-    </Helmet>
-
-    <h3 style={h3Style}>File Hosting Service</h3>
-    <Button color="success" onClick={props.onClickLogin}>Connect</Button>{' '}
-  </>
-);
-
-
-
-function App() {
+const Start = (props) => {
   function onClickLoginOnTestAccount(event) {
+    console.log('Logging in on test account.');
     //Creating an instance of the dropbox object
     let dropbox = new Dropbox({accessToken: ACCESS_TOKEN});
 
@@ -90,6 +78,21 @@ function App() {
     window.location.href = authUrl;
   }
 
+  return(
+    <>
+      <Helmet>
+        <title>Start</title>
+      </Helmet>
+
+      <h3 style={h3Style}>File Hosting Service</h3>
+      <Button color="success" onClick={onClickLoginOnTestAccount}>Connect</Button>{' '}
+    </>
+  );
+};
+
+
+
+function App() {
   return (
     <div className="App">
       <Router>
@@ -98,7 +101,7 @@ function App() {
           <h1 style={headerStyle}>TeaCup</h1>
         </nav>
         <Route exact path="/" component={Home} />
-        <Route path="/start" component={Start} onClickGetFolders={onClickGetFolders}/>
+        <Route path="/start" component={Start}/>
         <Route path="/favorite" component={Favorite} />
       </Router>
     </div >
