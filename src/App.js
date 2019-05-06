@@ -122,7 +122,7 @@ function Auth(props) {
   useEffect(fetchAccessToken, []);
 
   if(redirect) {
-    return <Redirect to="/home"/>;
+    return <Redirect to="/"/>;
   }
   else {
     return <p>Redirecting...</p>;
@@ -139,7 +139,7 @@ function App() {
         </nav><br /><br />
         <Route exact path="/" component={Home} />
         <Route path="/auth" component={Auth}/>
-        <Route path="/home" component={Home} />
+        {/* <Route path="/home" component={Home} /> */}
         <Route path="/start" component={Start}/>
         <Route path="/favorite" component={Favorite} />
       </Router>
