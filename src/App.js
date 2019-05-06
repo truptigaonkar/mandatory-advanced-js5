@@ -7,11 +7,10 @@ import Home from './Home';
 import Favorite from './Favorite';
 import logoImage from './logo.png';
 import { Dropbox } from 'dropbox';
+import Start from './Start';
 // import Dropbox from 'dropbox/dropbox'; <-- According to https://dropbox.github.io/dropbox-sdk-js/tutorial-Getting%20started.html
 //                                        this should be used with Babel, but this creates an error because 'Dropbox' has already been declared.
 import fetch from 'isomorphic-fetch';
-
-let ACCESS_TOKEN = 'u0siLycEZIAAAAAAAAAAPtXA74B-RQ190iCIQcSdrFgwdMBEE2zvsziKG3-QAbSA';
 
 const h3Style = {
   marginTop: "60px"
@@ -39,41 +38,22 @@ const headerStyle = {
   top: "20px"
 }
 
-const Start = (props) => (
-  <>
-    <Helmet>
-      <title>Start</title>
-    </Helmet>
+// const Start = (props) => (
+//   <>
+//     <Helmet>
+//       <title>Start</title>
+//     </Helmet>
 
-    <h3 style={h3Style}>File Hosting Service</h3>
-    <Button color="success" onClick={props.onClickGetFolders}>Connect</Button>{' '}
-  </>
-);
+//     <h3 style={h3Style}>File Hosting Service</h3>
+//     <Button color="success" onClick={props.onClickConnect}>Connect</Button>{' '}
+//   </>
+// );
 
 
 
 function App() {
-  function onClickGetFolders(event) {
-    //Creating an instance of the dropbox object
-    let dropbox = new Dropbox({accessToken: ACCESS_TOKEN});
-
-    //Testing out that the correct account is linked
-    dropbox.usersGetCurrentAccount()
-    .then(function(response) {
-      console.log(response);
-    })
-    .catch(function(error) {
-      console.error(error);
-    });
-
-    //Fetching all folders
-    dropbox.filesListFolder({path: ''})
-    .then(function(response) {
-      console.log(response.entries);
-    })
-    .catch(function(error) {
-      console.error(error);
-    });
+  function onClickConnect(event) {
+    console.log('connecting');
   }
 
   return (
@@ -83,8 +63,9 @@ function App() {
           <Link to="/"><img src={logoImage} style={logoStyle} /></Link>
           <h1 style={headerStyle}>TeaCup</h1>
         </nav>
-        <Route exact path="/" component={Home} />
-        <Route path="/start" component={Start} onClickGetFolders={onClickGetFolders}/>
+        {/* <Start onClickConnect={onClickConnect}/> */}
+        <Route exact path="/" component={Start} />
+        <Route path="/home" component={Home} />
         <Route path="/favorite" component={Favorite} />
       </Router>
     </div >
