@@ -99,8 +99,8 @@ function App() {
         <nav style={navStyle}>
           <Link to="/"><img src={logoImage} style={logoStyle} /></Link>
           <h1 style={headerStyle}>TeaCup</h1>
-        </nav>
-        <Route exact path="/" component={Home} />
+        </nav><br/><br/>
+        <Route exact path="/home" component={Home} />
         <Route path="/start" component={Start}/>
         <Route path="/favorite" component={Favorite} />
       </Router>
