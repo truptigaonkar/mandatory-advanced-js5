@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { Button } from 'reactstrap';
@@ -12,6 +12,7 @@ import { Dropbox } from 'dropbox';
 //                                        this should be used with Babel, but this creates an error because 'Dropbox' has already been declared.
 import fetch from 'isomorphic-fetch';
 import queryString from 'query-string';
+import { token$, updateToken } from './Store.js';
 
 let ACCESS_TOKEN = 'u0siLycEZIAAAAAAAAAA3NVwbhi2hLMF8YtFvS6mL9qzqE2Bb9qNuivhETRLV3hE';
 let CLIENT_ID = '708xp4tm8gf03u3';
@@ -98,24 +99,34 @@ const Start = (props) => {
       </Helmet>
 
       <h3 style={h3Style}>File Hosting Service</h3>
-      <Button color="success" onClick={onClickLoginOnTestAccount}>Connect</Button>{' '}
+      <Button color="success" onClick={onClickLogin}>Connect</Button>{' '}
     </>
   );
 };
 
 function Auth(props) {
+  //States
+  const [redirect, updateRedirect] = useState(false);
+
   function fetchAccessToken() {
     let location = props.location; //The Route component has a prop called location
     let parsedHash = queryString.parse(location.hash);
     let accessToken = parsedHash.access_token;
-    console.log('accessToken:');
-    console.log(accessToken);
+    updateToken(accessToken);
+
+    //Then, redirecting...
+    updateRedirect(true);
   }
 
   //When the auth component is loaded, fetch the access token from the URL
   useEffect(fetchAccessToken, []);
 
-  return <p>Hello</p>;
+  if(redirect) {
+    return <Redirect to="/home"/>;
+  }
+  else {
+    return <p>Redirecting...</p>;
+  }
 }
 
 function App() {
