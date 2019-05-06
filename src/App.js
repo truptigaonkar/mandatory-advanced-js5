@@ -98,7 +98,7 @@ const Start = (props) => {
       </Helmet>
 
       <h3 style={h3Style}>File Hosting Service</h3>
-      <Button color="success" onClick={onClickLogin}>Connect</Button>{' '}
+      <Button color="success" onClick={onClickLoginOnTestAccount}>Connect</Button>{' '}
     </>
   );
 };
