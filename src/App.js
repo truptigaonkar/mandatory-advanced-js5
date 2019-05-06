@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { Button } from 'reactstrap';
@@ -11,6 +11,8 @@ import { Dropbox } from 'dropbox';
 // import Dropbox from 'dropbox/dropbox'; <-- According to https://dropbox.github.io/dropbox-sdk-js/tutorial-Getting%20started.html
 //                                        this should be used with Babel, but this creates an error because 'Dropbox' has already been declared.
 import fetch from 'isomorphic-fetch';
+import queryString from 'query-string';
+import { token$, updateToken } from './Store.js';
 
 let ACCESS_TOKEN = 'u0siLycEZIAAAAAAAAAA3NVwbhi2hLMF8YtFvS6mL9qzqE2Bb9qNuivhETRLV3hE';
 let CLIENT_ID = '708xp4tm8gf03u3';
@@ -84,7 +86,7 @@ const Start = (props) => {
     let dropbox = new Dropbox({ clientId: CLIENT_ID });
 
     //Getting authentication url
-    let authUrl = dropbox.getAuthenticationUrl('http://localhost:8080/auth');
+    let authUrl = dropbox.getAuthenticationUrl('http://localhost:3000/auth');
 
     //Redirecting
     window.location.href = authUrl;
@@ -97,12 +99,35 @@ const Start = (props) => {
       </Helmet>
 
       <h3 style={h3Style}>File Hosting Service</h3>
-      <Button color="success" onClick={onClickLoginOnTestAccount}>Connect</Button>{' '}
+      <Button color="success" onClick={onClickLogin}>Connect</Button>{' '}
     </>
   );
 };
 
+function Auth(props) {
+  //States
+  const [redirect, updateRedirect] = useState(false);
 
+  function fetchAccessToken() {
+    let location = props.location; //The Route component has a prop called location
+    let parsedHash = queryString.parse(location.hash);
+    let accessToken = parsedHash.access_token;
+    updateToken(accessToken);
+
+    //Then, redirecting...
+    updateRedirect(true);
+  }
+
+  //When the auth component is loaded, fetch the access token from the URL
+  useEffect(fetchAccessToken, []);
+
+  if(redirect) {
+    return <Redirect to="/home"/>;
+  }
+  else {
+    return <p>Redirecting...</p>;
+  }
+}
 
 function App() {
   return (
@@ -113,7 +138,9 @@ function App() {
           <h1 style={headerStyle}>TeaCup</h1>
         </nav><br /><br />
         <Route exact path="/" component={Home} />
-        <Route path="/start" component={Start} />
+        <Route path="/auth" component={Auth}/>
+        <Route path="/home" component={Home} />
+        <Route path="/start" component={Start}/>
         <Route path="/favorite" component={Favorite} />
       </Router>
     </div >
