@@ -3,9 +3,9 @@ import { Dropbox } from 'dropbox';
 import { Button } from 'reactstrap';
 import { Helmet } from 'react-helmet';
 import { Redirect } from 'react-router-dom';
-import CLIENT_ID from './App.js';
-import h3Style from './App.js';
+import { CLIENT_ID, h3Style } from './constants.js';
 import { token$, updateToken } from './store.js';
+
 
 export default function Start(props) {
 
@@ -45,17 +45,20 @@ export default function Start(props) {
     console.log('Redirecting...');
 
     //Creating dropbox object
+    console.log(CLIENT_ID);
     let dropbox = new Dropbox({ clientId: CLIENT_ID });
 
     //Getting authentication url
     let authUrl = dropbox.getAuthenticationUrl('http://localhost:3000/auth');
+
+    console.log(authUrl);
 
     //Redirecting
     window.location.href = authUrl;
   }
 
   if(token) {
-    return <Redirect to="/home" />;
+    return <Redirect to="/" />;
   }
   else {
     return (
@@ -64,7 +67,7 @@ export default function Start(props) {
           <title>Start</title>
         </Helmet>
 
-        <h3 style={{h3Style}}>File Hosting Service</h3>
+        <h3 style={h3Style}>File Hosting Service</h3>
         <Button color="success" onClick={onClickLogin}>Connect</Button>{' '}
       </>
     );
