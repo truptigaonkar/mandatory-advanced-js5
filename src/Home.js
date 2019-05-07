@@ -3,7 +3,7 @@ import { Breadcrumb, BreadcrumbItem, Table } from 'reactstrap';
 import { Helmet } from 'react-helmet';
 import './Home.css';
 import { Dropbox } from 'dropbox';
-import { token$, updateToken } from './Store.js';
+import { token$, updateToken } from './store.js';
 
 function Home(props) {
 
@@ -69,7 +69,7 @@ function Home(props) {
               <th>Type</th>
               <th>Name</th>
               <th>Last modified</th>
-              <th>Size</th> 
+              <th>Size</th>
               <th>Menu</th>
               <th><i class="material-icons">star_border</i></th>
             </tr>
@@ -89,7 +89,7 @@ function Home(props) {
             })}
           </tbody>
        </Table>
-      
+
     </>
   );
 }

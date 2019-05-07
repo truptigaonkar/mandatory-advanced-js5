@@ -1,16 +1,56 @@
-import React, { Component } from 'react'
+import React from 'react';
+import { Dropbox } from 'dropbox';
+import { Button } from 'reactstrap';
+import { Helmet } from 'react-helmet';
+import CLIENT_ID from './App.js';
+import h3Style from './App.js';
 
-export default class Start extends Component {
-    render() {
-        return (
-            <div>
-                <h3>Login page</h3>
-                <>
-                {/* Reference: https://blogs.dropbox.com/developers/2013/07/using-oauth-2-0-with-the-core-api/ */}
-                    <a href='https://www.dropbox.com/oauth2/authorize?client_id=708xp4tm8gf03u3&response_type=code&redirect_uri=http://localhost:3000/home'>CONNECT</a>
-                </>
+export default function Start(props) {
+  // function onClickLoginOnTestAccount(event) {
+  //   console.log('Logging in on test account.');
+  //   //Creating an instance of the dropbox object
+  //   let dropbox = new Dropbox({ accessToken: ACCESS_TOKEN });
+  //
+  //   //Testing out that the correct account is linked
+  //   dropbox.usersGetCurrentAccount()
+  //     .then(function (response) {
+  //       console.log(response);
+  //     })
+  //     .catch(function (error) {
+  //       console.error(error);
+  //     });
+  //
+  //   //Fetching all folders
+  //   dropbox.filesListFolder({ path: '' })
+  //     .then(function (response) {
+  //       console.log(response.entries);
+  //     })
+  //     .catch(function (error) {
+  //       console.error(error);
+  //     });
+  // }
 
-            </div>
-        )
-    }
-}
+  function onClickLogin(event) {
+    console.log('Redirecting...');
+
+    //Creating dropbox object
+    let dropbox = new Dropbox({ clientId: CLIENT_ID });
+
+    //Getting authentication url
+    let authUrl = dropbox.getAuthenticationUrl('http://localhost:3000/auth');
+
+    //Redirecting
+    window.location.href = authUrl;
+  }
+
+  return (
+    <>
+      <Helmet>
+        <title>Start</title>
+      </Helmet>
+
+      <h3 style={{h3Style}}>File Hosting Service</h3>
+      <Button color="success" onClick={onClickLogin}>Connect</Button>{' '}
+    </>
+  );
+};
