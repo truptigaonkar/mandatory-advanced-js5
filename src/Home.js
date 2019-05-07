@@ -3,49 +3,67 @@ import { Breadcrumb, BreadcrumbItem, Table } from 'reactstrap';
 import { Helmet } from 'react-helmet';
 import './Home.css';
 import { Dropbox } from 'dropbox';
-
-let ACCESS_TOKEN = 'u0siLycEZIAAAAAAAAAA3NVwbhi2hLMF8YtFvS6mL9qzqE2Bb9qNuivhETRLV3hE';
+import { token$, updateToken } from './Store.js';
 
 function Home(props) {
 
- const [data, updateData] = useState([]);
+  const [data, updateData] = useState([]);
+  const [token, updateToken] = useState(token$.value);
+  const [search, updateSearch] = useState('');
 
- useEffect(() => {
+  // Using this instead of helmet because it was causing problem while search
+  useEffect(() => {
+    document.title = "Home";
+  })
 
-   let dropbox = new Dropbox({accessToken: ACCESS_TOKEN});
+  useEffect(() => {
+    const subscription = token$.subscribe(updateToken);
+    return () => subscription.unsubscribe();
+  }, []);
 
-      //Fetching all folders
-      dropbox.filesListFolder({path: ''})
-      .then(function(response) {
-        console.log("Response: ", response.entries);      
-        updateData(response.entries);
-      })
-      .catch(function(error) {
-        console.error(error);
-      });
-      
- }, []);
+  useEffect(() => {
 
- console.log("Data: ", data);
+    // If token exists
+    if (token) {
+
+      let dropbox = new Dropbox({ accessToken: token });
+
+      // if then else for search
+      if (!search) {
+        //Fetching all folders
+        dropbox.filesListFolder({ path: '' })
+          .then(function (response) {
+            console.log("Response: ", response.entries);
+            updateData(response.entries);
+          })
+          .catch(function (error) {
+            console.error(error);
+          });
+      } else {
+        // Search
+        dropbox.filesSearch({ path: '', query: search })
+          .then(function (response) {
+            const files = response.matches.map(file => {
+              return file.metadata
+            });
+
+            console.log(files)
+            updateData(files)
+          })
+      }
+
+    }
+
+  }, [token, search]);
+
+  console.log("Data: ", data);
   return (
     <>
-      <Helmet>
-        <title>Home</title>
-      </Helmet>
-      {
-        data.length === 0 ? <div>Loading...</div> :
-        <>
-        {data.map((file) => {
-          return(
-            <Breadcrumb tag="nav" listTag="div">
-              <BreadcrumbItem tag="a" href="#">Home</BreadcrumbItem>
-              <BreadcrumbItem tag="a" href="#">My Folders</BreadcrumbItem>
-              <BreadcrumbItem tag="span" active>{file.path_display.substr(1)}</BreadcrumbItem>
-            </Breadcrumb>
-          )
-        })
-        } 
-        <Table>
+
+      <input type="text" placeholder="search..." onChange={(e) => { updateSearch(e.target.value); }} value={search} />
+
+
+      <Table>
           <thead>
             <tr>
               <th>Type</th>
@@ -64,16 +82,14 @@ function Home(props) {
                   <td>{file.name}</td>
                   <td></td>
                   <td></td>
-                  <td><a href="./components/menu.js"><i class="material-icons">more_horiz</i></a></td>
-                  <td><a href=""><i class="material-icons">star_border</i></a></td>
+                  <td><i class="material-icons">more_horiz</i></td>
+                  <td><i class="material-icons">star_border</i></td>
                 </tr>
               )
             })}
           </tbody>
        </Table>
-       </>
-      }
-
+      
     </>
   );
 }
