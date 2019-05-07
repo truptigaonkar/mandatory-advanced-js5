@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { Button } from 'reactstrap';
+import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap';
 import './App.css';
 import Home from './Home';
 import Favorite from './Favorite';
@@ -14,7 +14,7 @@ import fetch from 'isomorphic-fetch';
 import queryString from 'query-string';
 import { token$, updateToken } from './Store.js';
 
-let ACCESS_TOKEN = 'u0siLycEZIAAAAAAAAAA3NVwbhi2hLMF8YtFvS6mL9qzqE2Bb9qNuivhETRLV3hE';
+
 let CLIENT_ID = '708xp4tm8gf03u3';
 
 const h3Style = {
@@ -122,7 +122,7 @@ function Auth(props) {
   useEffect(fetchAccessToken, []);
 
   if(redirect) {
-    return <Redirect to="/home"/>;
+    return <Redirect to="/"/>;
   }
   else {
     return <p>Redirecting...</p>;
@@ -139,7 +139,7 @@ function App() {
         </nav><br /><br />
         <Route exact path="/" component={Home} />
         <Route path="/auth" component={Auth}/>
-        <Route path="/home" component={Home} />
+        {/* <Route path="/home" component={Home} /> */}
         <Route path="/start" component={Start}/>
         <Route path="/favorite" component={Favorite} />
       </Router>
