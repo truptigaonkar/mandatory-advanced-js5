@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { Button } from 'reactstrap';
+import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap';
 import './App.css';
 import Start from './Start.js';
 import Auth from './Auth.js';
@@ -13,6 +13,7 @@ import logoImage from './logo.png';
 import fetch from 'isomorphic-fetch';
 import queryString from 'query-string';
 import { token$, updateToken } from './store.js';
+import DropdownToggle from 'reactstrap/lib/DropdownToggle';
 
 export const CLIENT_ID = '708xp4tm8gf03u3';
 
@@ -42,19 +43,80 @@ const headerStyle = {
   top: "20px"
 }
 
+const logOutStyle = {
+  position: "absolute",
+  right: "10px",
+  top: "10px"
+}
+
 function App() {
+  const [activeTab, updateActiveTab] = useState("1");
+  const [token, updateToken] = useState(token$.value);
+
+  useEffect(() => {
+    const subscription = token$.subscribe(updateToken);
+    return () => subscription.unsubscribe();
+  }, []);
+
+  function logOut() {
+    updateToken(null);
+  }
+
+
+
   return (
     <div className="App">
       <Router>
         <nav style={navStyle}>
           <Link to="/"><img src={logoImage} style={logoStyle} /></Link>
           <h1 style={headerStyle}>TeaCup</h1>
+          <Button style={logOutStyle} onClick={logOut}>Log out</Button>
         </nav><br /><br />
-        <Route exact path="/" component={Home} />
-        <Route path="/auth" component={Auth}/>
-        <Route path="/home" component={Home} />
-        <Route path="/start" component={Start}/>
-        <Route path="/favorite" component={Favorite} />
+
+        <Route path="/auth" component={Auth} />
+        {/* <Route path="/home" component={Home} /> */}
+        <Route path="/start" component={Start} />
+
+        <div style={{ display: "flex", width: "100%" }}>
+
+          <div style={{ flexGrow: 1 }}>
+            <Nav tabs>
+              <NavItem>
+                <NavLink className={activeTab === "1" ? "active" : ""} onClick={() => updateActiveTab("1")}>All</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink className={activeTab === "2" ? "active" : ""} onClick={() => updateActiveTab("2")}>Favorite</NavLink>
+              </NavItem>
+            </Nav>
+            <TabContent activeTab={activeTab}>
+              <TabPane tabId="1">
+                <Row>
+                  <Col sm="12">
+                    <h4>Breadcrumbs</h4>
+                  </Col>
+                  <Col sm="12">
+                    <Route exact path="/" component={Home} />
+                  </Col>
+                </Row>
+              </TabPane>
+              <TabPane tabId="2">
+                <Row>
+                  <Col sm="12">
+                    <h4>Favorite</h4>
+                  </Col>
+                  <Col sm="12">
+                    <Route path="/favorite" component={Favorite} />
+                  </Col>
+                </Row>
+              </TabPane>
+            </TabContent>
+          </div>
+          <aside style={{ marginTop: "41px", width: "20%", minWidth: "50px" }}>
+            <input type="text" />
+            <p>test</p>
+          </aside>
+        </div>
+
       </Router>
     </div >
   );
