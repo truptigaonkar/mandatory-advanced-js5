@@ -33,7 +33,6 @@ function Home(props) {
         //Fetching all folders
         dropbox.filesListFolder({ path: '' })
           .then(function (response) {
-            console.log("Response: ", response.entries);
             updateData(response.entries);
           })
           .catch(function (error) {
@@ -46,8 +45,6 @@ function Home(props) {
             const files = response.matches.map(file => {
               return file.metadata
             });
-
-            console.log(files)
             updateData(files)
           })
       }

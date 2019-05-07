@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap';
+import { TabContent, TabPane, Nav, NavItem, NavLink, Button, Row, Col, InputGroup, Input } from 'reactstrap';
 import './App.css';
 import Start from './Start.js';
 import Auth from './Auth.js';
@@ -62,8 +62,6 @@ function App() {
     updateToken(null);
   }
 
-
-
   return (
     <div className="App">
       <Router>
@@ -111,9 +109,12 @@ function App() {
               </TabPane>
             </TabContent>
           </div>
-          <aside style={{ marginTop: "41px", width: "20%", minWidth: "50px" }}>
-            <input type="text" />
-            <p>test</p>
+          <aside style={{ margin: "41px 6px 0 6px",  width: "20%", minWidth: "50px" }}>
+            <Input type="text" placeholder="Search" />
+            <ul style={{ listStyle: "none", padding: "0" }}>
+              <li><a href="">Upload File</a></li>
+              <li><a href="">New Folder</a></li>
+            </ul>
           </aside>
         </div>
 
