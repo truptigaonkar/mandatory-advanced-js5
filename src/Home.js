@@ -53,7 +53,12 @@ function Home(props) {
 
   }, [token, search]);
 
+  function onClickFavorite(event) {
+    console.log('Making folder or file a favorite...');
+  }
+
   console.log("Data: ", data);
+
   return (
     <>
 
@@ -80,7 +85,7 @@ function Home(props) {
                   <td></td>
                   <td></td>
                   <td><i class="material-icons">more_horiz</i></td>
-                  <td><i class="material-icons">star_border</i></td>
+                  <td><i class="material-icons" onClick={onClickFavorite}>star_border</i></td>
                 </tr>
               )
             })}

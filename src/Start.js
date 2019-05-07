@@ -1,11 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dropbox } from 'dropbox';
 import { Button } from 'reactstrap';
 import { Helmet } from 'react-helmet';
+import { Redirect } from 'react-router-dom';
 import CLIENT_ID from './App.js';
 import h3Style from './App.js';
+import { token$, updateToken } from './store.js';
 
 export default function Start(props) {
+
+  const [token, updateToken] = useState(token$.value);
+
+  //Listening to token when the start page is loaded
+  useEffect(() => {
+    const subscription = token$.subscribe(updateToken);
+    return () => subscription.unsubscribe();
+  }, []);
+
   // function onClickLoginOnTestAccount(event) {
   //   console.log('Logging in on test account.');
   //   //Creating an instance of the dropbox object
@@ -43,14 +54,19 @@ export default function Start(props) {
     window.location.href = authUrl;
   }
 
-  return (
-    <>
-      <Helmet>
-        <title>Start</title>
-      </Helmet>
+  if(token) {
+    return <Redirect to="/home" />;
+  }
+  else {
+    return (
+      <>
+        <Helmet>
+          <title>Start</title>
+        </Helmet>
 
-      <h3 style={{h3Style}}>File Hosting Service</h3>
-      <Button color="success" onClick={onClickLogin}>Connect</Button>{' '}
-    </>
-  );
+        <h3 style={{h3Style}}>File Hosting Service</h3>
+        <Button color="success" onClick={onClickLogin}>Connect</Button>{' '}
+      </>
+    );
+  }
 };
