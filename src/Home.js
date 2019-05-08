@@ -73,13 +73,7 @@ function Home(props) {
   }
 
   // Table data Last modified calculations
-  function handleLastModified (date) {
-    // if (moment(new Date()).diff(date, 'days') > 2) {
-    //   return moment(date).format('Do MMMM YYYY, h:mm')
-    // } else {
-    //   return moment(date).fromNow();
-    // }
-
+  function handleLastModified(date) {
     let day = date.substring(8, 10);
     let month = date.substring(5, 7);
     let year = date.substring(0, 4);
@@ -90,13 +84,22 @@ function Home(props) {
       "August", "September", "October",
       "November", "December"
     ];
-    
+
     month = month.replace(/^0+/, '');
     day = day.replace(/^0+/, '');
-    let monthShow = months[month-1];
-    
+    let monthShow = months[month - 1];
 
-    return <label>{ day + ' ' + monthShow + ' ' + year}</label>
+    return <label>{day + ' ' + monthShow + ' ' + year}</label>
+  }
+
+  // Table data size calculations in Bytes, KB, MB, GB, TB, PB, EB, ZB, YB
+  function handleSize(size) {
+    let sizes = [' B', ' KB', ' MB', ' GB', ' TB', ' PB', ' EB', ' ZB', ' YB'];
+    for (let i = 1; i < sizes.length; i++) {
+      if (size < Math.pow(1024, i))
+        return (Math.round((size / Math.pow(1024, i - 1)) * 100) / 100) + sizes[i - 1];
+    }
+    return size;
   }
 
   console.log("Data: ", data);
@@ -127,7 +130,7 @@ function Home(props) {
                 <td>{file[".tag"] === "folder" ? <i class="material-icons">folder_open</i> : file[".tag"]}</td>
                 <td>{file.name}</td>
                 <td>{file.server_modified ? handleLastModified(file.server_modified) : null}</td>
-                <td></td>
+                <td>{handleSize(file.size)}</td>
                 <td><i class="material-icons">more_horiz</i></td>
                 <td><i class="material-icons" onClick={onClickFavorite}>star_border</i></td>
               </tr>
