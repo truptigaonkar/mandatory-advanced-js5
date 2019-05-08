@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import queryString from 'query-string';
-import { token$, updateToken } from './store.js';
+import { token$, updateToken } from './Store.js';
 
 export default function Auth(props) {
   //States

@@ -12,7 +12,7 @@ import logoImage from './logo.png';
 //                                        this should be used with Babel, but this creates an error because 'Dropbox' has already been declared.
 import fetch from 'isomorphic-fetch';
 import queryString from 'query-string';
-import { token$, updateToken } from './store.js';
+import { token$, updateToken } from './Store.js';
 import DropdownToggle from 'reactstrap/lib/DropdownToggle';
 
 const navStyle = {
@@ -52,9 +52,9 @@ function App() {
     return () => subscription.unsubscribe();
   }, []);
 
-  function logOut() {
-    updateToken(null);
-  }
+  // function logOut() {
+  //   updateToken(null);
+  // }
 
   return (
     <div className="App">
@@ -62,7 +62,7 @@ function App() {
         <nav style={navStyle}>
           <Link to="/"><img src={logoImage} style={logoStyle} /></Link>
           <h1 style={headerStyle}>TeaCup</h1>
-          <Button style={logOutStyle} onClick={logOut}>Log out</Button>
+          {/* <Button style={logOutStyle} onClick={logOut}>Log out</Button> */}
         </nav><br /><br />
 
         <Route path="/auth" component={Auth} />

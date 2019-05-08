@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Breadcrumb, BreadcrumbItem, Table } from 'reactstrap';
-import { Helmet } from 'react-helmet';
 import './Home.css';
 import { Dropbox } from 'dropbox';
-import { token$, updateToken } from './store.js';
+import { updateToken } from './Store.js'
+import { token$ } from './Store.js';
+import { Redirect } from 'react-router-dom';
 
 function Home(props) {
 
   const [data, updateData] = useState([]);
-  const [token, updateToken] = useState(token$.value);
+  const [token, updateTokenState] = useState(token$.value)
   const [search, updateSearch] = useState('');
 
   // Using this instead of helmet because it was causing problem while search
@@ -16,10 +17,12 @@ function Home(props) {
     document.title = "Home";
   })
 
-  useEffect(() => {
-    const subscription = token$.subscribe(updateToken);
-    return () => subscription.unsubscribe();
-  }, []);
+
+  // Commented out as logout was not working with it.
+  // useEffect(() => {
+  //   const subscription = token$.subscribe(updateToken);
+  //   return () => subscription.unsubscribe();
+  // }, []);
 
   useEffect(() => {
 
@@ -57,40 +60,53 @@ function Home(props) {
     console.log('Making folder or file a favorite...');
   }
 
+  // Logout function
+  function handleLogout(e) {
+    e.preventDefault();
+    updateToken(null);
+    updateTokenState(token$.value);
+  }
+
+  if (!token) {
+    return <Redirect to="/start" />;
+  }
+
   console.log("Data: ", data);
 
   return (
     <>
 
+      <button onClick={handleLogout}>Logout</button><br />
+
       <input type="text" placeholder="search..." onChange={(e) => { updateSearch(e.target.value); }} value={search} />
 
 
       <Table>
-          <thead>
-            <tr>
-              <th>Type</th>
-              <th>Name</th>
-              <th>Last modified</th>
-              <th>Size</th>
-              <th>Menu</th>
-              <th><i class="material-icons">star_border</i></th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((file) => {
-              return (
-                <tr key={file.id}>
-                  <td>{file[".tag"] === "folder" ? <i class="material-icons">folder_open</i> : file[".tag"] }</td>
-                  <td>{file.name}</td>
-                  <td></td>
-                  <td></td>
-                  <td><i class="material-icons">more_horiz</i></td>
-                  <td><i class="material-icons" onClick={onClickFavorite}>star_border</i></td>
-                </tr>
-              )
-            })}
-          </tbody>
-       </Table>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Name</th>
+            <th>Last modified</th>
+            <th>Size</th>
+            <th>Menu</th>
+            <th><i class="material-icons">star_border</i></th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((file) => {
+            return (
+              <tr key={file.id}>
+                <td>{file[".tag"] === "folder" ? <i class="material-icons">folder_open</i> : file[".tag"]}</td>
+                <td>{file.name}</td>
+                <td></td>
+                <td></td>
+                <td><i class="material-icons">more_horiz</i></td>
+                <td><i class="material-icons" onClick={onClickFavorite}>star_border</i></td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </Table>
 
     </>
   );
