@@ -101,8 +101,24 @@ function Home(props) {
     return size;
   }
 
-  console.log("Data: ", data);
+  // Function to download files
+  function handleDownloadFile(fileName, filePath) {
+    const dropbox = new Dropbox({ accessToken: token$.value, fetch });
+    dropbox.filesDownload({ path: filePath })
+      .then((response) => {
+        console.log("File details to be download: ", response);
+        let url = URL.createObjectURL(response.fileBlob);
+        let downloadButton = document.createElement('a');
+        downloadButton.setAttribute('href', url);
+        downloadButton.setAttribute('download', response.name);
+        downloadButton.click();
+      })
+      .catch((error) => {
+        console.log(error.response);
+      })
+  }
 
+  console.log("Data: ", data);
   return (
     <>
 
@@ -127,7 +143,7 @@ function Home(props) {
             return (
               <tr key={file.id}>
                 <td>{file[".tag"] === "folder" ? <i class="material-icons">folder_open</i> : file[".tag"]}</td>
-                <td>{file.name}</td>
+                <td onClick={() => handleDownloadFile(file.name, file.path_display)} style={{ cursor: 'pointer', color: 'blue' }}>{file.name}</td>
                 <td>{file.server_modified ? handleLastModified(file.server_modified) : null}</td>
                 <td>{handleSize(file.size)}</td>
                 <td><i class="material-icons">more_horiz</i></td>
