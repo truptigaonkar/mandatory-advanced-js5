@@ -7,6 +7,7 @@ import Start from './Components/Start';
 import Auth from './Components/Auth';
 import Home from './Components/Home';
 import Favorite from './Components/Favorite';
+import SideMenu from './Components/SideMenu'
 import logoImage from './logo.png';
 // import Dropbox from 'dropbox/dropbox'; <-- According to https://dropbox.github.io/dropbox-sdk-js/tutorial-Getting%20started.html
 //                                        this should be used with Babel, but this creates an error because 'Dropbox' has already been declared.
@@ -74,10 +75,10 @@ function App() {
           <div style={{ flexGrow: 1 }}>
             <Nav tabs>
               <NavItem>
-                <NavLink className={activeTab === "1" ? "active" : ""} onClick={() => updateActiveTab("1")}>All</NavLink>
+                <NavLink className={activeTab === "1" ? "active" : ""} onClick={() => updateActiveTab("1")}><i class="material-icons" style={{ verticalAlign: "bottom" }}>folder</i>All</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink className={activeTab === "2" ? "active" : ""} onClick={() => updateActiveTab("2")}>Favorite</NavLink>
+                <NavLink className={activeTab === "2" ? "active" : ""} onClick={() => updateActiveTab("2")}><i class="material-icons" style={{ verticalAlign: "bottom" }}>star</i>Favorite</NavLink>
               </NavItem>
             </Nav>
             <TabContent activeTab={activeTab}>
@@ -103,13 +104,7 @@ function App() {
               </TabPane>
             </TabContent>
           </div>
-          <aside style={{ margin: "41px 6px 0 6px",  width: "20%", minWidth: "50px" }}>
-            <Input type="text" placeholder="Search" />
-            <ul style={{ listStyle: "none", padding: "0" }}>
-              <li><a href="">Upload File</a></li>
-              <li><a href="">New Folder</a></li>
-            </ul>
-          </aside>
+          <SideMenu />
         </div>
 
       </Router>
