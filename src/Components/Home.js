@@ -1,48 +1,43 @@
 import React, { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
-import { Breadcrumb, BreadcrumbItem, Table } from 'reactstrap';
-import './Home.css';
-import { Dropbox } from 'dropbox';
-import { token$, updateToken } from '../store';
-import { Redirect } from 'react-router-dom';
-import moment from 'moment';
+import { Link, Route } from "react-router-dom";
+import { Table, TabContent, TabPane, Nav, NavItem, NavLink, Button, Row, Col, Input } from "reactstrap";
+//import "./Home.css";
+import { Dropbox } from "dropbox";
+import { token$, updateToken } from "../store";
+import { Redirect } from "react-router-dom";
+import moment from "moment";
+import Data from './Data';
+import Favorite from './Favorite';
+import SideMenu from './SideMenu';
+import Breadcrumbs from './Breadcrumbs';
 
 function Home(props) {
+  const [token, updateTokenState] = useState(token$.value);
   const [data, updateData] = useState([]);
-  const [token, updateTokenState] = useState(token$.value)
   const [search, updateSearch] = useState('');
+  const [user, updateUser] = useState("");
+  const [activeTab, updateActiveTab] = useState("1");
+  const currentLocation = props.location.pathname.substring(5);  
 
   // Using this instead of helmet because it was causing problem while search
-  useEffect(() => {
-    document.title = "Home";
+   useEffect(() => {
+    document.title = "TeaCup";
   })
 
-
-  // Commented out as logout was not working with it.
-  // useEffect(() => {
-  //   const subscription = token$.subscribe(updateToken);
-  //   return () => subscription.unsubscribe();
-  // }, []);
-
   useEffect(() => {
-
-    // If token exists
-    if (token) {
-
       let dropbox = new Dropbox({ accessToken: token });
 
-      // if then else for search
-      if (!search) {
-        //Fetching all folders
-        dropbox.filesListFolder({ path: '' })
-          .then(function (response) {
-            updateData(response.entries);
-          })
-          .catch(function (error) {
-            console.error(error);
-          });
-      } else {
-        // Search
+      //Fetching files/folders
+      dropbox.filesListFolder({ path: '' })
+      .then(function (response) {
+        updateData(response.entries);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+
+      // Search
+      if(search) {
         dropbox.filesSearch({ path: '', query: search })
           .then(function (response) {
             const files = response.matches.map(file => {
@@ -51,111 +46,86 @@ function Home(props) {
             updateData(files)
           })
       }
-
-    }
-
-  }, [token, search]);
-
-  function onClickFavorite(event) {
-    console.log('Making folder or file a favorite...');
-  }
-
-  // Logout function
-  function handleLogout(e) {
-    e.preventDefault();
-    updateToken(null);
-    updateTokenState(token$.value);
-  }
+    
+      // Fetch user name
+      dropbox.usersGetCurrentAccount()
+        .then(function (response) {
+          updateUser(response.name.given_name);
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+  }, [token]);
 
   if (!token) {
     return <Redirect to="/start" />;
   }
 
-  // Table data Last modified calculations
-  function handleLastModified(date) {
-    let day = date.substring(8, 10);
-    let month = date.substring(5, 7);
-    let year = date.substring(0, 4);
-
-    let months = [
-      "January", "February", "March",
-      "April", "May", "June", "July",
-      "August", "September", "October",
-      "November", "December"
-    ];
-
-    month = month.replace(/^0+/, '');
-    day = day.replace(/^0+/, '');
-    let monthShow = months[month - 1];
-
-    return <label>{day + ' ' + monthShow + ' ' + year}</label>
+  function logOut(e) {
+    e.preventDefault();
+    updateToken(null);
+    updateTokenState(token$.value);
   }
 
-  // Table data size calculations in Bytes, KB, MB, GB, TB, PB, EB, ZB, YB
-  function handleSize(size) {
-    let sizes = [' B', ' KB', ' MB', ' GB', ' TB', ' PB', ' EB', ' ZB', ' YB'];
-    for (let i = 1; i < sizes.length; i++) {
-      if (size < Math.pow(1024, i))
-        return (Math.round((size / Math.pow(1024, i - 1)) * 100) / 100) + sizes[i - 1];
+  function uploadFile(files) {
+    if(files.length > 0 && files[0].size < 150000000) {
+      const dropbox = new Dropbox({ accessToken: token$.value, fetch });
+      dropbox.filesUpload({ contents: files[0], path: `${currentLocation}/${files[0].name}`})
+      .then(response => {
+        const dropbox = new Dropbox({ accessToken: token$.value, fetch });
+        dropbox.filesListFolder({path: currentLocation});
+        updateData(response.entries);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
     }
-    return size;
   }
-
-  // Function to download files
-  function handleDownloadFile(fileName, filePath) {
-    const dropbox = new Dropbox({ accessToken: token$.value, fetch });
-    dropbox.filesDownload({ path: filePath })
-      .then((response) => {
-        console.log("File details to be download: ", response);
-        let url = URL.createObjectURL(response.fileBlob);
-        let downloadButton = document.createElement('a');
-        downloadButton.setAttribute('href', url);
-        downloadButton.setAttribute('download', response.name);
-        downloadButton.click();
-      })
-      .catch((error) => {
-        console.log(error.response);
-      })
-  }
-
-  console.log("Data: ", data);
 
   return (
-    <>
-
-      <button onClick={handleLogout}>Logout</button><br />
-
-      <input type="text" placeholder="search..." onChange={(e) => { updateSearch(e.target.value); }} value={search} />
-
-
-      <Table>
-        <thead>
-          <tr>
-            <th>Type</th>
-            <th>Name</th>
-            <th>Last modified</th>
-            <th>Size</th>
-            <th>Menu</th>
-            <th><i class="material-icons">star_border</i></th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((file) => {
-            return (
-              <tr key={file.id}>
-                <td>{file[".tag"] === "folder" ? <i class="material-icons">folder_open</i> : file[".tag"]}</td>
-                <td>{file[".tag"] === "folder" ? <Link to={`/home${file.path_display}`}>{file.name}</Link> : <span onClick={() => handleDownloadFile(file.name, file.path_display)} style={{ cursor: 'pointer', color: 'blue' }}>{file.name}</span>}</td>
-                <td>{file.server_modified ? handleLastModified(file.server_modified) : null}</td>
-                <td>{handleSize(file.size)}</td>
-                <td><i class="material-icons">more_horiz</i></td>
-                <td><i class="material-icons" onClick={onClickFavorite}>star_border</i></td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </Table>
-
-    </>
+    <div style={{ display: "flex", width: "100%" }}>
+      <div style={{ flexGrow: 1 }}>
+        <Nav tabs>
+          <NavItem>
+            <NavLink className={activeTab === "1" ? "active" : ""} onClick={() => updateActiveTab("1")}>
+              <i class="material-icons" style={{ verticalAlign: "bottom" }}>folder</i>
+              All
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink className={activeTab === "2" ? "active" : ""} onClick={() => updateActiveTab("2")}>
+              <i class="material-icons" style={{ verticalAlign: "bottom" }}>star</i>
+              Favorite
+            </NavLink>
+          </NavItem>
+        </Nav>
+        <TabContent activeTab={activeTab}>
+          <TabPane tabId="1">
+            <Row>
+              <Col sm="12">
+                <Breadcrumbs path={props.location.pathname} />
+              </Col>
+            </Row>
+            <Row>
+              <Col sm="12">
+                <Data />
+              </Col>
+            </Row>
+          </TabPane>
+          <TabPane tabId="2">
+            <Row>
+              <Col sm="12">
+                <h4>Favorite</h4>
+              </Col>
+              <Col sm="12">
+                <Favorite />
+              </Col>
+            </Row>
+          </TabPane>
+        </TabContent>
+        </div>
+      <SideMenu search={search} updateSearch={updateSearch} logOut={logOut} user={user} />
+    </div>
   );
 }
 
