@@ -59,7 +59,7 @@ export default function Start(props) {
   }
 
   if(token) {
-    return <Redirect to="/" />;
+    return <Redirect to="/home" />;
   }
   else {
     return (

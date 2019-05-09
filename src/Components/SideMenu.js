@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Input } from 'reactstrap';
-import UploadFileModal from './UploadFileModal';
+import UploadFileModal from './uploadFileModal';
 import "./SideMenu.css";
 
 const asideStyle = { 

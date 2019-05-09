@@ -64,7 +64,7 @@ function Data(props) {
   }
 
   if (!token) {
-    return <Redirect to="/start" />;
+    return <Redirect to="/" />;
   }
 
   // Table data Last modified calculations

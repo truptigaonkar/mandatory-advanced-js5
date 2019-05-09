@@ -58,7 +58,7 @@ function Home(props) {
   }, [token]);
 
   if (!token) {
-    return <Redirect to="/start" />;
+    return <Redirect to="/" />;
   }
 
   function logOut(e) {

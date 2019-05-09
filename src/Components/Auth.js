@@ -21,7 +21,7 @@ export default function Auth(props) {
   useEffect(fetchAccessToken, []);
 
   if(redirect) {
-    return <Redirect to="/"/>;
+    return <Redirect to="/home"/>;
   }
   else {
     return <p>Redirecting...</p>;

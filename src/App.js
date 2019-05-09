@@ -47,9 +47,9 @@ function App() {
           <h1 style={headerStyle}>TeaCup</h1>
         </nav>
 
-        <Route path="/home" component={Home} />
+        <Route exact path="/" component={Start} />
         <Route path="/auth" component={Auth} />
-        <Route path="/start" component={Start} />
+        <Route path="/home" component={Home} />
       </Router>
     </div>
   );
