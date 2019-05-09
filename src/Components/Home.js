@@ -11,6 +11,7 @@ function Home(props) {
   const [data, updateData] = useState([]);
   const [token, updateTokenState] = useState(token$.value)
   const [search, updateSearch] = useState('');
+  const [user, updateUser] = useState("");
 
   // Using this instead of helmet because it was causing problem while search
   useEffect(() => {
@@ -28,12 +29,11 @@ function Home(props) {
 
     // If token exists
     if (token) {
-
       let dropbox = new Dropbox({ accessToken: token });
 
-      // if then else for search
+      // if then (Fetching files/folders) else (search)
       if (!search) {
-        //Fetching all folders
+        //Fetching files/folders
         dropbox.filesListFolder({ path: '' })
           .then(function (response) {
             updateData(response.entries);
@@ -52,8 +52,16 @@ function Home(props) {
           })
       }
 
+      // Fetching logged in username
+      dropbox.usersGetCurrentAccount()
+        .then(function (response) {
+          console.log("User Email: ", response.email);
+          updateUser(response.email);
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
     }
-
   }, [token, search]);
 
   function onClickFavorite(event) {
@@ -118,15 +126,20 @@ function Home(props) {
       })
   }
 
-  console.log("Data: ", data);
+  //console.log("Data: ", data);
+  console.log("Username", user)
   return (
     <>
+     {/* User information */}
+     {user}
 
-      <button onClick={handleLogout}>Logout</button><br />
+     {/* Logout page */}
+      <button onClick={handleLogout}>Logout</button><br /><br/>
 
-      <input type="text" placeholder="search..." onChange={(e) => { updateSearch(e.target.value); }} value={search} />
+      {/* Search page */}
+      <input type="text" placeholder="search..." onChange={(e) => { updateSearch(e.target.value); }} value={search} /> <br/>
 
-
+      {/* Table file/folder data */}
       <Table>
         <thead>
           <tr>
@@ -139,18 +152,20 @@ function Home(props) {
           </tr>
         </thead>
         <tbody>
-          {data.map((file) => {
-            return (
-              <tr key={file.id}>
-                <td>{file[".tag"] === "folder" ? <i class="material-icons">folder_open</i> : file[".tag"]}</td>
-                <td onClick={() => handleDownloadFile(file.name, file.path_display)} style={{ cursor: 'pointer', color: 'blue' }}>{file.name}</td>
-                <td>{file.server_modified ? handleLastModified(file.server_modified) : null}</td>
-                <td>{handleSize(file.size)}</td>
-                <td><i class="material-icons">more_horiz</i></td>
-                <td><i class="material-icons" onClick={onClickFavorite}>star_border</i></td>
-              </tr>
-            )
-          })}
+          {
+            data.map((file) => {
+              return (
+                <tr key={file.id}>
+                  <td>{file[".tag"] === "folder" ? <i class="material-icons">folder_open</i> : file[".tag"]}</td>
+                  <td onClick={() => handleDownloadFile(file.name, file.path_display)} style={{ cursor: 'pointer', color: 'blue' }}>{file.name}</td>
+                  <td>{file.server_modified ? handleLastModified(file.server_modified) : null}</td>
+                  <td>{handleSize(file.size)}</td>
+                  <td><i class="material-icons">more_horiz</i></td>
+                  <td><i class="material-icons" onClick={onClickFavorite}>star_border</i></td>
+                </tr>
+              )
+            })
+          }
         </tbody>
       </Table>
 
