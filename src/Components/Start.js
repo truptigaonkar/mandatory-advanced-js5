@@ -3,8 +3,9 @@ import { Dropbox } from 'dropbox';
 import { Button } from 'reactstrap';
 import { Helmet } from 'react-helmet';
 import { Redirect } from 'react-router-dom';
-import { CLIENT_ID, h3Style } from './constants.js';
-import { token$, updateToken } from './Store.js';
+import { CLIENT_ID } from '../constants';
+import { token$, updateToken } from '../store';
+import { h3Style } from './style';
 
 
 export default function Start(props) {

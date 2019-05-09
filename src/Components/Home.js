@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Breadcrumb, BreadcrumbItem, Table } from 'reactstrap';
 import './Home.css';
 import { Dropbox } from 'dropbox';
-import { updateToken } from './Store.js'
-import { token$ } from './Store.js';
+import { token$, updateToken } from '../store';
 import { Redirect } from 'react-router-dom';
 import moment from 'moment';
 
