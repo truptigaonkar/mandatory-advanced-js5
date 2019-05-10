@@ -4,8 +4,7 @@ import { Table } from 'reactstrap';
 import './Data.css';
 import { Dropbox } from 'dropbox';
 import { token$, updateToken } from '../store';
-import { Redirect } from 'react-router-dom';
-import moment from 'moment';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input } from 'reactstrap';
 
 function Data(props) {  
   /*
@@ -13,6 +12,7 @@ function Data(props) {
   const [token, updateTokenState] = useState(token$.value);
   const [data, updateData] = useState([]);
   const [user, updateUser] = useState("");
+  const [modal, updateModal] = useState(false);
 
   
   useEffect(() => {
@@ -106,15 +106,61 @@ function Data(props) {
       })
   }
 
+
+  // New folder
+  function toggleFolder() {
+    updateModal(true)
+  }
+
+  function exitDialog() {
+    updateModal(false)
+  }
+
+
+  const [folderName, updateFolderName] = useState("");
+
+  function handleFolderName(e) {
+    console.log("console log input value: ", e.target.value);
+    updateFolderName(e.target.value);
+  }
+
+  
+  function handleNewFolder(props) {
+    console.log(1)
+    // const currentPath = props.location
+    // console.log("current path: ", currentPath);
+
+    // let dropbox = new Dropbox({ accessToken: token$.value, fetch });
+    // dropbox.filesCreateFolder({ path: currentPath + "/" + folderName })
+    // exitDialog();
+  }
+
   //console.log("Data: ", data);
   //console.log("Username", user)
-  
   return (
     <>
-      {/* Search page 
-      <input type="text" placeholder="search..." onChange={(e) => { updateSearch(e.target.value); }} value={search} /> <br/>
-      */}
-      
+
+      {/* Create new folder button and modal */}
+      <div>
+        <Button color="danger" onClick={toggleFolder}>Create New Folder</Button>
+        <Modal isOpen={modal} toggle={toggleFolder} >
+          <ModalHeader toggle={exitDialog}>Create New Folder</ModalHeader>
+          <ModalBody>
+            <FormGroup>
+              <Label for="name">Folder name</Label>
+              <Input type="text" placeholder="Folder name" onChange={handleFolderName} value={folderName} />
+            </FormGroup>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={handleNewFolder}>Create</Button>{' '}
+            <Button color="secondary" onClick={exitDialog}>Cancel</Button>
+          </ModalFooter>
+        </Modal>
+      </div><br/>
+
+      {/* Search page */}
+      <input type="text" placeholder="search..." onChange={(e) => { updateSearch(e.target.value); }} value={search} /> <br />
+
       {/* Table file/folder data */}
       <Table>
         <thead>
