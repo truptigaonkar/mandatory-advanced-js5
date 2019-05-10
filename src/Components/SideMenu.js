@@ -14,6 +14,12 @@ const ulStyle = {
   padding: "0"
 }
 
+const liStyle = {
+  marginTop: "15px",
+  padding: "0",
+  fontSize: "large"
+}
+
 const accountStyle = {
   position: "absolute",
   right: "10px",
@@ -30,8 +36,8 @@ function SideMenu(props) {
     <aside style={asideStyle}>
       <Input size="lg" type="text" placeholder="Search" onChange={(e) => { props.updateSearch(e.target.value); }} value={props.search} />
       <ul style={ulStyle}>
-        <li onClick={UploadFileModal}>Upload File</li>
-        <li onClick={props.newFolder}>New Folder</li>
+        <li style={liStyle} onClick={UploadFileModal}>Upload File</li>
+        <li style={liStyle} onClick={props.newFolder}>New Folder</li>
       </ul>
       <div style={accountStyle}>
         <span style={usernameStyle}>{props.user}</span>

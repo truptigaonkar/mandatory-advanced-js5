@@ -35,8 +35,8 @@ function Home(props) {
     })
     .catch(function (error) {
       console.error(error);
-    }, [currentLocation]);
-  });
+    });
+  }, [currentLocation]);
 
   useEffect(() => {
       let dropbox = new Dropbox({ accessToken: token });
