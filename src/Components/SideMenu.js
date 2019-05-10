@@ -34,9 +34,10 @@ const usernameStyle = {
 function SideMenu(props) {
   return (
     <aside style={asideStyle}>
-      <Input size="lg" type="text" placeholder="Search" onChange={(e) => { props.updateSearch(e.target.value); }} value={props.search} />
+      <UploadFileModal />
+      <Input size="lg" type="text" placeholder="Search" onChange={(e) => { props.filterFile(e); }} value={props.search} />
       <ul style={ulStyle}>
-        <li style={liStyle} onClick={UploadFileModal}>Upload File</li>
+        <li style={liStyle} onClick={props.uploadFile} modal={props.uploadFileToggle}>Upload File</li>
         <li style={liStyle} onClick={props.newFolder}>New Folder</li>
       </ul>
       <div style={accountStyle}>

@@ -1,8 +1,5 @@
 import React from "react";
 import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
-//import Breadcrumbs from 'react-breadcrumbs';
-//import { Breadcrumb } from "reactstrap";
-//import CardTitle from "reactstrap/lib/CardTitle";
 
 function Breadcrumbs(props) {
   let linkToDirectory = "";

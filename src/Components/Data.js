@@ -8,10 +8,12 @@ import { Redirect } from 'react-router-dom';
 import moment from 'moment';
 
 function Data(props) {  
+  /*
   const [search, updateSearch] = useState("");
   const [token, updateTokenState] = useState(token$.value);
   const [data, updateData] = useState([]);
   const [user, updateUser] = useState("");
+
   
   useEffect(() => {
     // If token exists
@@ -50,6 +52,8 @@ function Data(props) {
         });
     }
   }, [token, search]);
+
+  */
 
   function onClickFavorite(event) {
     console.log('Making folder or file a favorite...');
@@ -107,9 +111,10 @@ function Data(props) {
   
   return (
     <>
-      {/* Search page */}
+      {/* Search page 
       <input type="text" placeholder="search..." onChange={(e) => { updateSearch(e.target.value); }} value={search} /> <br/>
-
+      */}
+      
       {/* Table file/folder data */}
       <Table>
         <thead>
@@ -123,7 +128,7 @@ function Data(props) {
           </tr>
         </thead>
         <tbody>
-          {data.map((file) => {
+          {props.data.map((file) => {
             return (
               <tr key={file.id}>
                 <td>{file[".tag"] === "folder" ? <i class="material-icons">folder_open</i> : file[".tag"]}</td>
