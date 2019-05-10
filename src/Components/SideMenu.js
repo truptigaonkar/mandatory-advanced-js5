@@ -28,14 +28,14 @@ const usernameStyle = {
 function SideMenu(props) {
   return (
     <aside style={asideStyle}>
-      <Input type="text" placeholder="Search" onChange={(e) => { props.updateSearch(e.target.value); }} value={props.search} />
+      <Input size="lg" type="text" placeholder="Search" onChange={(e) => { props.updateSearch(e.target.value); }} value={props.search} />
       <ul style={ulStyle}>
         <li onClick={UploadFileModal}>Upload File</li>
         <li onClick={props.newFolder}>New Folder</li>
       </ul>
       <div style={accountStyle}>
         <span style={usernameStyle}>{props.user}</span>
-        <Button onClick={props.logOut}>Log out</Button>
+        <Button color="success" onClick={props.logOut}>Log out</Button>
       </div>
     </aside>
   );

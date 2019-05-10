@@ -11,10 +11,8 @@ body {
   border-color: #4F772D;
   outline: none;
   box-shadow: none;
-  margin-top: 30px;
 }
 
 .btn-success:hover {
   background-color: #31572C;
-  margin-top: 30px;
 }

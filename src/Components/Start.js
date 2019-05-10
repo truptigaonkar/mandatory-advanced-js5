@@ -7,6 +7,9 @@ import { CLIENT_ID } from '../constants';
 import { token$, updateToken } from '../store';
 import { h3Style } from './style';
 
+const startButtonStyle = {
+  marginTop: "30px"
+}
 
 export default function Start(props) {
 
@@ -69,7 +72,7 @@ export default function Start(props) {
         </Helmet>
 
         <h3 style={h3Style}>File Hosting Service</h3>
-        <Button color="success" onClick={onClickLogin}>Connect</Button>{' '}
+        <Button color="success" onClick={onClickLogin} style={startButtonStyle}>Connect</Button>{' '}
       </>
     );
   }

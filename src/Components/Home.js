@@ -14,27 +14,32 @@ import Breadcrumbs from './Breadcrumbs';
 function Home(props) {
   const [token, updateTokenState] = useState(token$.value);
   const [data, updateData] = useState([]);
-  const [search, updateSearch] = useState('');
+  const [search, updateSearch] = useState("");
   const [user, updateUser] = useState("");
+  //const [directory, updateDirectory] = useState([]);
   const [activeTab, updateActiveTab] = useState("1");
-  const currentLocation = props.location.pathname.substring(5);  
+  let currentLocation = props.location.pathname.substring(5);  
 
   // Using this instead of helmet because it was causing problem while search
-   useEffect(() => {
+  useEffect(() => {
     document.title = "TeaCup";
   })
 
   useEffect(() => {
-      let dropbox = new Dropbox({ accessToken: token });
+    const dropbox = new Dropbox({ accessToken: token, fetch });
 
-      //Fetching files/folders
-      dropbox.filesListFolder({ path: '' })
-      .then(function (response) {
-        updateData(response.entries);
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
+    //Fetching files/folders
+    dropbox.filesListFolder({ path: currentLocation })
+    .then(function (response) {
+      updateData(response.entries);
+    })
+    .catch(function (error) {
+      console.error(error);
+    }, [currentLocation]);
+  });
+
+  useEffect(() => {
+      let dropbox = new Dropbox({ accessToken: token });
 
       // Search
       if(search) {

@@ -7,14 +7,13 @@ import { token$, updateToken } from '../store';
 import { Redirect } from 'react-router-dom';
 import moment from 'moment';
 
-function Data(props) {
-  const [data, updateData] = useState([]);
+function Data(props) {  
+  const [search, updateSearch] = useState("");
   const [token, updateTokenState] = useState(token$.value);
-  const [search, updateSearch] = useState('');
+  const [data, updateData] = useState([]);
   const [user, updateUser] = useState("");
-
+  
   useEffect(() => {
-
     // If token exists
     if (token) {
       let dropbox = new Dropbox({ accessToken: token });
@@ -104,7 +103,7 @@ function Data(props) {
   }
 
   //console.log("Data: ", data);
-  console.log("Username", user)
+  //console.log("Username", user)
   
   return (
     <>
@@ -138,7 +137,6 @@ function Data(props) {
           })}
         </tbody>
       </Table>
-
     </>
   );
 }
