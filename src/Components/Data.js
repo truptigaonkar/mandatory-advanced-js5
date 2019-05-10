@@ -56,17 +56,6 @@ function Data(props) {
     console.log('Making folder or file a favorite...');
   }
 
-  // Logout function
-  function handleLogout(e) {
-    e.preventDefault();
-    updateToken(null);
-    updateTokenState(token$.value);
-  }
-
-  if (!token) {
-    return <Redirect to="/" />;
-  }
-
   // Table data Last modified calculations
   function handleLastModified(date) {
     let day = date.substring(8, 10);
@@ -119,12 +108,6 @@ function Data(props) {
   
   return (
     <>
-     {/* User information */}
-     {user}
-
-     {/* Logout page */}
-      <button onClick={handleLogout}>Logout</button><br /><br/>
-
       {/* Search page */}
       <input type="text" placeholder="search..." onChange={(e) => { updateSearch(e.target.value); }} value={search} /> <br/>
 
