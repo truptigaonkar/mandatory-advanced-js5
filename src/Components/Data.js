@@ -181,7 +181,7 @@ function Data(props) {
             console.log("file data: ", file)
             return (
               <tr key={file.id}>
-              <td>{file[".tag"] === "folder" ? <i class="material-icons">folder_open</i> : file[".tag"]}<Thumbnail file={file} /></td>
+              <td style={{color:'green'}}>{file[".tag"] === "folder" ? <i class="material-icons">folder</i> : <Thumbnail file={file} />}</td>
                 <td>{file[".tag"] === "folder" ? <Link to={`/home${file.path_display}`}>{file.name}</Link> : <span onClick={() => handleDownloadFile(file.name, file.path_display)} style={{ cursor: 'pointer', color: 'blue' }}>{file.name}</span>}</td>
                 <td>{file.server_modified ? handleLastModified(file.server_modified) : null}</td>
                 <td>{handleSize(file.size)}</td>
