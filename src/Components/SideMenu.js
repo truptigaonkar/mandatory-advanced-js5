@@ -3,10 +3,10 @@ import { Button, Input } from 'reactstrap';
 import UploadFileModal from './UploadFileModal';
 import "./SideMenu.css";
 
-const asideStyle = { 
+const asideStyle = {
   margin: "41px 6px 0 6px",
   width: "20%",
-  minWidth: "50px" 
+  minWidth: "50px"
 }
 
 const ulStyle = {
@@ -29,7 +29,7 @@ const accountStyle = {
 const usernameStyle = {
   marginRight: "5px",
   verticalAlign: "baseline"
-}; 
+};
 
 function SideMenu(props) {
   return (

@@ -1,22 +1,12 @@
 import React, { useRef, useState } from "react";
-import {
-  Button,
-  FormGroup,
-  FormText,
-  Input,
-  Label,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter
-} from "reactstrap";
+import { Button, FormGroup, FormText, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
 function UploadFileModal(props) {
   const [modal, updateModal] = useState(props.modal);
   const fileInputRef = useRef(null);
   console.log(modal);
-  
-  
+
+
   function onUploadSubmit(e) {
     e.preventDefault();
     props.uploadFile(fileInputRef.current.files);
@@ -40,7 +30,7 @@ function UploadFileModal(props) {
             onClick={() => updateModal(!modal)}
             onSubmit={(e) => onUploadSubmit(e)}
           >
-          {/*<Button
+            {/*<Button
             type="submit"
             color="success"
              onClick={toggle(false)} 

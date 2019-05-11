@@ -1,18 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, Route } from "react-router-dom";
-import {
-  Table,
-  TabContent,
-  TabPane,
-  Nav,
-  NavItem,
-  NavLink,
-  Button,
-  Row,
-  Col,
-  Input
-} from "reactstrap";
-//import "./Home.css";
+import { Table, TabContent, TabPane, Nav, NavItem, NavLink, Button, Row, Col, Inpu } from "reactstrap";
 import { Dropbox } from "dropbox";
 import { token$, updateToken } from "../store";
 import { Redirect } from "react-router-dom";
@@ -31,7 +19,7 @@ function Home(props) {
   //const [directory, updateDirectory] = useState([]);
   const [activeTab, updateActiveTab] = useState("1");
   let currentLocation = props.location.pathname.substring(5);
-  
+
   // Using this instead of helmet because it was causing problem while search
   useEffect(() => {
     document.title = "TeaCup";
@@ -44,11 +32,11 @@ function Home(props) {
       currentLocation = "";
     }
     dropbox.filesListFolder({ path: currentLocation })
-      .then(function(response) {
+      .then(function (response) {
         updateData(response.entries);
         console.log(response.entries);
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.error(error);
       });
   }, [currentLocation]);
@@ -60,7 +48,7 @@ function Home(props) {
     if (!search) {
       //Fetching files/folders
       dropbox.filesListFolder({ path: currentLocation })
-        .then(function(response) {
+        .then(function (response) {
           updateData(response.entries);
         })
         .catch(function (error) {
@@ -74,7 +62,8 @@ function Home(props) {
             return file.metadata
           });
           updateData(files);
-        })}
+        })
+    }
   }, []);
 
   // Fetch user name
@@ -82,10 +71,10 @@ function Home(props) {
     const dropbox = new Dropbox({ accessToken: token });
     dropbox
       .usersGetCurrentAccount()
-      .then(function(response) {
+      .then(function (response) {
         updateUser(response.name.given_name);
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.error(error);
       });
   }, [token]);
@@ -115,12 +104,12 @@ function Home(props) {
         })
         .then(response => {
           dropbox.filesListFolder({ path: currentLocation })
-          .then(response => {
-            updateData(response.entries);
-            updateUploadFileToggle(false);
-          })
+            .then(response => {
+              updateData(response.entries);
+              updateUploadFileToggle(false);
+            })
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.error(error);
         });
     }
