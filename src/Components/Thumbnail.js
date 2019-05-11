@@ -4,17 +4,20 @@ import { token$ } from '../store';
 
 const fileType = /\.(gif|jpg|jpeg|tiff|tif|png|bmp)$/i;
 
-const FileType = (props) => {
+const Thumbnail = props => {
   const [url, updateUrl] = useState('');
 
   useEffect(() => {
     if(fileType.test(props.file.name)){
       const dropbox = new Dropbox({ accessToken: token$.value, fetch });
       dropbox.filesGetThumbnail({path: props.file.path_lower, size: 'w32h32'})
-      .then((res) => {
-        let urlBlob = URL.createObjectURL(res.fileBlob);
+      .then((response) => {
+        let urlBlob = URL.createObjectURL(response.fileBlob);
         updateUrl(urlBlob);
       })
+      .catch(function (error) {
+        console.error(error);
+      });
     }
   }, [props.file.name, props.file.path_lower])
 
@@ -30,4 +33,4 @@ const FileType = (props) => {
 
 }
 
-export default FileType
+export default Thumbnail
