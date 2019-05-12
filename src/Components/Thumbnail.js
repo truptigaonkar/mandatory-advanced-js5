@@ -27,10 +27,13 @@ const Thumbnail = props => {
       <img src={url} alt={props.file.name}></img>
     )
   }
-  else {
+  else if (props.file['.tag'] === 'file') {
+    return (
+      <i class="material-icons">file_copy</i>
+    )
+  }else{
     return null
   }
-
 }
 
 export default Thumbnail
