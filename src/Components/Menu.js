@@ -3,7 +3,7 @@ import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 
 class Menu extends Component {
   constructor(props) {
-    super(props):
+    super(props);
     this.state = {
       modal: false
     }

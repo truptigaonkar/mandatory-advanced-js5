@@ -5,7 +5,7 @@ import "./Data.css";
 import { Dropbox } from "dropbox";
 import { token$, updateToken } from "../store";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input } from "reactstrap";
-import Dropdown from './Dropdown'
+import Dropdown from "./Dropdown"
 
 function Data(props) {
   const [modal, updateModal] = useState(false);
