@@ -7,9 +7,10 @@ import { token$, updateToken } from '../store';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input } from 'reactstrap';
 import Dropdown from "./Dropdown";
 import Thumbnail from './Thumbnail';
+import { file } from "@babel/types";
 
-function Data(props) {  
-  
+function Data(props) {
+
   const [search, updateSearch] = useState("");
   const [token, updateTokenState] = useState(token$.value);
   const [data, updateData] = useState([]);
@@ -54,7 +55,7 @@ function Data(props) {
     }
   }, [token, search]);
 
-  
+
 
   function onClickFavorite(event) {
     console.log('Making folder or file a favorite...');
@@ -109,6 +110,8 @@ function Data(props) {
 
 
   //  ------------------------------------- New folder ----------------------------------------------------//
+  const [folderName, updateFolderName] = useState("");
+
   function toggleFolder() {
     updateModal(true)
   }
@@ -117,23 +120,22 @@ function Data(props) {
     updateModal(false)
   }
 
-
-  const [folderName, updateFolderName] = useState("");
-
   function handleFolderName(e) {
     console.log("console log input value: ", e.target.value);
     updateFolderName(e.target.value);
   }
 
-  
-  function handleNewFolder(props) {
-    console.log(1)
-    // const currentPath = props.location
-    // console.log("current path: ", currentPath);
 
-    // let dropbox = new Dropbox({ accessToken: token$.value, fetch });
-    // dropbox.filesCreateFolder({ path: currentPath + "/" + folderName })
-    // exitDialog();
+  function handleNewFolder() {
+    console.log(1)
+    const filePath = window.location.pathname.substring(5);
+    let dropbox = new Dropbox({ accessToken: token$.value, fetch });
+    dropbox.filesCreateFolder({ path: filePath + "/" + folderName, autorename: true })
+      .then((response) => {
+        console.log("new folder response: ", response)
+        exitDialog();
+      }
+      )
   }
 
   //  ------------------------------------- End New folder ----------------------------------------------------//
@@ -159,7 +161,7 @@ function Data(props) {
             <Button color="secondary" onClick={exitDialog}>Cancel</Button>
           </ModalFooter>
         </Modal>
-      </div><br/>
+      </div><br />
 
       {/* Search page */}
       <input type="text" placeholder="search..." onChange={(e) => { updateSearch(e.target.value); }} value={props.search} /> <br />
@@ -178,10 +180,10 @@ function Data(props) {
         </thead>
         <tbody>
           {props.data.map((file) => {
-            console.log("file data: ", file)
+            //console.log("file data: ", file)
             return (
               <tr key={file.id}>
-              <td style={{color:'green'}}><Thumbnail file={file} /></td>
+                <td style={{ color: 'green' }}><Thumbnail file={file} /></td>
                 <td>{file[".tag"] === "folder" ? <Link to={`/home${file.path_display}`}>{file.name}</Link> : <span onClick={() => handleDownloadFile(file.name, file.path_display)} style={{ cursor: 'pointer', color: 'blue' }}>{file.name}</span>}</td>
                 <td>{file.server_modified ? handleLastModified(file.server_modified) : null}</td>
                 <td>{handleSize(file.size)}</td>
