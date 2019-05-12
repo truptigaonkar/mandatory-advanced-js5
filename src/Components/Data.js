@@ -7,7 +7,6 @@ import { token$, updateToken } from '../store';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input } from 'reactstrap';
 import Dropdown from "./Dropdown";
 import Thumbnail from './Thumbnail';
-import { file } from "@babel/types";
 
 function Data(props) {
 
@@ -55,12 +54,11 @@ function Data(props) {
     }
   }, [token, search]);
 
-
-
   function onClickFavorite(event) {
     console.log('Making folder or file a favorite...');
   }
 
+  /*------------------------------------- Render table data ---------------------------------------------*/
   // Table data Last modified calculations
   function handleLastModified(date) {
     let day = date.substring(8, 10);
@@ -90,7 +88,9 @@ function Data(props) {
     }
     return size;
   }
+  /*------------------------------------- End Render table data ---------------------------------------------*/
 
+  /*------------------------------------- Download files ---------------------------------------------*/
   // Function to download files
   function handleDownloadFile(fileName, filePath) {
     const dropbox = new Dropbox({ accessToken: token$.value, fetch });
@@ -107,49 +107,54 @@ function Data(props) {
         console.log(error.response);
       })
   }
+/*------------------------------------- End Download files ---------------------------------------------*/
 
-
-  //  ------------------------------------- New folder ----------------------------------------------------//
+  /*------------------------------------- New folder ---------------------------------------------*/
   const [folderName, updateFolderName] = useState("");
 
+  // Triggering modal to open
   function toggleFolder() {
     updateModal(true)
   }
 
-  function exitDialog() {
+  //Closing modal
+  function exitModal() {
     updateModal(false)
   }
 
+  // Handle input
   function handleFolderName(e) {
     console.log("console log input value: ", e.target.value);
     updateFolderName(e.target.value);
   }
 
-
+  // Handling create button function
   function handleNewFolder() {
     console.log(1)
     const filePath = window.location.pathname.substring(5);
     let dropbox = new Dropbox({ accessToken: token$.value, fetch });
     dropbox.filesCreateFolder({ path: filePath + "/" + folderName, autorename: true })
       .then((response) => {
-        console.log("new folder response: ", response)
-        exitDialog();
-      }
-      )
+        console.log("new folder response: ", response);
+        exitModal();
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+      window.location.reload();
   }
-
-  //  ------------------------------------- End New folder ----------------------------------------------------//
+  /*-------------------------------------End New folder ---------------------------------------------*/
 
   //console.log("Data: ", data);
   //console.log("Username", user)
   return (
     <>
 
-      {/* Create new folder button and modal */}
+      {/* ------------------------------------- New folder --------------------------------------------- */}
       <div>
         <Button color="danger" onClick={toggleFolder}>Create New Folder</Button>
         <Modal isOpen={modal} toggle={toggleFolder} >
-          <ModalHeader toggle={exitDialog}>Create New Folder</ModalHeader>
+          <ModalHeader toggle={exitModal}>Create New Folder</ModalHeader>
           <ModalBody>
             <FormGroup>
               <Label for="name">Folder name</Label>
@@ -158,14 +163,14 @@ function Data(props) {
           </ModalBody>
           <ModalFooter>
             <Button color="primary" onClick={handleNewFolder}>Create</Button>{' '}
-            <Button color="secondary" onClick={exitDialog}>Cancel</Button>
+            <Button color="secondary" onClick={exitModal}>Cancel</Button>
           </ModalFooter>
         </Modal>
       </div><br />
+      {/* -------------------------------------End New folder --------------------------------------------- */}
 
-      {/* Search page */}
+      {/* ------------------------------------------ Search ----------------------------------------------- */}
       <input type="text" placeholder="search..." onChange={(e) => { updateSearch(e.target.value); }} value={props.search} /> <br />
-
       {/* Table file/folder data */}
       <Table>
         <thead>
@@ -194,6 +199,7 @@ function Data(props) {
           })}
         </tbody>
       </Table>
+      {/* ------------------------------------------End Search ----------------------------------------------- */}
     </>
   );
 }
