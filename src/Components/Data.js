@@ -9,11 +9,12 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, I
 import Dropdown from './Dropdown';
 import { Star } from './Star.js';
 import { FilledStar } from './FilledStar.js';
+import Thumbnail from './Thumbnail';
+import CreateFolder from './CreateFolder';
 
 function Data(props) {
   const [modal, updateModal] = useState(false);
   const [favorites, updateFavorites] = useState(favorites$.value); //favorites is an array of objects
-  /*
   const [search, updateSearch] = useState("");
   const [token, updateTokenState] = useState(token$.value);
   const [data, updateData] = useState([]);
@@ -56,8 +57,6 @@ function Data(props) {
         });
     }
   }, [token, search]);
-
-  */
 
   //Listening to favorites observable
   //updateFavorites is used only here. Anywhere else, use updateFavoriteObservable to update favorites.
@@ -105,6 +104,7 @@ function Data(props) {
     }
   }
 
+  /*------------------------------------- Render table data ---------------------------------------------*/
   // Table data Last modified calculations
   function handleLastModified(date) {
     let day = date.substring(8, 10);
@@ -112,120 +112,58 @@ function Data(props) {
     let year = date.substring(0, 4);
 
     let months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
+      "January", "February", "March",
+      "April", "May", "June", "July",
+      "August", "September", "October",
+      "November", "December"
     ];
 
-    month = month.replace(/^0+/, "");
-    day = day.replace(/^0+/, "");
+    month = month.replace(/^0+/, '');
+    day = day.replace(/^0+/, '');
     let monthShow = months[month - 1];
 
-    return <label>{day + " " + monthShow + " " + year}</label>;
+    return <label>{day + ' ' + monthShow + ' ' + year}</label>
   }
 
   // Table data size calculations in Bytes, KB, MB, GB, TB, PB, EB, ZB, YB
   function handleSize(size) {
-    let sizes = [" B", " KB", " MB", " GB", " TB", " PB", " EB", " ZB", " YB"];
+    let sizes = [' B', ' KB', ' MB', ' GB', ' TB', ' PB', ' EB', ' ZB', ' YB'];
     for (let i = 1; i < sizes.length; i++) {
       if (size < Math.pow(1024, i))
-        return (
-          Math.round((size / Math.pow(1024, i - 1)) * 100) / 100 + sizes[i - 1]
-        );
+        return (Math.round((size / Math.pow(1024, i - 1)) * 100) / 100) + sizes[i - 1];
     }
     return size;
   }
+  /*------------------------------------- End Render table data ---------------------------------------------*/
 
+  /*------------------------------------- Download files ---------------------------------------------*/
   // Function to download files
   function handleDownloadFile(fileName, filePath) {
     const dropbox = new Dropbox({ accessToken: token$.value, fetch });
-    dropbox
-      .filesDownload({ path: filePath })
-      .then(response => {
+    dropbox.filesDownload({ path: filePath })
+      .then((response) => {
         console.log("File details to be download: ", response);
         let url = URL.createObjectURL(response.fileBlob);
-        let downloadButton = document.createElement("a");
-        downloadButton.setAttribute("href", url);
-        downloadButton.setAttribute("download", response.name);
+        let downloadButton = document.createElement('a');
+        downloadButton.setAttribute('href', url);
+        downloadButton.setAttribute('download', response.name);
         downloadButton.click();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error.response);
-      });
+      })
   }
-
-  // New folder
-  function toggleFolder() {
-    updateModal(true);
-  }
-
-  function exitDialog() {
-    updateModal(false);
-  }
-
-  const [folderName, updateFolderName] = useState("");
-
-  function handleFolderName(e) {
-    console.log("console log input value: ", e.target.value);
-    updateFolderName(e.target.value);
-  }
-
-  function handleNewFolder(props) {
-    console.log(1);
-    // const currentPath = props.location
-    // console.log("current path: ", currentPath);
-
-    // let dropbox = new Dropbox({ accessToken: token$.value, fetch });
-    // dropbox.filesCreateFolder({ path: currentPath + "/" + folderName })
-    // exitDialog();
-  }
+/*------------------------------------- End Download files ---------------------------------------------*/
 
   //console.log("Data: ", data);
   //console.log("Username", user)
+
+  console.log("hej", data);
+
   return (
     <>
-      {/* Create new folder button and modal */}
-      <div>
-        <Button color="danger" onClick={toggleFolder}>
-          Create New Folder
-        </Button>
-        <Modal isOpen={modal} toggle={toggleFolder}>
-          <ModalHeader toggle={exitDialog}>Create New Folder</ModalHeader>
-          <ModalBody>
-            <FormGroup>
-              <Label for="name">Folder name</Label>
-              <Input
-                type="text"
-                placeholder="Folder name"
-                onChange={handleFolderName}
-                value={folderName}
-              />
-            </FormGroup>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={handleNewFolder}>
-              Create
-            </Button>{" "}
-            <Button color="secondary" onClick={exitDialog}>
-              Cancel
-            </Button>
-          </ModalFooter>
-        </Modal>
-      </div>
-      <br />
-
-      {/* Search page
-      <input type="text" placeholder="search..." onChange={(e) => { updateSearch(e.target.value); }} value={search} /> <br />
-*/}
+      {/* ------------------------------------------ Search ----------------------------------------------- */}
+      <input type="text" placeholder="search..." onChange={(e) => { updateSearch(e.target.value); }} value={props.search} /> <br />
       {/* Table file/folder data */}
       <Table>
         <thead>
@@ -235,9 +173,7 @@ function Data(props) {
             <th>Last modified</th>
             <th>Size</th>
             <th>Menu</th>
-            <th>
-              <i class="material-icons">star_border</i>
-            </th>
+            <th><i class="material-icons">star_border</i></th>
           </tr>
         </thead>
         <tbody>
@@ -252,46 +188,25 @@ function Data(props) {
               }
             }
 
+            // let favorite = false;
+            // console.log('favorites: ', favorites);
+
             return (
               <tr key={file.id}>
-                <td>
-                  {file[".tag"] === "folder" ? (
-                    <i class="material-icons">folder_open</i>
-                  ) : (
-                      file[".tag"]
-                    )}
-                </td>
-                <td>
-                  {file[".tag"] === "folder" ? (
-                    <Link to={`/home${file.path_display}`}>{file.name}</Link>
-                  ) : (
-                      <span
-                        onClick={() =>
-                          handleDownloadFile(file.name, file.path_display)
-                        }
-                        style={{ cursor: "pointer", color: "blue" }}
-                      >
-                        {file.name}
-                      </span>
-                    )}
-                </td>
-                <td>
-                  {file.server_modified
-                    ? handleLastModified(file.server_modified)
-                    : null}
-                </td>
+                <td style={{ color: 'green' }}><Thumbnail file={file} /></td>
+                <td>{file[".tag"] === "folder" ? <Link to={`/home${file.path_display}`}>{file.name}</Link> : <span onClick={() => handleDownloadFile(file.name, file.path_display)} style={{ cursor: 'pointer', color: 'blue' }}>{file.name}</span>}</td>
+                <td>{file.server_modified ? handleLastModified(file.server_modified) : null}</td>
                 <td>{handleSize(file.size)}</td>
-                <td>
-                  <Dropdown />
-                </td>
+                <td><Dropdown /></td>
                 <td>
                   { favorite ? <FilledStar id={file.id} onClickFavorite={onClickFavorite}/> : <Star id={file.id} onClickFavorite={onClickFavorite}/>}
                 </td>
               </tr>
-            );
+            )
           })}
         </tbody>
       </Table>
+      {/* ------------------------------------------End Search ----------------------------------------------- */}
     </>
   );
 }

@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Input } from 'reactstrap';
 import UploadFileModal from './UploadFileModal';
 import "./SideMenu.css";
+import CreateFolder from './CreateFolder';
 
 const asideStyle = {
   margin: "41px 6px 0 6px",
@@ -38,7 +39,7 @@ function SideMenu(props) {
       <Input size="lg" type="text" placeholder="Search" onChange={(e) => { props.filterFile(e); }} value={props.search} />
       <ul style={ulStyle}>
         <li style={liStyle} onClick={props.uploadFile} modal={props.uploadFileToggle}>Upload File</li>
-        <li style={liStyle} onClick={props.newFolder}>New Folder</li>
+        <li style={liStyle} onClick={props.newFolder}><CreateFolder /></li>
       </ul>
       <div style={accountStyle}>
         <span style={usernameStyle}>{props.user}</span>

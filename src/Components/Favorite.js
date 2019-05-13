@@ -1,11 +1,24 @@
+// import React, { useState, useEffect } from "react";
+// import { Table } from 'reactstrap';
+// import { Helmet } from 'react-helmet';
+// import Home from './Home';
+// import { token$, updateToken } from '../store.js';
+// import { favorites$, updateFavoriteObservable } from '../store.js';
 import React, { useState, useEffect } from "react";
-import { Table } from 'reactstrap';
-import { Helmet } from 'react-helmet';
-import Home from './Home';
-import { token$, updateToken } from '../store.js';
-import { favorites$, updateFavoriteObservable } from '../store.js';
+import { Link } from "react-router-dom";
+import { Table } from "reactstrap";
+import "./Data.css";
+import { Dropbox } from "dropbox";
+import { token$, updateToken } from "../store";
+import { favorites$, updateFavoriteObservable } from '../store';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input } from "reactstrap";
+import Dropdown from './Dropdown';
+import { Star } from './Star.js';
+import { FilledStar } from './FilledStar.js';
+import Thumbnail from './Thumbnail';
+import CreateFolder from './CreateFolder';
 
-export default function Favorite() {
+export default function Favorite(props) {
   const [token, updateToken] = useState(token$.value);
   const [favorites, updateFavorites] = useState(favorites$.value); //favorites is an array of objects
   const [search, updateSearch] = useState('');
@@ -35,6 +48,7 @@ export default function Favorite() {
     });
     updateFavoriteObservable(filteredFavorites);
   }
+
 
   return (
     <>
@@ -71,4 +85,5 @@ export default function Favorite() {
 
     </>
   );
+
 }
