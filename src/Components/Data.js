@@ -1,21 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
-import { Table } from 'reactstrap';
-import './Data.css';
-import { Dropbox } from 'dropbox';
-import { token$, updateToken } from '../store';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input } from 'reactstrap';
-import Dropdown from "./Dropdown";
+import { Link } from "react-router-dom";
+import { Table } from "reactstrap";
+import "./Data.css";
+import { Dropbox } from "dropbox";
+import { token$, updateToken } from "../store";
+import { favorites$, updateFavoriteObservable } from '../store';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input } from "reactstrap";
+import Dropdown from './Dropdown';
+import { Star } from './Star.js';
+import { FilledStar } from './FilledStar.js';
 import Thumbnail from './Thumbnail';
 import CreateFolder from './CreateFolder';
 
 function Data(props) {
-
+  const [modal, updateModal] = useState(false);
+  const [favorites, updateFavorites] = useState(favorites$.value); //favorites is an array of objects
   const [search, updateSearch] = useState("");
   const [token, updateTokenState] = useState(token$.value);
   const [data, updateData] = useState([]);
   const [user, updateUser] = useState("");
-  const [modal, updateModal] = useState(false);
 
   useEffect(() => {
     // If token exists
@@ -55,8 +58,50 @@ function Data(props) {
     }
   }, [token, search]);
 
+  //Listening to favorites observable
+  //updateFavorites is used only here. Anywhere else, use updateFavoriteObservable to update favorites.
+  useEffect(() => {
+    const subscription = favorites$.subscribe(updateFavorites);
+    return () => subscription.unsubscribe();
+  }, []);
+
+  function addFavorite(id) {
+    //Looking for the right file/folder in data (matching on id)
+    let targetObject;
+    for(let object of props.data) {
+      if(object.id === id) {
+        targetObject = {...object};
+      }
+    }
+
+    //Making a copy of favorites array to work with
+    let newFavoritesArray = favorites.slice();
+
+    //Adding new object to array
+    newFavoritesArray.push(targetObject);
+
+    //Updating favorites
+    updateFavoriteObservable(newFavoritesArray);
+  }
+
+  function removeFavorite(id) {
+    let filteredFavorites = favorites.filter(object => {
+      return object.id !== id;
+    });
+    updateFavoriteObservable(filteredFavorites);
+  }
+
+  //Function adding or removing favorite depending on current state (checks if the star is filled or not)
   function onClickFavorite(event) {
-    console.log('Making folder or file a favorite...');
+    let id = event.target.id;
+    let textContent = event.target.textContent;
+
+    if(textContent === 'star_border') {
+      addFavorite(id);
+    }
+    else {
+      removeFavorite(id);
+    }
   }
 
   /*------------------------------------- Render table data ---------------------------------------------*/
@@ -131,8 +176,20 @@ function Data(props) {
           </tr>
         </thead>
         <tbody>
-          {props.data.map((file) => {
-            //console.log("file data: ", file)
+          {props.data.map(file => {
+
+            //Favorite logic
+            let favorite = false;
+            for(let object of favorites) {
+              if(object.id === file.id) {
+                favorite = true;
+                break;
+              }
+            }
+
+            // let favorite = false;
+            // console.log('favorites: ', favorites);
+
             return (
               <tr key={file.id}>
                 <td style={{ color: 'green' }}><Thumbnail file={file} /></td>
@@ -140,7 +197,9 @@ function Data(props) {
                 <td>{file.server_modified ? handleLastModified(file.server_modified) : null}</td>
                 <td>{handleSize(file.size)}</td>
                 <td><Dropdown /></td>
-                <td><i class="material-icons" onClick={onClickFavorite}>star_border</i></td>
+                <td>
+                  { favorite ? <FilledStar id={file.id} onClickFavorite={onClickFavorite}/> : <Star id={file.id} onClickFavorite={onClickFavorite}/>}
+                </td>
               </tr>
             )
           })}
