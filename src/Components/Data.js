@@ -27,7 +27,7 @@ function Data(props) {
     if (token) {
       let dropbox = new Dropbox({ accessToken: token });
 
-    
+
       // if then (Fetching files/folders) else (search)
       if (!search) {
         //Fetching files/folders

@@ -24,3 +24,8 @@ export function updateFavoriteObservable(newFavoritesArray) {
   //Updating favorites observable
   favorites$.next(newFavoritesArray);
 }
+
+export function removeFavorites() {
+  window.localStorage.removeItem('favorites');
+  favorites$.next(null);
+}
