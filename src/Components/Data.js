@@ -4,17 +4,21 @@ import { Table } from "reactstrap";
 import "./Data.css";
 import { Dropbox } from "dropbox";
 import { token$, updateToken } from "../store";
+import { favorites$, updateFavoriteObservable } from '../store';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input } from "reactstrap";
-import Dropdown from './Dropdown'
+import Dropdown from './Dropdown';
+import { Star } from './Star.js';
+import { FilledStar } from './FilledStar.js';
 
 function Data(props) {
   const [modal, updateModal] = useState(false);
+  const [favorites, updateFavorites] = useState(favorites$.value); //favorites is an array of objects
   /*
   const [search, updateSearch] = useState("");
   const [token, updateTokenState] = useState(token$.value);
   const [data, updateData] = useState([]);
   const [user, updateUser] = useState("");
-  
+
   useEffect(() => {
     // If token exists
     if (token) {
@@ -55,8 +59,50 @@ function Data(props) {
 
   */
 
+  //Listening to favorites observable
+  //updateFavorites is used only here. Anywhere else, use updateFavoriteObservable to update favorites.
+  useEffect(() => {
+    const subscription = favorites$.subscribe(updateFavorites);
+    return () => subscription.unsubscribe();
+  }, []);
+
+  function addFavorite(id) {
+    //Looking for the right file/folder in data (matching on id)
+    let targetObject;
+    for(let object of props.data) {
+      if(object.id === id) {
+        targetObject = {...object};
+      }
+    }
+
+    //Making a copy of favorites array to work with
+    let newFavoritesArray = favorites.slice();
+
+    //Adding new object to array
+    newFavoritesArray.push(targetObject);
+
+    //Updating favorites
+    updateFavoriteObservable(newFavoritesArray);
+  }
+
+  function removeFavorite(id) {
+    let filteredFavorites = favorites.filter(object => {
+      return object.id !== id;
+    });
+    updateFavoriteObservable(filteredFavorites);
+  }
+
+  //Function adding or removing favorite depending on current state (checks if the star is filled or not)
   function onClickFavorite(event) {
-    console.log("Making folder or file a favorite...");
+    let id = event.target.id;
+    let textContent = event.target.textContent;
+
+    if(textContent === 'star_border') {
+      addFavorite(id);
+    }
+    else {
+      removeFavorite(id);
+    }
   }
 
   // Table data Last modified calculations
@@ -177,7 +223,7 @@ function Data(props) {
       </div>
       <br />
 
-      {/* Search page 
+      {/* Search page
       <input type="text" placeholder="search..." onChange={(e) => { updateSearch(e.target.value); }} value={search} /> <br />
 */}
       {/* Table file/folder data */}
@@ -196,6 +242,16 @@ function Data(props) {
         </thead>
         <tbody>
           {props.data.map(file => {
+
+            //Favorite logic
+            let favorite = false;
+            for(let object of favorites) {
+              if(object.id === file.id) {
+                favorite = true;
+                break;
+              }
+            }
+
             return (
               <tr key={file.id}>
                 <td>
@@ -229,9 +285,7 @@ function Data(props) {
                   <Dropdown />
                 </td>
                 <td>
-                  <i class="material-icons" onClick={onClickFavorite}>
-                    star_border
-                  </i>
+                  { favorite ? <FilledStar id={file.id} onClickFavorite={onClickFavorite}/> : <Star id={file.id} onClickFavorite={onClickFavorite}/>}
                 </td>
               </tr>
             );
