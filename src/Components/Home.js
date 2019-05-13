@@ -81,6 +81,10 @@ function Home(props) {
     return <Redirect to="/" />;
   }
 
+  function onNewFolder(folder) {
+    updateData(folder);
+  }
+
   function filterFile(e) {
     updateSearch(e.target.value);
   }
@@ -150,6 +154,7 @@ function Home(props) {
         filterFile={filterFile}
         logOut={logOut}
         user={user}
+        onNewFolder={onNewFolder}
       />
     </div>
   );

@@ -3,7 +3,7 @@ import { Dropbox } from 'dropbox';
 import { token$, updateToken } from '../store';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input } from 'reactstrap';
 
-const CreateFolder = () => {
+const CreateFolder = (props) => {
 
   const [modal, updateModal] = useState(false);
   const [folderName, updateFolderName] = useState("");
@@ -29,8 +29,9 @@ const CreateFolder = () => {
     let dropbox = new Dropbox({ accessToken: token$.value, fetch });
     dropbox.filesCreateFolder({ path: filePath + "/" + folderName, autorename: true })
       .then((response) => {
+        props.onNewFolder(response);
         exitModal();
-        window.location.reload();
+        //window.location.reload();
       })
       .catch((error) => {
         console.log(error.response);

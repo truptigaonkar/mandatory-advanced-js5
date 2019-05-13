@@ -38,7 +38,7 @@ function SideMenu(props) {
       <Input size="lg" type="text" placeholder="Search" onChange={(e) => { props.filterFile(e); }} value={props.search} />
       <ul style={ulStyle}>
         <li style={liStyle}><UploadFileModal /></li>
-        <li style={liStyle}><CreateFolder /></li>
+        <li style={liStyle}><CreateFolder onNewFolder={props.onNewFolder} /></li>
       </ul>
       <div style={accountStyle}>
         <span style={usernameStyle}>{props.user}</span>

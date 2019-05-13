@@ -4,28 +4,13 @@ import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
 function Breadcrumbs(props) {
   let linkToDirectory = "";
   let pathElements = props.path.substring(1).split("/");
-  const directoryLinks = pathElements.map((directory) => {
+  const directoryLinks = pathElements.map((directory, idx) => {
     linkToDirectory += `/${directory}`;
-    return <BreadcrumbItem tag="a" href={linkToDirectory}>{directory}</BreadcrumbItem>
+    return <BreadcrumbItem active={idx === pathElements.length - 1} tag="a" href={linkToDirectory}>{idx === 0 ? "Home" : directory}</BreadcrumbItem>
   })
 
-  //Capitalize Home TypeError: pathElements.map is not a function
-  /*
-  let linkToDirectory = "home";
-  let pathElements = props.path.substring(1).split("/");
-
-  if(pathElements.length > 1) {
-    pathElements = pathElements.shift();
-  }
-
-  const directoryLinks = pathElements.map((directory) => {
-    linkToDirectory += `/${directory}`;
-    return <BreadcrumbItem tag ="a" href={linkToDirectory}>{directory}</BreadcrumbItem>
-  })
- */
   return (
     <Breadcrumb>
-      {/*<BreadcrumbItem tag="a" href="/home">Home</BreadcrumbItem>*/}
       {directoryLinks}
     </Breadcrumb>
   )

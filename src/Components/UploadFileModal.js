@@ -1,37 +1,35 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { Dropbox } from 'dropbox';
-import { token$, updateToken } from '../store';
+import { token$, updateToken, updateFavoriteObservable } from '../store';
 import { Button, FormGroup, FormText, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
-function UploadFileModal(props) {
+function UploadFileModal() {
   const [token, updateTokenState] = useState(token$.value);
-  const [modal, updateModal] = useState(false); //toggle={() => updateModal(!modal)} toggle={() => updateModal(!modal)} onClick={() => updateModal(!modal)} onClick={() => updateModal(!modal)}
-  const fileInputRef = useRef(null);
+  const [modal, updateModal] = useState(false);
+  const [file, updateFile] =  useState(null);
   const currentLocation = window.location.pathname.substring(5);
 
   function toggle() {
     updateModal(!modal)
   }
 
-  function uploadFile(files) {
+  function uploadFile(file) {
     const dropbox = new Dropbox({ accessToken: token, fetch });
-    console.log(files);
-    
-
-    if (files.length > 0 && files[0].size < 150000000) {
+  
+    if (file.size < 150000000) {
       dropbox
         .filesUpload({
-          contents: files[0],
-          path: `${currentLocation}/${files[0].name}`
+          contents: file,
+          path: `${currentLocation}/${file.name}`
         })
         .then(response => {
           dropbox.filesListFolder({ path: currentLocation })
-            .then(response => {
-              updateModal(false);
-              console.log(response.entries);
-              
-            })
+          console.log(response.entries);
         })
+            .then(response => {
+              console.log(response.entries);
+              updateModal(false);
+            })
         .catch(function (error) {
           console.error(error);
         });
@@ -40,9 +38,13 @@ function UploadFileModal(props) {
 
   function onUploadSubmit(e) {
     e.preventDefault();
-    uploadFile(fileInputRef.current.files);
+    uploadFile(file);
     window.location.reload();
     updateModal(false);
+  }
+
+  function onChangeFile(e) {
+    updateFile(e.target.files[0] || null);
   }
 
   return (
@@ -53,23 +55,23 @@ function UploadFileModal(props) {
         <ModalBody>
           <FormGroup id="upload">
             <Label for="uploadfile">Please select a file to upload</Label>
-            <Input type="file" name="file" id="uploadfile" ref={fileInputRef} />
+            <Input type="file" name="file" id="uploadfile" onChange={onChangeFile} />
             <FormText color="muted">The size of a file should not exceed 150MB.</FormText>
           </FormGroup>
         </ModalBody>
         <ModalFooter>
           <Button
-            for="upload"
+            htmlFor="upload"
             type="submit"
             color="success"
-            onClick={toggle}
+            onClick={(e) => onUploadSubmit(e)}
           >
             Upload
           </Button>{" "}
           <Button
             color="secondary"
-            onClick={(e) => onUploadSubmit(e)}
-          > {/*<Button color="secondary" onClick={toggle(false)}>*/}
+            onClick={toggle}
+          >
             Cancel
           </Button>
         </ModalFooter>
