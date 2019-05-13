@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, Route } from "react-router-dom";
 import { Table, TabContent, TabPane, Nav, NavItem, NavLink, Button, Row, Col, Inpu } from "reactstrap";
 import { Dropbox } from "dropbox";
-import { token$, updateToken } from "../store";
+import { token$, updateToken, removeFavorites } from "../store";
 import { Redirect } from "react-router-dom";
 import moment from "moment";
 import Data from "./Data";
@@ -91,6 +91,7 @@ function Home(props) {
     e.preventDefault();
     updateToken(null);
     updateTokenState(token$.value);
+    removeFavorites();
   }
 
   function uploadFile(files) {
