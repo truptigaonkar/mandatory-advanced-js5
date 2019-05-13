@@ -26,18 +26,18 @@ const CreateFolder = props => {
 
   // Handling create button function
   function handleNewFolder() {
-    console.log(1)
     const filePath = window.location.pathname.substring(5);
     let dropbox = new Dropbox({ accessToken: token$.value, fetch });
     dropbox.filesCreateFolder({ path: filePath + "/" + folderName, autorename: true })
       .then((response) => {
         console.log("new folder response: ", response);
         exitModal();
+        window.location.reload();
       })
       .catch((error) => {
         console.log(error.response);
       });
-      window.location.reload();
+      
   }
 
   return (
