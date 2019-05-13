@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, Route } from "react-router-dom";
-import { Table, TabContent, TabPane, Nav, NavItem, NavLink, Button, Row, Col, Inpu } from "reactstrap";
+import { Table, TabContent, TabPane, Nav, NavItem, NavLink, Button, Row, Col, Input } from "reactstrap";
 import { Dropbox } from "dropbox";
 import { token$, updateToken, removeFavorites } from "../store";
 import { Redirect } from "react-router-dom";
@@ -24,7 +24,7 @@ function Home(props) {
   });
 
   //Fetching files/folders in designated path
-  useEffect(() => {
+  function renderData() {
     const dropbox = new Dropbox({ accessToken: token, fetch });
     if (currentLocation === "/") {
       currentLocation = "";
@@ -35,10 +35,14 @@ function Home(props) {
       })
       .catch(function (error) {
         console.error(error);
-      });
+      })
+  }
+  useEffect(() => {
+    renderData();
   }, [currentLocation]);
 
   // Search
+  /*
   useEffect(() => {
     const dropbox = new Dropbox({ accessToken: token, fetch });
 
@@ -62,7 +66,7 @@ function Home(props) {
         })
     }
   }, []);
-
+*/
   // Fetch user name
   useEffect(() => {
     const dropbox = new Dropbox({ accessToken: token });
@@ -82,11 +86,11 @@ function Home(props) {
   }
 
   function onNewFolder(folder) {
-    updateData(folder);
+    renderData();
   }
 
-  function filterFile(e) {
-    updateSearch(e.target.value);
+  function onUpload() {
+    renderData();
   }
 
   function logOut(e) {
@@ -134,7 +138,7 @@ function Home(props) {
             </Row>
             <Row>
               <Col sm="12">
-                <Data data={data} />
+                <Data data={data} updateData={updateData} renderData={renderData} />
               </Col>
             </Row>
           </TabPane>
@@ -151,11 +155,10 @@ function Home(props) {
         </TabContent>
       </div>
       <SideMenu
-        search={search}
-        filterFile={filterFile}
         logOut={logOut}
         user={user}
         onNewFolder={onNewFolder}
+        onUpload={onUpload}
       />
     </div>
   );

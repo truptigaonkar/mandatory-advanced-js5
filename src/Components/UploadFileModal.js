@@ -3,7 +3,7 @@ import { Dropbox } from 'dropbox';
 import { token$, updateToken, updateFavoriteObservable } from '../store';
 import { Button, FormGroup, FormText, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
-function UploadFileModal() {
+function UploadFileModal(props) {
   const [token, updateTokenState] = useState(token$.value);
   const [modal, updateModal] = useState(false);
   const [file, updateFile] =  useState(null);
@@ -17,19 +17,17 @@ function UploadFileModal() {
     const dropbox = new Dropbox({ accessToken: token, fetch });
   
     if (file.size < 150000000) {
+      console.log("in function");
+      
       dropbox
         .filesUpload({
           contents: file,
           path: `${currentLocation}/${file.name}`
         })
         .then(response => {
-          dropbox.filesListFolder({ path: currentLocation })
-          console.log(response.entries);
+          props.onUpload();
+          updateModal(false);
         })
-            .then(response => {
-              console.log(response.entries);
-              updateModal(false);
-            })
         .catch(function (error) {
           console.error(error);
         });
@@ -39,7 +37,7 @@ function UploadFileModal() {
   function onUploadSubmit(e) {
     e.preventDefault();
     uploadFile(file);
-    window.location.reload();
+    //window.location.reload();
     updateModal(false);
   }
 

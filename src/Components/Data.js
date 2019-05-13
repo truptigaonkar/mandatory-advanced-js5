@@ -1,47 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Table } from "reactstrap";
 import "./Data.css";
 import { Dropbox } from "dropbox";
-import { token$, updateToken } from "../store";
-import { favorites$, updateFavoriteObservable } from '../store';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input } from "reactstrap";
+import { token$, updateToken, favorites$, updateFavoriteObservable  } from "../store";
+import { Table, Input } from "reactstrap";
 import Dropdown from './Dropdown';
 import { Star } from './Star.js';
 import { FilledStar } from './FilledStar.js';
 import Thumbnail from './Thumbnail';
-import CreateFolder from './CreateFolder';
 
 function Data(props) {
   const [modal, updateModal] = useState(false);
   const [favorites, updateFavorites] = useState(favorites$.value); //favorites is an array of objects
   const [search, updateSearch] = useState("");
   const [token, updateTokenState] = useState(token$.value);
-  const [data, updateData] = useState([]);
+  //const [data, updateData] = useState([]);
   const [user, updateUser] = useState("");
 
   let currentLocation = window.location.pathname.substring(5);
+  const updateData = props.updateData;
 
   useEffect(() => {
     // If token exists
     if (token) {
       let dropbox = new Dropbox({ accessToken: token });
 
-
       // if then (Fetching files/folders) else (search)
-      if (!search) {
-        //Fetching files/folders
-        if (currentLocation === "/") {
-          currentLocation = "";
-        }
-        dropbox.filesListFolder({ path: currentLocation })
-          .then(function (response) {
-            updateData(response.entries);
-          })
-          .catch(function (error) {
-            console.error(error);
-          });
-      } else {
+      if (search) {
         // Search
         dropbox.filesSearch({ path: '', query: search })
           .then(function (response) {
@@ -53,6 +38,7 @@ function Data(props) {
       }
 
       // Fetching logged in username
+      /*
       dropbox.usersGetCurrentAccount()
         .then(function (response) {
           console.log("User Email: ", response.email);
@@ -61,6 +47,7 @@ function Data(props) {
         .catch(function (error) {
           console.error(error);
         });
+        */
     }
   }, [token, search, currentLocation]);
 
@@ -74,7 +61,7 @@ function Data(props) {
   function addFavorite(id) {
     //Looking for the right file/folder in data (matching on id)
     let targetObject;
-    for(let object of data) {
+    for(let object of props.data) {
       if(object.id === id) {
         targetObject = {...object};
       }
@@ -161,14 +148,10 @@ function Data(props) {
   }
 /*------------------------------------- End Download files ---------------------------------------------*/
 
-  //console.log("Data: ", data);
-  //console.log("Username", user)
-  //console.log("hej", data);
-
   return (
     <>
       {/* ------------------------------------------ Search ----------------------------------------------- */}
-      <input type="text" placeholder="search..." onChange={(e) => { updateSearch(e.target.value); }} value={props.search} /> <br />
+      <Input type="text" placeholder="search..." onChange={(e) => { updateSearch(e.target.value); }} value={props.search} /> <br />
       {/* Table file/folder data */}
       <Table>
         <thead>
@@ -182,7 +165,7 @@ function Data(props) {
           </tr>
         </thead>
         <tbody>
-          {data.map(file => {
+          {props.data.map(file => {
 
             //Favorite logic
             let favorite = false;
@@ -192,9 +175,6 @@ function Data(props) {
                 break;
               }
             }
-
-            // let favorite = false;
-            // console.log('favorites: ', favorites);
 
             return (
               <tr key={file.id}>
@@ -211,7 +191,6 @@ function Data(props) {
           })}
         </tbody>
       </Table>
-      {/* ------------------------------------------End Search ----------------------------------------------- */}
     </>
   );
 }
