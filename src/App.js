@@ -33,7 +33,8 @@ const headerStyle = {
   margin: 0,
   position: "absolute",
   left: "64px",
-  top: "24px"
+  top: "24px",
+  color: "#212529"
 };
 
 function App() {

@@ -2,23 +2,27 @@ import React, { useRef, useState } from "react";
 import { Button, FormGroup, FormText, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
 function UploadFileModal(props) {
-  const [modal, updateModal] = useState(props.modal);
+  const [modal, updateModal] = useState(props.UploadFileModal); //toggle={() => updateModal(!modal)} toggle={() => updateModal(!modal)} onClick={() => updateModal(!modal)} onClick={() => updateModal(!modal)}
   const fileInputRef = useRef(null);
-  console.log(modal);
 
+  function toggle() {
+    console.log(modal);
+    updateModal(!modal)
+  }
 
   function onUploadSubmit(e) {
     e.preventDefault();
     props.uploadFile(fileInputRef.current.files);
+    //updateModal(false);
   }
 
   return (
     <>
-      <Modal isOpen={modal} toggle={() => updateModal(!modal)}>
-        <ModalHeader toggle={() => updateModal(!modal)}>Upload file</ModalHeader>
+      <Modal isOpen={modal} toggle={toggle}>
+        <ModalHeader toggle={toggle}>Upload file</ModalHeader>
         <ModalBody>
           <FormGroup>
-            <Label for="uploadfile">File</Label>
+            <Label for="uploadfile">Please select a file to upload</Label>
             <Input type="file" name="file" id="uploadfile" ref={fileInputRef} />
             <FormText color="muted">The size of a file should not exceed 150MB.</FormText>
           </FormGroup>
@@ -27,7 +31,7 @@ function UploadFileModal(props) {
           <Button
             type="submit"
             color="success"
-            onClick={() => updateModal(!modal)}
+            onClick={toggle}
             onSubmit={(e) => onUploadSubmit(e)}
           >
             {/*<Button
@@ -38,7 +42,10 @@ function UploadFileModal(props) {
           >*/}
             Upload
           </Button>{" "}
-          <Button color="secondary" onClick={() => updateModal(!modal)}> {/*<Button color="secondary" onClick={toggle(false)}>*/}
+          <Button
+            color="secondary"
+            onClick={toggle}
+          > {/*<Button color="secondary" onClick={toggle(false)}>*/}
             Cancel
           </Button>
         </ModalFooter>

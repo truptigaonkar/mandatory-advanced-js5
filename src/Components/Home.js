@@ -16,7 +16,6 @@ function Home(props) {
   const [search, updateSearch] = useState("");
   const [user, updateUser] = useState("");
   const [uploadFileToggle, updateUploadFileToggle] = useState(false);
-  //const [directory, updateDirectory] = useState([]);
   const [activeTab, updateActiveTab] = useState("1");
   let currentLocation = props.location.pathname.substring(5);
 
@@ -75,6 +74,7 @@ function Home(props) {
         updateUser(response.name.given_name);
       })
       .catch(function (error) {
+
         console.error(error);
       });
   }, [token]);
@@ -123,6 +123,7 @@ function Home(props) {
             <NavLink
               className={activeTab === "1" ? "active" : ""}
               onClick={() => updateActiveTab("1")}
+              style={{color: "#31572C"}}
             >
               <i class="material-icons" style={{ verticalAlign: "bottom" }}>
                 folder
@@ -134,6 +135,7 @@ function Home(props) {
             <NavLink
               className={activeTab === "2" ? "active" : ""}
               onClick={() => updateActiveTab("2")}
+              style={{color: "#31572C"}}
             >
               <i class="material-icons" style={{ verticalAlign: "bottom" }}>
                 star
@@ -171,7 +173,7 @@ function Home(props) {
         search={search}
         filterFile={filterFile}
         uploadFileToggle={uploadFileToggle}
-        uploadFile={() => updateUploadFileToggle(true)}
+        uploadFile={uploadFile}
         logOut={logOut}
         user={user}
       />
