@@ -10,7 +10,7 @@ export function updateToken(newToken){
 export const favorites$ = new BehaviorSubject(JSON.parse(window.localStorage.getItem('favorites')) || []);
 
 //For resetting favorites
-// export const favorites$ = new BehaviorSubject([]);
+//export const favorites$ = new BehaviorSubject([]);
 
 export function updateFavoriteObservable(newFavoritesArray) {
   //Turning array into string
