@@ -112,12 +112,10 @@ function Data(props) {
 
   //console.log("Data: ", data);
   //console.log("Username", user)
-
-  console.log("hej", data);
+  //console.log("hej", data);
 
   return (
     <>
-
       {/* ------------------------------------------ Search ----------------------------------------------- */}
       <input type="text" placeholder="search..." onChange={(e) => { updateSearch(e.target.value); }} value={props.search} /> <br />
       {/* Table file/folder data */}

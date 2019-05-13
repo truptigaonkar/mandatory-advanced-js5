@@ -33,19 +33,11 @@ const usernameStyle = {
 };
 
 function SideMenu(props) {
-  const [modal, updateModal] = useState(props.uploadFileToggle);
-
-  function toggle() {
-    console.log(modal);
-    updateModal(!modal);
-  }
-
   return (
     <aside style={asideStyle}>
-      <UploadFileModal uploadFileToggle={props.uploadFileToggle} uploadFile={props.uploadFile} />
       <Input size="lg" type="text" placeholder="Search" onChange={(e) => { props.filterFile(e); }} value={props.search} />
       <ul style={ulStyle}>
-        <li style={liStyle} onClick={toggle}>Upload File</li>
+        <li style={liStyle}><UploadFileModal /></li>
         <li style={liStyle}><CreateFolder /></li>
       </ul>
       <div style={accountStyle}>
