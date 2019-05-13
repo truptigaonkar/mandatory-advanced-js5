@@ -16,3 +16,8 @@ body {
 .btn-success:hover {
   background-color: #31572C;
 }
+
+.show>.btn-outline-success.dropdown-toggle:focus, .btn-outline-success:focus {
+  outline: none;
+  box-shadow: none;
+}

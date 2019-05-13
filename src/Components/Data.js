@@ -49,7 +49,7 @@ function Data(props) {
       // Fetching logged in username
       dropbox.usersGetCurrentAccount()
         .then(function (response) {
-          console.log("User Email: ", response.email);
+          //console.log("User Email: ", response.email);
           updateUser(response.email);
         })
         .catch(function (error) {

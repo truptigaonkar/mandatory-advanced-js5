@@ -29,7 +29,7 @@ const Thumbnail = props => {
     // filetype: file
   } else if (props.file['.tag'] === 'file') {
     return (
-      <i class="material-icons">file_copy</i>
+      <i class="material-icons">insert_drive_file</i>
     )
     // filetype: folder
   } else if (props.file['.tag'] === 'folder') {

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import "./Dropdown.css"
 
 class Action extends Component {
   constructor(props) {
@@ -23,7 +24,7 @@ class Action extends Component {
         isOpen={this.state.dropdownOpen}
         toggle={this.toggle}
       >
-        <DropdownToggle outline caret border="none"><i class="material-icons">more_horiz</i></DropdownToggle>
+        <DropdownToggle color="primary" outline caret><i class="material-icons">more_horiz</i></DropdownToggle>
         <DropdownMenu>
           <DropdownItem>Delete</DropdownItem>
           <DropdownItem>Rename</DropdownItem>
