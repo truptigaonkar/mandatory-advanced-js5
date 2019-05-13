@@ -20,15 +20,21 @@ function Data(props) {
   const [data, updateData] = useState([]);
   const [user, updateUser] = useState("");
 
+  let currentLocation = window.location.pathname.substring(5);
+
   useEffect(() => {
     // If token exists
     if (token) {
       let dropbox = new Dropbox({ accessToken: token });
 
+    
       // if then (Fetching files/folders) else (search)
       if (!search) {
         //Fetching files/folders
-        dropbox.filesListFolder({ path: '' })
+        if (currentLocation === "/") {
+          currentLocation = "";
+        }
+        dropbox.filesListFolder({ path: currentLocation })
           .then(function (response) {
             updateData(response.entries);
           })
@@ -49,14 +55,14 @@ function Data(props) {
       // Fetching logged in username
       dropbox.usersGetCurrentAccount()
         .then(function (response) {
-          //console.log("User Email: ", response.email);
+          console.log("User Email: ", response.email);
           updateUser(response.email);
         })
         .catch(function (error) {
           console.error(error);
         });
     }
-  }, [token, search]);
+  }, [token, search, currentLocation]);
 
   //Listening to favorites observable
   //updateFavorites is used only here. Anywhere else, use updateFavoriteObservable to update favorites.
@@ -68,7 +74,7 @@ function Data(props) {
   function addFavorite(id) {
     //Looking for the right file/folder in data (matching on id)
     let targetObject;
-    for(let object of props.data) {
+    for(let object of data) {
       if(object.id === id) {
         targetObject = {...object};
       }
@@ -176,7 +182,7 @@ function Data(props) {
           </tr>
         </thead>
         <tbody>
-          {props.data.map(file => {
+          {data.map(file => {
 
             //Favorite logic
             let favorite = false;
