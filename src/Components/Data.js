@@ -7,9 +7,10 @@ import { token$, updateToken } from '../store';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input } from 'reactstrap';
 import Dropdown from "./Dropdown";
 import Thumbnail from './Thumbnail';
+import CreateFolder from './CreateFolder';
 
-function Data(props) {  
-  
+function Data(props) {
+
   const [search, updateSearch] = useState("");
   const [token, updateTokenState] = useState(token$.value);
   const [data, updateData] = useState([]);
@@ -54,12 +55,11 @@ function Data(props) {
     }
   }, [token, search]);
 
-  
-
   function onClickFavorite(event) {
     console.log('Making folder or file a favorite...');
   }
 
+  /*------------------------------------- Render table data ---------------------------------------------*/
   // Table data Last modified calculations
   function handleLastModified(date) {
     let day = date.substring(8, 10);
@@ -89,7 +89,9 @@ function Data(props) {
     }
     return size;
   }
+  /*------------------------------------- End Render table data ---------------------------------------------*/
 
+  /*------------------------------------- Download files ---------------------------------------------*/
   // Function to download files
   function handleDownloadFile(fileName, filePath) {
     const dropbox = new Dropbox({ accessToken: token$.value, fetch });
@@ -106,64 +108,18 @@ function Data(props) {
         console.log(error.response);
       })
   }
-
-
-  //  ------------------------------------- New folder ----------------------------------------------------//
-  function toggleFolder() {
-    updateModal(true)
-  }
-
-  function exitDialog() {
-    updateModal(false)
-  }
-
-
-  const [folderName, updateFolderName] = useState("");
-
-  function handleFolderName(e) {
-    console.log("console log input value: ", e.target.value);
-    updateFolderName(e.target.value);
-  }
-
-  
-  function handleNewFolder(props) {
-    console.log(1)
-    // const currentPath = props.location
-    // console.log("current path: ", currentPath);
-
-    // let dropbox = new Dropbox({ accessToken: token$.value, fetch });
-    // dropbox.filesCreateFolder({ path: currentPath + "/" + folderName })
-    // exitDialog();
-  }
-
-  //  ------------------------------------- End New folder ----------------------------------------------------//
+/*------------------------------------- End Download files ---------------------------------------------*/
 
   //console.log("Data: ", data);
   //console.log("Username", user)
+
+  console.log("hej", data);
+
   return (
     <>
 
-      {/* Create new folder button and modal */}
-      <div>
-        <Button color="danger" onClick={toggleFolder}>Create New Folder</Button>
-        <Modal isOpen={modal} toggle={toggleFolder} >
-          <ModalHeader toggle={exitDialog}>Create New Folder</ModalHeader>
-          <ModalBody>
-            <FormGroup>
-              <Label for="name">Folder name</Label>
-              <Input type="text" placeholder="Folder name" onChange={handleFolderName} value={folderName} />
-            </FormGroup>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={handleNewFolder}>Create</Button>{' '}
-            <Button color="secondary" onClick={exitDialog}>Cancel</Button>
-          </ModalFooter>
-        </Modal>
-      </div><br/>
-
-      {/* Search page */}
+      {/* ------------------------------------------ Search ----------------------------------------------- */}
       <input type="text" placeholder="search..." onChange={(e) => { updateSearch(e.target.value); }} value={props.search} /> <br />
-
       {/* Table file/folder data */}
       <Table>
         <thead>
@@ -181,7 +137,7 @@ function Data(props) {
             //console.log("file data: ", file)
             return (
               <tr key={file.id}>
-              <td style={{color: "#4F772D"}}>{file[".tag"] === "folder" ? <i class="material-icons">folder</i> : <Thumbnail file={file} />}</td>
+                <td style={{ color: 'green' }}><Thumbnail file={file} /></td>
                 <td>{file[".tag"] === "folder" ? <Link to={`/home${file.path_display}`}>{file.name}</Link> : <span onClick={() => handleDownloadFile(file.name, file.path_display)} style={{ cursor: 'pointer', color: 'blue' }}>{file.name}</span>}</td>
                 <td>{file.server_modified ? handleLastModified(file.server_modified) : null}</td>
                 <td>{handleSize(file.size)}</td>
@@ -192,6 +148,7 @@ function Data(props) {
           })}
         </tbody>
       </Table>
+      {/* ------------------------------------------End Search ----------------------------------------------- */}
     </>
   );
 }
