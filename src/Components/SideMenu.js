@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Input } from 'reactstrap';
-import UploadFileModal from './UploadFileModal';
+import UploadFile from './UploadFile';
 import "./SideMenu.css";
 import CreateFolder from './CreateFolder';
 
@@ -36,8 +36,8 @@ function SideMenu(props) {
   return (
     <aside style={asideStyle}>
       <ul style={ulStyle}>
-        <li style={liStyle}><UploadFileModal onUpload={props.onUpload} /></li>
-        <li style={liStyle}><CreateFolder onNewFolder={props.onNewFolder} /></li>
+        <li style={liStyle}><UploadFile onUpload={props.onUpload} location={props.location} /></li>
+        <li style={liStyle}><CreateFolder onNewFolder={props.onNewFolder} location={props.location} /></li>
       </ul>
       <div style={accountStyle}>
         <span style={usernameStyle}>{props.user}</span>

@@ -155,6 +155,7 @@ function Home(props) {
         </TabContent>
       </div>
       <SideMenu
+        location={props.location}
         logOut={logOut}
         user={user}
         onNewFolder={onNewFolder}

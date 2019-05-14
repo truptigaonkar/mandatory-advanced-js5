@@ -41,5 +41,8 @@
   },
   "engines": {
     "yarn": "YARN NO LONGER USED - use npm instead."
+  },
+  "devDependencies": {
+    "react-testing-library": "^7.0.0"
   }
 }

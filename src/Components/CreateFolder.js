@@ -7,6 +7,7 @@ const CreateFolder = (props) => {
 
   const [modal, updateModal] = useState(false);
   const [folderName, updateFolderName] = useState("");
+  const filePath = props.location.pathname.substring(5);
 
   // Triggering modal to open
   function toggleFolder() {
@@ -25,7 +26,6 @@ const CreateFolder = (props) => {
 
   // Handling create button function
   function handleNewFolder() {
-    const filePath = window.location.pathname.substring(5);
     let dropbox = new Dropbox({ accessToken: token$.value, fetch });
     dropbox.filesCreateFolder({ path: filePath + "/" + folderName, autorename: true })
       .then((response) => {
