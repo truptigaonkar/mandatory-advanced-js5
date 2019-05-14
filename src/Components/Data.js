@@ -232,7 +232,7 @@ function Data(props) {
                 <td>{file[".tag"] === "folder" ? <Link to={`/home${file.path_display}`}>{file.name}</Link> : <span onClick={() => handleDownloadFile(file.name, file.path_display)} style={{ cursor: 'pointer', color: 'blue' }}>{file.name}</span>}</td>
                 <td>{file.server_modified ? handleLastModified(file.server_modified) : null}</td>
                 <td>{handleSize(file.size)}</td>
-                <td><Button file={file} >Delete</Button><Dropdown /></td>
+                <td><Dropdown file={file} onDelete={props.onDelete} /></td>
                 <td>
                   { favorite ? <FilledStar id={file.id} onClickRemoveFavorite={onClickRemoveFavorite}/> : <Star id={file.id} onClickAddFavorite={onClickAddFavorite}/>}
                 </td>

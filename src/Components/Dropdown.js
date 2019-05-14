@@ -10,7 +10,8 @@ class Action extends Component {
     this.state = {
       dropdownOpen: false,
       file: props.file,
-      deleteModal: false
+      deleteModal: false,
+      onDelete: props.onDelete
     };
 
     this.toggle = this.toggle.bind(this);
@@ -26,11 +27,7 @@ class Action extends Component {
   deleteToggle() {
     this.setState(prevState => ({
       deleteModal: !prevState.deleteModal
-    }))
-    console.log("deleteToggle");
-    console.log(this.state.deleteModal);
-    
-    
+    }))  
   }
 
   //onClick={() => { updateFileToDelete(file); toggleFolder() }}
@@ -43,7 +40,7 @@ class Action extends Component {
       >
         <DropdownToggle color="primary" outline caret><i class="material-icons">more_horiz</i></DropdownToggle>
         <DropdownMenu>
-          <DropdownItem onClick={this.deleteToggle}><Delete file={this.state.file} toggle={this.state.deleteModal} />Delete</DropdownItem> 
+          <DropdownItem onClick={this.deleteToggle}><Delete file={this.state.file} toggle={this.state.deleteModal} onDelete={this.state.onDelete} />Delete</DropdownItem> 
           <DropdownItem>Rename</DropdownItem>
           <DropdownItem>Move</DropdownItem>
           <DropdownItem>Copy</DropdownItem>

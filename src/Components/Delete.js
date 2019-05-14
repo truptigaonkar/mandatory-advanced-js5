@@ -6,20 +6,14 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, I
 const Delete = (props) => {
 
     const [modal, updateModal] = useState(props.toggle);
-    const [fileToDelete, updateFileToDelete] = useState(null);
+    const [fileToDelete, updateFileToDelete] = useState(props.file);
     const [currentFolder, setCurrentFolder] = useState([]);
   
-    function toggleFolder() {
-      updateModal(true)
-    }
-  
-    //Closing modal
-    function exitModal() {
-      updateModal(false)
+    function toggle() {
+      updateModal(!modal)
     }
   
     function handleDelete(file) {
-      console.log(file);
       const dropbox = new Dropbox({ accessToken: token$.value, fetch });
       dropbox.filesDeleteV2({ path: fileToDelete.path_lower })
         .then(response => {
@@ -28,18 +22,18 @@ const Delete = (props) => {
             return file !== t;
           })
           setCurrentFolder(folderToDelete);
-          exitModal();
+          props.onDelete();
+          toggle();
         })
         .catch(err => {
           console.error(err);
         })
-      window.location.reload();
     }
 
   return (
     <>
-    <Modal isOpen={modal} toggle={toggleFolder} >
-        <ModalHeader toggle={exitModal}>Delete file/folder</ModalHeader>
+    <Modal isOpen={modal} toggle={toggle} >
+        <ModalHeader toggle={toggle}>Delete file/folder</ModalHeader>
         <ModalBody>
           <FormGroup>
             <Label>Are you sure want to delete "{fileToDelete && fileToDelete.name}"?</Label>
@@ -47,7 +41,7 @@ const Delete = (props) => {
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={() => handleDelete(props.file)}>Delete</Button>{' '}
-          <Button color="secondary" onClick={exitModal}>Cancel</Button>
+          <Button color="secondary" onClick={toggle}>Cancel</Button>
         </ModalFooter>
       </Modal>
     </>
