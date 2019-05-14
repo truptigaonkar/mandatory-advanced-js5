@@ -24,6 +24,12 @@ function Home(props) {
     document.title = "TeaCup";
   });
 
+  useEffect(() => {
+    const subscription = token$.subscribe(updateTokenState);
+
+    return () => subscription.unsubscribe();
+  });
+
   //Fetching files/folders in designated path
   useEffect(() => {
     const dropbox = new Dropbox({ accessToken: token, fetch });
@@ -89,8 +95,10 @@ function Home(props) {
 
   function logOut(e) {
     e.preventDefault();
+
+    const dropbox = new Dropbox({ accessToken: token$.value, fetch });
+    dropbox.authTokenRevoke();
     updateToken(null);
-    updateTokenState(token$.value);
     removeFavorites();
   }
 
@@ -164,7 +172,7 @@ function Home(props) {
                 <h4>Favorite</h4>
               </Col>
               <Col sm="12">
-                <Favorite />
+                <Favorite activeTab={activeTab} updateActiveTab={updateActiveTab}/>
               </Col>
             </Row>
           </TabPane>

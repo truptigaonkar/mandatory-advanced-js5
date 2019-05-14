@@ -1,9 +1,3 @@
-// import React, { useState, useEffect } from "react";
-// import { Table } from 'reactstrap';
-// import { Helmet } from 'react-helmet';
-// import Home from './Home';
-// import { token$, updateToken } from '../store.js';
-// import { favorites$, updateFavoriteObservable } from '../store.js';
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Table } from "reactstrap";
@@ -41,6 +35,25 @@ export default function Favorite(props) {
     return () => subscription.unsubscribe();
   }, []);
 
+  /*------------------------------------- Download files ---------------------------------------------*/
+  // Function to download files
+  function handleDownloadFile(fileName, filePath) {
+    const dropbox = new Dropbox({ accessToken: token$.value, fetch });
+    dropbox.filesDownload({ path: filePath })
+      .then((response) => {
+        console.log("File details to be download: ", response);
+        let url = URL.createObjectURL(response.fileBlob);
+        let downloadButton = document.createElement('a');
+        downloadButton.setAttribute('href', url);
+        downloadButton.setAttribute('download', response.name);
+        downloadButton.click();
+      })
+      .catch((error) => {
+        console.log(error.response);
+      })
+  }
+/*------------------------------------- End Download files ---------------------------------------------*/
+
   function onClickRemoveFavorite(event) {
     let id = event.target.id;
     let filteredFavorites = favorites.filter(object => {
@@ -49,6 +62,12 @@ export default function Favorite(props) {
     updateFavoriteObservable(filteredFavorites);
   }
 
+  // function redirectToHome(event) {
+  //   console.log('redirecting...');
+  //   props.updateActiveTab('2');
+  //
+  //   console.log('Active tab: ', props.activeTab);
+  // }
 
   return (
     <>
@@ -69,10 +88,12 @@ export default function Favorite(props) {
           <tbody>
             {favorites.map((file) => {
 
+              console.log('file.path_display: ', file.path_display);
+
               return (
                 <tr key={file.id}>
-                  <td>{file[".tag"] === "folder" ? <i class="material-icons">folder_open</i> : file[".tag"] }</td>
-                  <td>{file.name}</td>
+                  <td style={{ color: 'green' }}><Thumbnail file={file} /></td>
+                  <td>{file[".tag"] === "folder" ? <Link to={`/home${file.path_display}`}>{file.name}</Link> : <span onClick={() => handleDownloadFile(file.name, file.path_display)} style={{ cursor: 'pointer', color: 'blue' }}>{file.name}</span>}</td>
                   <td></td>
                   <td></td>
                   <td><i class="material-icons">more_horiz</i></td>
