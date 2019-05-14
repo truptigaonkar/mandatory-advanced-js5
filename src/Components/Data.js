@@ -170,7 +170,7 @@ function Data(props) {
             // let favorite = false;
             // console.log('favorites: ', favorites);
 
-            console.log('file.path_display: ', file.path_display);
+            //console.log('file.path_display: ', file.path_display);
 
             return (
               <tr key={file.id}>

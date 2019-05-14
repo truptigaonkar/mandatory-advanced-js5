@@ -15,7 +15,7 @@ function Home(props) {
   const [data, updateData] = useState([]);
   const [search, updateSearch] = useState("");
   const [user, updateUser] = useState("");
-  const [activeTab, updateActiveTab] = useState("1");
+  const [activeTab, updateActiveTab] = useState(props.location.pathname === "/home/favorites" ? "2" : "1");
   let currentLocation = props.location.pathname.substring(5);
 
   // Using this instead of helmet because it was causing problem while search
@@ -113,6 +113,7 @@ function Home(props) {
       <div style={{ flexGrow: 1 }}>
         <Nav tabs>
           <NavItem>
+            <Link to="/home">
             <NavLink
               className={activeTab === "1" ? "active" : ""}
               onClick={() => updateActiveTab("1")}
@@ -123,18 +124,24 @@ function Home(props) {
               </i>
               All
             </NavLink>
+            </Link>
           </NavItem>
           <NavItem>
+            <Link to="/home/favorites">
             <NavLink
               className={activeTab === "2" ? "active" : ""}
-              onClick={() => updateActiveTab("2")}
+              onClick={() => {
+                updateActiveTab("2");
+                //window.location = "/favorites";
+          }}
               style={{color: "#31572C"}}
             >
               <i class="material-icons" style={{ verticalAlign: "bottom" }}>
                 star
               </i>
-              Favorite
+              Favorites
             </NavLink>
+            </Link>
           </NavItem>
         </Nav>
         <TabContent activeTab={activeTab}>
@@ -153,10 +160,12 @@ function Home(props) {
           <TabPane tabId="2">
             <Row>
               <Col sm="12">
-                <h4>Favorite</h4>
+                <h4>Favorites</h4>
               </Col>
               <Col sm="12">
-                <Favorite activeTab={activeTab} updateActiveTab={updateActiveTab}/>
+                <Route path="/home/favorites" render={(props) => (
+                  <Favorite activeTab={activeTab} updateActiveTab={updateActiveTab} {...props} />
+                )} />
               </Col>
             </Row>
           </TabPane>

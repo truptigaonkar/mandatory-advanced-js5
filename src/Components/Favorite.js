@@ -54,6 +54,36 @@ export default function Favorite(props) {
   }
 /*------------------------------------- End Download files ---------------------------------------------*/
 
+  // Table data Last modified calculations
+  function handleLastModified(date) {
+    let day = date.substring(8, 10);
+    let month = date.substring(5, 7);
+    let year = date.substring(0, 4);
+
+    let months = [
+      "January", "February", "March",
+      "April", "May", "June", "July",
+      "August", "September", "October",
+      "November", "December"
+    ];
+
+    month = month.replace(/^0+/, '');
+    day = day.replace(/^0+/, '');
+    let monthShow = months[month - 1];
+
+    return <label>{day + ' ' + monthShow + ' ' + year}</label>
+  }
+
+  // Table data size calculations in Bytes, KB, MB, GB, TB, PB, EB, ZB, YB
+  function handleSize(size) {
+    let sizes = [' B', ' KB', ' MB', ' GB', ' TB', ' PB', ' EB', ' ZB', ' YB'];
+    for (let i = 1; i < sizes.length; i++) {
+      if (size < Math.pow(1024, i))
+        return (Math.round((size / Math.pow(1024, i - 1)) * 100) / 100) + sizes[i - 1];
+    }
+    return size;
+  }
+
   function onClickRemoveFavorite(event) {
     let id = event.target.id;
     let filteredFavorites = favorites.filter(object => {
@@ -62,17 +92,12 @@ export default function Favorite(props) {
     updateFavoriteObservable(filteredFavorites);
   }
 
-  // function redirectToHome(event) {
-  //   console.log('redirecting...');
-  //   props.updateActiveTab('2');
-  //
-  //   console.log('Active tab: ', props.activeTab);
-  // }
+  function redirectToHome(event) {
+    props.updateActiveTab('1');
+  }
 
   return (
     <>
-
-      <input type="text" placeholder="search..." onChange={(e) => { updateSearch(e.target.value); }} value={search} />
 
       <Table>
           <thead>
@@ -81,22 +106,20 @@ export default function Favorite(props) {
               <th>Name</th>
               <th>Last modified</th>
               <th>Size</th>
-              <th>Menu</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             {favorites.map((file) => {
 
-              console.log('file.path_display: ', file.path_display);
+              //console.log('file.path_display: ', file.path_display);
 
               return (
                 <tr key={file.id}>
                   <td style={{ color: 'green' }}><Thumbnail file={file} /></td>
-                  <td>{file[".tag"] === "folder" ? <Link to={`/home${file.path_display}`}>{file.name}</Link> : <span onClick={() => handleDownloadFile(file.name, file.path_display)} style={{ cursor: 'pointer', color: 'blue' }}>{file.name}</span>}</td>
-                  <td></td>
-                  <td></td>
-                  <td><i class="material-icons">more_horiz</i></td>
+                  <td>{file[".tag"] === "folder" ? <Link to={`/home${file.path_display}`} onClick={redirectToHome}>{file.name}</Link> : <span onClick={() => handleDownloadFile(file.name, file.path_display)} style={{ cursor: 'pointer', color: 'blue' }}>{file.name}</span>}</td>
+                  <td>{file.server_modified ? handleLastModified(file.server_modified) : null}</td>
+                  <td>{handleSize(file.size)}</td>
                   <td><button id={file.id} onClick={onClickRemoveFavorite}>Remove from favorites</button></td>
                 </tr>
               )
