@@ -1,24 +1,22 @@
 import React, { useState } from "react";
 import { Dropbox } from 'dropbox';
 import { token$, updateToken, updateFavoriteObservable } from '../store';
-import { Button, FormGroup, FormText, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { Alert, Button, FormGroup, FormText, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
-function UploadFileModal(props) {
+function UploadFile(props) {
   const [token, updateTokenState] = useState(token$.value);
   const [modal, updateModal] = useState(false);
   const [file, updateFile] =  useState(null);
-  const currentLocation = window.location.pathname.substring(5);
+  const currentLocation = props.location.pathname.substring(5);
 
   function toggle() {
     updateModal(!modal)
   }
 
-  function uploadFile(file) {
+  function handleUploadFile(file) {
     const dropbox = new Dropbox({ accessToken: token, fetch });
   
-    if (file.size < 150000000) {
-      console.log("in function");
-      
+    if (file.size > 0 && file.size < 150000000) {
       dropbox
         .filesUpload({
           contents: file,
@@ -36,8 +34,13 @@ function UploadFileModal(props) {
 
   function onUploadSubmit(e) {
     e.preventDefault();
-    uploadFile(file);
-    //window.location.reload();
+    
+    if (!file) {
+      return alert("Please select a file")
+      //() => {return <Alert color="danger">Please select a file</Alert>}
+    }
+
+    handleUploadFile(file);
     updateModal(false);
   }
 
@@ -52,7 +55,7 @@ function UploadFileModal(props) {
         <ModalHeader toggle={toggle}>Upload file</ModalHeader>
         <ModalBody>
           <FormGroup id="upload">
-            <Label for="uploadfile">Please select a file to upload</Label>
+            <Label htmlFor="uploadfile">Please select a file to upload</Label>
             <Input type="file" name="file" id="uploadfile" onChange={onChangeFile} />
             <FormText color="muted">The size of a file should not exceed 150MB.</FormText>
           </FormGroup>
@@ -78,4 +81,4 @@ function UploadFileModal(props) {
   );
 }
 
-export default UploadFileModal;
+export default UploadFile;

@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Data.css";
 import { Dropbox } from "dropbox";
-import { token$, updateToken, favorites$, updateFavoriteObservable  } from "../store";
+import { token$, updateToken, favorites$, updateFavoriteObservable } from "../store";
 import { Table, Input } from "reactstrap";
 import Dropdown from './Dropdown';
 import { Star } from './Star.js';
 import { FilledStar } from './FilledStar.js';
 import Thumbnail from './Thumbnail';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label } from "reactstrap";
 
 function Data(props) {
   const [modal, updateModal] = useState(false);
@@ -64,9 +65,9 @@ function Data(props) {
 
     //Looking for the right file/folder in data (matching on id)
     let targetObject;
-    for(let object of props.data) {
-      if(object.id === id) {
-        targetObject = {...object};
+    for (let object of props.data) {
+      if (object.id === id) {
+        targetObject = { ...object };
       }
     }
 
@@ -87,6 +88,7 @@ function Data(props) {
     });
     updateFavoriteObservable(filteredFavorites);
   }
+
 
   /*------------------------------------- Render table data ---------------------------------------------*/
   // Table data Last modified calculations
@@ -137,10 +139,60 @@ function Data(props) {
         console.log(error.response);
       })
   }
-/*------------------------------------- End Download files ---------------------------------------------*/
+  /*------------------------------------- End Download files ---------------------------------------------*/
+
+  /*------------------------------------- Delete ---------------------------------------------*/
+
+  const [fileToDelete, updateFileToDelete] = useState(null);
+  const [currentFolder, setCurrentFolder] = useState([]);
+
+  function toggleFolder() {
+    updateModal(true)
+  }
+
+  //Closing modal
+  function exitModal() {
+    updateModal(false)
+  }
+
+  function handleDelete(file) {
+    console.log(file);
+    const dropbox = new Dropbox({ accessToken: token$.value, fetch });
+    dropbox.filesDeleteV2({ path: fileToDelete.path_lower })
+      .then(response => {
+        console.log("delete response: ", response);
+        let folderToDelete = currentFolder.filter((t) => {
+          return file !== t;
+        })
+        setCurrentFolder(folderToDelete);
+        exitModal();
+      })
+      .catch(err => {
+        console.error(err);
+      })
+    window.location.reload();
+  }
+  /*------------------------------------- End Delete ---------------------------------------------*/
+
 
   return (
     <>
+      {/* ------------------------------------- Delete --------------------------------------------- */}
+      <Modal isOpen={modal} toggle={toggleFolder} >
+        <ModalHeader toggle={exitModal}>Delete file/folder</ModalHeader>
+        <ModalBody>
+          <FormGroup>
+            <Label>Are you sure want to delete "{fileToDelete && fileToDelete.name}"?</Label>
+          </FormGroup>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={() => handleDelete(props.file)}>Delete</Button>{' '}
+          <Button color="secondary" onClick={exitModal}>Cancel</Button>
+        </ModalFooter>
+      </Modal>
+      {/* ------------------------------------- End Delete --------------------------------------------- */}
+
+
       {/* ------------------------------------------ Search ----------------------------------------------- */}
       <Input type="text" placeholder="search..." onChange={(e) => { updateSearch(e.target.value); }} value={props.search} /> <br />
       {/* Table file/folder data */}
@@ -160,8 +212,8 @@ function Data(props) {
 
             //Favorite logic
             let favorite = false;
-            for(let object of favorites) {
-              if(object.id === file.id) {
+            for (let object of favorites) {
+              if (object.id === file.id) {
                 favorite = true;
                 break;
               }
@@ -178,7 +230,7 @@ function Data(props) {
                 <td>{file[".tag"] === "folder" ? <Link to={`/home${file.path_display}`}>{file.name}</Link> : <span onClick={() => handleDownloadFile(file.name, file.path_display)} style={{ cursor: 'pointer', color: 'blue' }}>{file.name}</span>}</td>
                 <td>{file.server_modified ? handleLastModified(file.server_modified) : null}</td>
                 <td>{handleSize(file.size)}</td>
-                <td><Dropdown /></td>
+                <td><Button file={file} onClick={() => { updateFileToDelete(file); toggleFolder() }}>Delete</Button><Dropdown /></td>
                 <td>
                   { favorite ? <FilledStar id={file.id} onClickRemoveFavorite={onClickRemoveFavorite}/> : <Star id={file.id} onClickAddFavorite={onClickAddFavorite}/>}
                 </td>
