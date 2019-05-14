@@ -61,7 +61,10 @@ function Data(props) {
     return () => subscription.unsubscribe();
   }, []);
 
-  function addFavorite(id) {
+  function onClickAddFavorite(event) {
+    //Finding out id
+    let id = event.target.id;
+
     //Looking for the right file/folder in data (matching on id)
     let targetObject;
     for (let object of props.data) {
@@ -80,25 +83,14 @@ function Data(props) {
     updateFavoriteObservable(newFavoritesArray);
   }
 
-  function removeFavorite(id) {
+  function onClickRemoveFavorite(event) {
+    let id = event.target.id;
     let filteredFavorites = favorites.filter(object => {
       return object.id !== id;
     });
     updateFavoriteObservable(filteredFavorites);
   }
 
-  //Function adding or removing favorite depending on current state (checks if the star is filled or not)
-  function onClickFavorite(event) {
-    let id = event.target.id;
-    let textContent = event.target.textContent;
-
-    if (textContent === 'star_border') {
-      addFavorite(id);
-    }
-    else {
-      removeFavorite(id);
-    }
-  }
 
   /*------------------------------------- Render table data ---------------------------------------------*/
   // Table data Last modified calculations
@@ -229,6 +221,11 @@ function Data(props) {
               }
             }
 
+            // let favorite = false;
+            // console.log('favorites: ', favorites);
+
+            //console.log('file.path_display: ', file.path_display);
+
             return (
               <tr key={file.id}>
                 <td style={{ color: 'green' }}><Thumbnail file={file} /></td>
@@ -237,7 +234,7 @@ function Data(props) {
                 <td>{handleSize(file.size)}</td>
                 <td><Button file={file} >Delete</Button><Dropdown /></td>
                 <td>
-                  {favorite ? <FilledStar id={file.id} onClickFavorite={onClickFavorite} /> : <Star id={file.id} onClickFavorite={onClickFavorite} />}
+                  { favorite ? <FilledStar id={file.id} onClickRemoveFavorite={onClickRemoveFavorite}/> : <Star id={file.id} onClickAddFavorite={onClickAddFavorite}/>}
                 </td>
               </tr>
             )
