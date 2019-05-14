@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, Route } from "react-router-dom";
-import { Table, TabContent, TabPane, Nav, NavItem, NavLink, Button, Row, Col, Inpu } from "reactstrap";
+import { Table, TabContent, TabPane, Nav, NavItem, NavLink, Button, Row, Col, Input } from "reactstrap";
 import { Dropbox } from "dropbox";
 import { token$, updateToken, removeFavorites } from "../store";
 import { Redirect } from "react-router-dom";
@@ -15,7 +15,6 @@ function Home(props) {
   const [data, updateData] = useState([]);
   const [search, updateSearch] = useState("");
   const [user, updateUser] = useState("");
-  const [uploadFileToggle, updateUploadFileToggle] = useState(false);
   const [activeTab, updateActiveTab] = useState("1");
   let currentLocation = props.location.pathname.substring(5);
 
@@ -31,7 +30,7 @@ function Home(props) {
   });
 
   //Fetching files/folders in designated path
-  useEffect(() => {
+  function renderData() {
     const dropbox = new Dropbox({ accessToken: token, fetch });
     if (currentLocation === "/") {
       currentLocation = "";
@@ -39,14 +38,17 @@ function Home(props) {
     dropbox.filesListFolder({ path: currentLocation })
       .then(function (response) {
         updateData(response.entries);
-        console.log(response.entries);
       })
       .catch(function (error) {
         console.error(error);
-      });
+      })
+  }
+  useEffect(() => {
+    renderData();
   }, [currentLocation]);
 
   // Search
+  /*
   useEffect(() => {
     const dropbox = new Dropbox({ accessToken: token, fetch });
 
@@ -70,7 +72,7 @@ function Home(props) {
         })
     }
   }, []);
-
+*/
   // Fetch user name
   useEffect(() => {
     const dropbox = new Dropbox({ accessToken: token });
@@ -89,8 +91,12 @@ function Home(props) {
     return <Redirect to="/" />;
   }
 
-  function filterFile(e) {
-    updateSearch(e.target.value);
+  function onNewFolder(folder) {
+    renderData();
+  }
+
+  function onUpload() {
+    renderData();
   }
 
   function logOut(e) {
@@ -100,28 +106,6 @@ function Home(props) {
     dropbox.authTokenRevoke();
     updateToken(null);
     removeFavorites();
-  }
-
-  function uploadFile(files) {
-    const dropbox = new Dropbox({ accessToken: token, fetch });
-
-    if (files.length > 0 && files[0].size < 150000000) {
-      dropbox
-        .filesUpload({
-          contents: files[0],
-          path: `${currentLocation}/${files[0].name}`
-        })
-        .then(response => {
-          dropbox.filesListFolder({ path: currentLocation })
-            .then(response => {
-              updateData(response.entries);
-              updateUploadFileToggle(false);
-            })
-        })
-        .catch(function (error) {
-          console.error(error);
-        });
-    }
   }
 
   return (
@@ -162,7 +146,7 @@ function Home(props) {
             </Row>
             <Row>
               <Col sm="12">
-                <Data data={data} />
+                <Data data={data} updateData={updateData} renderData={renderData} />
               </Col>
             </Row>
           </TabPane>
@@ -179,12 +163,10 @@ function Home(props) {
         </TabContent>
       </div>
       <SideMenu
-        search={search}
-        filterFile={filterFile}
-        uploadFileToggle={uploadFileToggle}
-        uploadFile={uploadFile}
         logOut={logOut}
         user={user}
+        onNewFolder={onNewFolder}
+        onUpload={onUpload}
       />
     </div>
   );
