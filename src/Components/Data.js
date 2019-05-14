@@ -9,6 +9,8 @@ import { Star } from './Star.js';
 import { FilledStar } from './FilledStar.js';
 import Thumbnail from './Thumbnail';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label } from "reactstrap";
+import Delete from './Delete';
+
 
 function Data(props) {
   const [modal, updateModal] = useState(false);
@@ -151,42 +153,42 @@ function Data(props) {
 
   /*------------------------------------- Delete ---------------------------------------------*/
 
-  const [fileToDelete, updateFileToDelete] = useState(null);
-  const [currentFolder, setCurrentFolder] = useState([]);
+  // const [fileToDelete, updateFileToDelete] = useState(null);
+  // const [currentFolder, setCurrentFolder] = useState([]);
 
-  function toggleFolder() {
-    updateModal(true)
-  }
+  // function toggleFolder() {
+  //   updateModal(true)
+  // }
 
-  //Closing modal
-  function exitModal() {
-    updateModal(false)
-  }
+  // //Closing modal
+  // function exitModal() {
+  //   updateModal(false)
+  // }
 
-  function handleDelete(file) {
-    console.log(file);
-    const dropbox = new Dropbox({ accessToken: token$.value, fetch });
-    dropbox.filesDeleteV2({ path: fileToDelete.path_lower })
-      .then(response => {
-        console.log("delete response: ", response);
-        let folderToDelete = currentFolder.filter((t) => {
-          return file !== t;
-        })
-        setCurrentFolder(folderToDelete);
-        exitModal();
-      })
-      .catch(err => {
-        console.error(err);
-      })
-    window.location.reload();
-  }
+  // function handleDelete(file) {
+  //   console.log(file);
+  //   const dropbox = new Dropbox({ accessToken: token$.value, fetch });
+  //   dropbox.filesDeleteV2({ path: fileToDelete.path_lower })
+  //     .then(response => {
+  //       console.log("delete response: ", response);
+  //       let folderToDelete = currentFolder.filter((t) => {
+  //         return file !== t;
+  //       })
+  //       setCurrentFolder(folderToDelete);
+  //       exitModal();
+  //     })
+  //     .catch(err => {
+  //       console.error(err);
+  //     })
+  //   window.location.reload();
+  // }
   /*------------------------------------- End Delete ---------------------------------------------*/
 
 
   return (
     <>
       {/* ------------------------------------- Delete --------------------------------------------- */}
-      <Modal isOpen={modal} toggle={toggleFolder} >
+      {/* <Modal isOpen={modal} toggle={toggleFolder} >
         <ModalHeader toggle={exitModal}>Delete file/folder</ModalHeader>
         <ModalBody>
           <FormGroup>
@@ -197,7 +199,7 @@ function Data(props) {
           <Button color="primary" onClick={() => handleDelete(props.file)}>Delete</Button>{' '}
           <Button color="secondary" onClick={exitModal}>Cancel</Button>
         </ModalFooter>
-      </Modal>
+      </Modal> */}
       {/* ------------------------------------- End Delete --------------------------------------------- */}
 
 
@@ -233,7 +235,7 @@ function Data(props) {
                 <td>{file[".tag"] === "folder" ? <Link to={`/home${file.path_display}`}>{file.name}</Link> : <span onClick={() => handleDownloadFile(file.name, file.path_display)} style={{ cursor: 'pointer', color: 'blue' }}>{file.name}</span>}</td>
                 <td>{file.server_modified ? handleLastModified(file.server_modified) : null}</td>
                 <td>{handleSize(file.size)}</td>
-                <td><Button file={file} onClick={() => { updateFileToDelete(file); toggleFolder() }}>Delete</Button><Dropdown /></td>
+                <td><Button file={file} >Delete</Button><Dropdown /></td>
                 <td>
                   {favorite ? <FilledStar id={file.id} onClickFavorite={onClickFavorite} /> : <Star id={file.id} onClickFavorite={onClickFavorite} />}
                 </td>
