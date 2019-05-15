@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Dropbox } from 'dropbox';
-import { token$, updateToken } from '../store';
+import { token$, updateToken, favorites$, updateFavoriteObservable } from "../store";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input } from 'reactstrap';
 
 const Delete = (props) => {
@@ -28,6 +28,14 @@ const Delete = (props) => {
         .catch(err => {
           console.error(err);
         })
+
+      //Removing object from favorites
+      let id = file.id;
+      let favorites = favorites$.value;
+      let filteredFavorites = favorites.filter(object => {
+        return object.id !== id;
+      });
+      updateFavoriteObservable(filteredFavorites);
     }
 
   return (

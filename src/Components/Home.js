@@ -31,6 +31,11 @@ function Home(props) {
 
   //Fetching files/folders in designated path
   function renderData() {
+    //If the favorite tab is active, do not make a new fetch
+    if(currentLocation === "/favorites") {
+      return;
+    }
+
     const dropbox = new Dropbox({ accessToken: token, fetch });
     if (currentLocation === "/") {
       currentLocation = "";
@@ -157,9 +162,9 @@ function Home(props) {
             </Row>
             <Row>
               <Col sm="12">
-                <Data 
-                  data={data} 
-                  updateData={updateData} 
+                <Data
+                  data={data}
+                  updateData={updateData}
                   renderData={renderData}
                   onDelete={onDelete} />
               </Col>
