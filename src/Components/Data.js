@@ -136,7 +136,7 @@ function Data(props) {
         <Breadcrumbs path={props.location.pathname} />
         <Input type="text" size="lg" placeholder="Search" onChange={(e) => { updateSearch(e.target.value); }} value={props.search} style={{ position: "absolute", width: "30%", minWidth: "150px", right: "0px", top: "-1px" }} />
       </div>
-      
+
       {/* Table file/folder data */}
       <Table>
         <thead>
@@ -151,6 +151,8 @@ function Data(props) {
         </thead>
         <tbody>
           {props.data.map(file => {
+
+            console.log(file);
 
             //Favorite logic
             let favorite = false;
