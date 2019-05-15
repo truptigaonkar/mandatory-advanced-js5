@@ -98,8 +98,7 @@ export default function Favorite(props) {
 
   return (
     <>
-
-      <Table>
+      <Table style={{ marginTop: "1em" }}>
           <thead>
             <tr>
               <th>Type</th>

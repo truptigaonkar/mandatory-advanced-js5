@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Dropbox } from 'dropbox';
 import { token$, updateToken, updateFavoriteObservable } from '../store';
-import { Alert, Button, FormGroup, FormText, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { Button, FormGroup, FormText, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
 function UploadFile(props) {
   const [token, updateTokenState] = useState(token$.value);
@@ -45,7 +45,7 @@ function UploadFile(props) {
   return (
     <>
       <Button onClick={toggle}>Upload File</Button>
-      <Modal isOpen={modal} toggle={toggle}>
+      <Modal isOpen={modal} toggle={toggle} modalTransition={{ timeout: 700 }} backdropTransition={{ timeout: 1300 }}>
         <ModalHeader toggle={toggle}>Upload file</ModalHeader>
         <ModalBody>
           <FormGroup id="upload">

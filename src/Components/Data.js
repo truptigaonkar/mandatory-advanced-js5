@@ -4,12 +4,11 @@ import "./Data.css";
 import { Dropbox } from "dropbox";
 import { token$, updateToken, favorites$, updateFavoriteObservable } from "../store";
 import { Table, Input } from "reactstrap";
+import Breadcrumbs from "./Breadcrumbs";
 import Dropdown from './Dropdown';
 import { Star } from './Star.js';
 import { FilledStar } from './FilledStar.js';
 import Thumbnail from './Thumbnail';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label } from "reactstrap";
-import Delete from './Delete';
 
 
 function Data(props) {
@@ -17,10 +16,9 @@ function Data(props) {
   const [favorites, updateFavorites] = useState(favorites$.value); //favorites is an array of objects
   const [search, updateSearch] = useState("");
   const [token, updateTokenState] = useState(token$.value);
-  //const [data, updateData] = useState([]);
   const [user, updateUser] = useState("");
 
-  let currentLocation = window.location.pathname.substring(5);
+  let currentLocation = props.location.pathname.substring(5);
   const updateData = props.updateData;
 
   useEffect(() => {
@@ -39,18 +37,6 @@ function Data(props) {
             updateData(files)
           })
       }
-
-      // Fetching logged in username
-      /*
-      dropbox.usersGetCurrentAccount()
-        .then(function (response) {
-          console.log("User Email: ", response.email);
-          updateUser(response.email);
-        })
-        .catch(function (error) {
-          console.error(error);
-        });
-        */
     }
   }, [token, search, currentLocation]);
 
@@ -143,60 +129,14 @@ function Data(props) {
   }
   /*------------------------------------- End Download files ---------------------------------------------*/
 
-  /*------------------------------------- Delete ---------------------------------------------*/
-
-  // const [fileToDelete, updateFileToDelete] = useState(null);
-  // const [currentFolder, setCurrentFolder] = useState([]);
-
-  // function toggleFolder() {
-  //   updateModal(true)
-  // }
-
-  // //Closing modal
-  // function exitModal() {
-  //   updateModal(false)
-  // }
-
-  // function handleDelete(file) {
-  //   console.log(file);
-  //   const dropbox = new Dropbox({ accessToken: token$.value, fetch });
-  //   dropbox.filesDeleteV2({ path: fileToDelete.path_lower })
-  //     .then(response => {
-  //       console.log("delete response: ", response);
-  //       let folderToDelete = currentFolder.filter((t) => {
-  //         return file !== t;
-  //       })
-  //       setCurrentFolder(folderToDelete);
-  //       exitModal();
-  //     })
-  //     .catch(err => {
-  //       console.error(err);
-  //     })
-  //   window.location.reload();
-  // }
-  /*------------------------------------- End Delete ---------------------------------------------*/
-
-
   return (
     <>
-      {/* ------------------------------------- Delete --------------------------------------------- */}
-      {/* <Modal isOpen={modal} toggle={toggleFolder} >
-        <ModalHeader toggle={exitModal}>Delete file/folder</ModalHeader>
-        <ModalBody>
-          <FormGroup>
-            <Label>Are you sure want to delete "{fileToDelete && fileToDelete.name}"?</Label>
-          </FormGroup>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={() => handleDelete(props.file)}>Delete</Button>{' '}
-          <Button color="secondary" onClick={exitModal}>Cancel</Button>
-        </ModalFooter>
-      </Modal> */}
-      {/* ------------------------------------- End Delete --------------------------------------------- */}
-
-
       {/* ------------------------------------------ Search ----------------------------------------------- */}
-      <Input type="text" placeholder="search..." onChange={(e) => { updateSearch(e.target.value); }} value={props.search} /> <br />
+      <div style={{ position:"relative", width: "100%" }}>
+        <Breadcrumbs path={props.location.pathname} />
+        <Input type="text" size="lg" placeholder="Search" onChange={(e) => { updateSearch(e.target.value); }} value={props.search} style={{ position: "absolute", width: "30%", minWidth: "150px", right: "0px", top: "-1px" }} />
+      </div>
+      
       {/* Table file/folder data */}
       <Table>
         <thead>
@@ -220,11 +160,6 @@ function Data(props) {
                 break;
               }
             }
-
-            // let favorite = false;
-            // console.log('favorites: ', favorites);
-
-            //console.log('file.path_display: ', file.path_display);
 
             return (
               <tr key={file.id}>

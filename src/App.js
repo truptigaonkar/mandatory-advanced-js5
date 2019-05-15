@@ -1,16 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
-import Breadcrumbs from 'react-breadcrumbs';
 import "./App.css";
 import Start from "./Components/Start";
 import Auth from "./Components/Auth";
 import Home from "./Components/Home";
-import Favorite from "./Components/Favorite";
 import logoImage from "./logo.png";
-import fetch from "isomorphic-fetch";
-import queryString from "query-string";
-import { token$, updateToken } from "./store.js";
-import DropdownToggle from "reactstrap/lib/DropdownToggle";
 
 const navStyle = {
   width: "100%",
