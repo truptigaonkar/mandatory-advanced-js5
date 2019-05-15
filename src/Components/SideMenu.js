@@ -36,8 +36,8 @@ function SideMenu(props) {
   return (
     <aside style={asideStyle}>
       <ul style={ulStyle}>
-        <li style={liStyle}><UploadFile onUpload={props.onUpload} location={props.location} /></li>
-        <li style={liStyle}><CreateFolder onNewFolder={props.onNewFolder} location={props.location} /></li>
+        <li className="menu" style={liStyle}><UploadFile onUpload={props.onUpload} location={props.location} file={props.file} /></li>
+        <li className="menu" style={liStyle}><CreateFolder onNewFolder={props.onNewFolder} location={props.location} /></li>
       </ul>
       <div style={accountStyle}>
         <span style={usernameStyle}>{props.user}</span>

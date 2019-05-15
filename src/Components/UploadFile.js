@@ -34,12 +34,6 @@ function UploadFile(props) {
 
   function onUploadSubmit(e) {
     e.preventDefault();
-    
-    if (!file) {
-      return alert("Please select a file")
-      //() => {return <Alert color="danger">Please select a file</Alert>}
-    }
-
     handleUploadFile(file);
     updateModal(false);
   }
@@ -55,7 +49,7 @@ function UploadFile(props) {
         <ModalHeader toggle={toggle}>Upload file</ModalHeader>
         <ModalBody>
           <FormGroup id="upload">
-            <Label htmlFor="uploadfile">Please select a file to upload</Label>
+            <Label htmlFor="uploadfile" id="uploadLabel">Please select a file to upload</Label>
             <Input type="file" name="file" id="uploadfile" onChange={onChangeFile} />
             <FormText color="muted">The size of a file should not exceed 150MB.</FormText>
           </FormGroup>
@@ -65,6 +59,7 @@ function UploadFile(props) {
             htmlFor="upload"
             type="submit"
             color="success"
+            disabled={file === null}
             onClick={(e) => onUploadSubmit(e)}
           >
             Upload
