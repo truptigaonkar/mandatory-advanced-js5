@@ -32,7 +32,7 @@ const Delete = (props) => {
 
   return (
     <>
-    <Modal isOpen={modal} toggle={toggle} >
+    <Modal isOpen={modal} toggle={toggle} modalTransition={{ timeout: 700 }} backdropTransition={{ timeout: 1300 }} >
         <ModalHeader toggle={toggle}>Delete file/folder</ModalHeader>
         <ModalBody>
           <FormGroup>
@@ -40,7 +40,7 @@ const Delete = (props) => {
           </FormGroup>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={() => handleDelete(props.file)}>Delete</Button>{' '}
+          <Button color="danger" onClick={() => handleDelete(props.file)}>Delete</Button>{' '}
           <Button color="secondary" onClick={toggle}>Cancel</Button>
         </ModalFooter>
       </Modal>

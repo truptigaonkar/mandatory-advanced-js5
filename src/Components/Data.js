@@ -9,8 +9,6 @@ import Dropdown from './Dropdown';
 import { Star } from './Star.js';
 import { FilledStar } from './FilledStar.js';
 import Thumbnail from './Thumbnail';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label } from "reactstrap";
-import Delete from './Delete';
 
 
 function Data(props) {

@@ -41,7 +41,7 @@ const CreateFolder = (props) => {
   return (
     <>
       <Button onClick={toggleFolder}>New Folder</Button>
-      <Modal isOpen={modal} toggle={toggleFolder} >
+      <Modal isOpen={modal} toggle={toggleFolder} modalTransition={{ timeout: 700 }} backdropTransition={{ timeout: 1300 }} >
         <ModalHeader toggle={exitModal}>Create New Folder</ModalHeader>
         <ModalBody>
           <FormGroup>
