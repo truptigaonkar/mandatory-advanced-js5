@@ -21,32 +21,7 @@ export default function Start(props) {
     return () => subscription.unsubscribe();
   }, []);
 
-  // function onClickLoginOnTestAccount(event) {
-  //   console.log('Logging in on test account.');
-  //   //Creating an instance of the dropbox object
-  //   let dropbox = new Dropbox({ accessToken: ACCESS_TOKEN });
-  //
-  //   //Testing out that the correct account is linked
-  //   dropbox.usersGetCurrentAccount()
-  //     .then(function (response) {
-  //       console.log(response);
-  //     })
-  //     .catch(function (error) {
-  //       console.error(error);
-  //     });
-  //
-  //   //Fetching all folders
-  //   dropbox.filesListFolder({ path: '' })
-  //     .then(function (response) {
-  //       console.log(response.entries);
-  //     })
-  //     .catch(function (error) {
-  //       console.error(error);
-  //     });
-  // }
-
   function onClickLogin(event) {
-    console.log('Redirecting...');
 
     //Creating dropbox object
     console.log(CLIENT_ID);

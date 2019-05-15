@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, Route } from "react-router-dom";
 import { Table, TabContent, TabPane, Nav, NavItem, NavLink, Button, Row, Col, Input } from "reactstrap";
 import { Dropbox } from "dropbox";
-import { token$, updateToken, removeFavorites } from "../store";
+import { token$, updateToken, removeAllFavorites } from "../store";
 import { Redirect } from "react-router-dom";
 import moment from "moment";
 import Data from "./Data";
@@ -105,7 +105,7 @@ function Home(props) {
     const dropbox = new Dropbox({ accessToken: token$.value, fetch });
     dropbox.authTokenRevoke();
     updateToken(null);
-    removeFavorites();
+    removeAllFavorites();
   }
 
   return (

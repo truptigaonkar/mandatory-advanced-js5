@@ -19,13 +19,13 @@ export function updateFavoriteObservable(newFavoritesArray) {
   //Updating local storage with new favorites string
   window.localStorage.setItem('favorites', favoritesString);
 
-  console.log('local storage: ', window.localStorage);
+  //console.log('local storage: ', window.localStorage);
 
   //Updating favorites observable
   favorites$.next(newFavoritesArray);
 }
 
-export function removeFavorites() {
+export function removeAllFavorites() {
   window.localStorage.removeItem('favorites');
   favorites$.next(null);
 }
