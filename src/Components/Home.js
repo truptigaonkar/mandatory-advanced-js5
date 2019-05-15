@@ -8,12 +8,12 @@ import moment from "moment";
 import Data from "./Data";
 import Favorite from "./Favorite";
 import SideMenu from "./SideMenu";
-import Breadcrumbs from "./Breadcrumbs";
+//import Breadcrumbs from "./Breadcrumbs";
 
 function Home(props) {
   const [token, updateTokenState] = useState(token$.value);
   const [data, updateData] = useState([]);
-  const [search, updateSearch] = useState("");
+  //const [search, updateSearch] = useState("");
   const [user, updateUser] = useState("");
   const [activeTab, updateActiveTab] = useState(props.location.pathname === "/home/favorites" ? "2" : "1");
   let currentLocation = props.location.pathname.substring(5);
@@ -25,7 +25,6 @@ function Home(props) {
 
   useEffect(() => {
     const subscription = token$.subscribe(updateTokenState);
-
     return () => subscription.unsubscribe();
   });
 
@@ -44,35 +43,12 @@ function Home(props) {
       })
   }
   useEffect(() => {
-    renderData();
+    const poll = setInterval(() => {
+      renderData();
+    }, 3000);
+    return() => clearInterval(poll);
   }, [currentLocation]);
 
-  // Search
-  /*
-  useEffect(() => {
-    const dropbox = new Dropbox({ accessToken: token, fetch });
-
-    if (!search) {
-      //Fetching files/folders
-      dropbox.filesListFolder({ path: currentLocation })
-        .then(function (response) {
-          updateData(response.entries);
-        })
-        .catch(function (error) {
-          console.error(error);
-        });
-    } else {
-      // Search
-      dropbox.filesSearch({ path: currentLocation, query: search })
-        .then(function (response) {
-          const files = response.matches.map(file => {
-            return file.metadata
-          });
-          updateData(files);
-        })
-    }
-  }, []);
-*/
   // Fetch user name
   useEffect(() => {
     const dropbox = new Dropbox({ accessToken: token });
@@ -82,7 +58,6 @@ function Home(props) {
         updateUser(response.name.given_name);
       })
       .catch(function (error) {
-
         console.error(error);
       });
   }, [token]);
@@ -105,7 +80,6 @@ function Home(props) {
 
   function logOut(e) {
     e.preventDefault();
-
     const dropbox = new Dropbox({ accessToken: token$.value, fetch });
     dropbox.authTokenRevoke();
     updateToken(null);
@@ -136,7 +110,6 @@ function Home(props) {
               className={activeTab === "2" ? "active" : ""}
               onClick={() => {
                 updateActiveTab("2");
-                //window.location = "/favorites";
           }}
               style={{color: "#31572C"}}
             >
@@ -152,12 +125,13 @@ function Home(props) {
           <TabPane tabId="1">
             <Row>
               <Col sm="12">
-                <Breadcrumbs path={props.location.pathname} />
+                {/*<Breadcrumbs path={props.location.pathname} />*/}
               </Col>
             </Row>
             <Row>
               <Col sm="12">
                 <Data 
+                  location={props.location}
                   data={data} 
                   updateData={updateData} 
                   renderData={renderData}

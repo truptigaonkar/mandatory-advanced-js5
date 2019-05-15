@@ -50,7 +50,7 @@ const CreateFolder = (props) => {
           </FormGroup>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={handleNewFolder}>Create</Button>{' '}
+          <Button color="success" onClick={handleNewFolder}>Create</Button>{' '}
           <Button color="secondary" onClick={exitModal}>Cancel</Button>
         </ModalFooter>
       </Modal>
