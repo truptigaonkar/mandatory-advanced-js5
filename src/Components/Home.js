@@ -99,6 +99,10 @@ function Home(props) {
     renderData();
   }
 
+  function onDelete() {
+    renderData()
+  }
+
   function logOut(e) {
     e.preventDefault();
 
@@ -153,15 +157,16 @@ function Home(props) {
             </Row>
             <Row>
               <Col sm="12">
-                <Data data={data} updateData={updateData} renderData={renderData} />
+                <Data 
+                  data={data} 
+                  updateData={updateData} 
+                  renderData={renderData}
+                  onDelete={onDelete} />
               </Col>
             </Row>
           </TabPane>
           <TabPane tabId="2">
             <Row>
-              <Col sm="12">
-                <h4>Favorites</h4>
-              </Col>
               <Col sm="12">
                 <Route path="/home/favorites" render={(props) => (
                   <Favorite activeTab={activeTab} updateActiveTab={updateActiveTab} {...props} />
