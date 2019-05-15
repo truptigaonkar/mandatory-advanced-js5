@@ -7,8 +7,6 @@ import Auth from "./Components/Auth";
 import Home from "./Components/Home";
 import Favorite from "./Components/Favorite";
 import logoImage from "./logo.png";
-// import Dropbox from 'dropbox/dropbox'; <-- According to https://dropbox.github.io/dropbox-sdk-js/tutorial-Getting%20started.html
-//                                        this should be used with Babel, but this creates an error because 'Dropbox' has already been declared.
 import fetch from "isomorphic-fetch";
 import queryString from "query-string";
 import { token$, updateToken } from "./store.js";
