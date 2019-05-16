@@ -110,9 +110,6 @@ export default function Favorite(props) {
           </thead>
           <tbody>
             {favorites.map((file) => {
-
-              //console.log('file.path_display: ', file.path_display);
-
               return (
                 <tr key={file.id}>
                   <td style={{color: "#31572C"}}><Thumbnail file={file} /></td>

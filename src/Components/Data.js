@@ -9,7 +9,6 @@ import Dropdown from './Dropdown';
 import { Star } from './Star.js';
 import { FilledStar } from './FilledStar.js';
 import Thumbnail from './Thumbnail';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label } from "reactstrap";
 import moment from 'moment';
 
 function Data(props) {
@@ -132,9 +131,9 @@ function Data(props) {
   return (
     <>
       {/* ------------------------------------------ Search ----------------------------------------------- */}
-      <div style={{ position:"relative", width: "100%" }}>
+      <div style={{ position: "relative", width: "100%" }}>
         <Breadcrumbs path={props.location.pathname} />
-        <Input type="text" size="lg" placeholder="Search" onChange={(e) => { updateSearch(e.target.value); }} value={props.search} style={{ position: "absolute", width: "30%", minWidth: "150px", right: "0px", top: "-1px" }} />
+        <Input type="text" size="lg" placeholder="Search" onChange={(e) => { updateSearch(e.target.value); }} style={{ position: "absolute", width: "30%", minWidth: "150px", right: "0px", top: "-1px" }} />
       </div>
 
       {/* Table file/folder data */}
@@ -162,14 +161,14 @@ function Data(props) {
             }
             return (
               <tr key={file.id}>
-                <td style={{color: "#31572C"}}><Thumbnail file={file} /></td>
+                <td style={{ color: "#31572C" }}><Thumbnail file={file} /></td>
                 <td className="link">{file[".tag"] === "folder" ? <Link to={`/home${file.path_display}`}>{file.name}</Link> : <span onClick={() => handleDownloadFile(file.name, file.path_display)} style={{ cursor: 'pointer', color: '#31572C' }}>{file.name}</span>}</td>
                 <td>{file.server_modified ? handleLastModified(file.server_modified) : null}</td>
                 <td>{handleSize(file.size)}</td>
-                
-                <td><Dropdown file={file} onDataChange={props.onDataChange} location={props.location} /></td>
+
+                <td><Dropdown file={file} onDataChange={props.onDataChange} location={props.location} style={{ zIndex: "2" }} /></td>
                 <td className="link">
-                  { favorite ? <FilledStar id={file.id} onClickRemoveFavorite={onClickRemoveFavorite} /> : <Star id={file.id} onClickAddFavorite={onClickAddFavorite} />}
+                  {favorite ? <FilledStar id={file.id} onClickRemoveFavorite={onClickRemoveFavorite} /> : <Star id={file.id} onClickAddFavorite={onClickAddFavorite} />}
                 </td>
               </tr>
             )

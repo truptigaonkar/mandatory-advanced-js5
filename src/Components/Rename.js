@@ -1,100 +1,100 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Dropbox } from "dropbox";
 import { token$, updateToken } from "../store";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
 
 const Rename = (props) => {
 
   const [modal, updateModal] = useState(props.toggle);
   const [newName, updateNewName] = useState("");
-  //const [fileToRename, updateFileToRename] = useState(props.file);
-  //const [currentFolder, setCurrentFolder] = useState([]);
-  //const [folderName, updateFolderName] = useState("");
-  //const [renameFileData, setRenameFileData] = useState({});
 
   function toggle() {
     updateModal(!modal)
   }
 
-  /*
-  function toggleFolder(file) {
-    // let fileData = {
-    //   fileName: file.name,
-    //   path: file.path_display,
-    // }
-    // setRenameFileData(fileData);
-    updateModal(true)
-  }
-  
-  //Closing modal
-  function exitModal() {
-    updateModal(false)
-  }
-
-  // Handle input
-  function handleFolderName(e) {
-
-    // let fileData = {
-    //   fileName: file.name,
-    //   path: file.path_display,
-    // }
-    // setRenameFileData(fileData);
-    console.log("console log input value: ", e.target.value);
-    let fileData = JSON.parse(JSON.stringify(renameFileData));
-    fileData.fileName = e.target.value;
-    updateFolderName(fileData); 
-  }
-  */
-
   function handleFolderRename(folder) {
-    const beforePath = folder.path_lower;
-    let afterPath = newName;
-    afterPath = `/${afterPath}`;
-    /*
-    let newPath = fileData.path;
-    newPath = newPath.split('/');
-    newPath[newPath.length - 1] = fileData.fileName;
-    newPath = newPath.join('/');
-    */
+    let beforePath = folder.path_lower.split("/");
+    let afterPath;
+    if (beforePath.length <= 2) {
+      afterPath = `/${newName}`;
+    }
+    else {
+      beforePath.shift();
+      beforePath.pop();
+      afterPath = `/${beforePath.join('/')}/${newName}`;
+    }
 
+    console.log(beforePath);
+    
+    console.log(afterPath);
+    
     const dropbox = new Dropbox({ accessToken: token$.value, fetch });
     dropbox.filesMoveV2({
-      from_path: beforePath,
+      from_path: folder.path_lower,
       to_path: afterPath,
       autorename: true
     })
       .then(res => {
         dropbox.filesListFolder({ path: afterPath })
           .then(res => {
-            //setCurrentFolder(res.entries);
             props.onDataChange();
             toggle();
           })
-      }) 
+      })
+  }
+
+  function handleFileRename(file) {
+    let beforePath = file.path_lower.split("/");
+    let fileExtention = file.name.split(".")[1];
+    let afterPath;
+    let renderPath;
+
+    if (beforePath.length <= 2) {
+      afterPath = `/${newName}.${fileExtention}`
+      renderPath = ""
+    }
+    else {
+      beforePath.shift();
+      beforePath.pop();
+      afterPath = `/${[beforePath].join("/")}/${newName}.${fileExtention}`;
+      renderPath = `/${[beforePath].join("/")}`
+    }
+
+    const dropbox = new Dropbox({ accessToken: token$.value, fetch });
+    dropbox.filesMoveV2({
+      from_path: file.path_lower,
+      to_path: afterPath,
+      autorename: true
+    })
+      .then(res => {
+        dropbox.filesListFolder({ path: renderPath })
+          .then(res => {
+            props.onDataChange();
+            toggle();
+          })
+      })
 
   }
 
-/*
-  <FormGroup>
-            <Label for="name">Rename {fileToRename}</Label>
-            <Input type="text" placeholder="Folder name" onChange={handleFolderName} value={folderName} />
-          </FormGroup>
+  function handleRename(file) {
+    if (file[".tag"] === "folder") {
+      handleFolderRename(file);
+    }
+    else {
+      handleFileRename(file);
+    }
+  }
 
-          <FormGroup>
-          <Label htmlFor="newName">Rename {fileToRename}</Label>
-          <Input name="newName" type="text" placeholder="New name" onChange={handleFolderName} value={folderName} />
-          </FormGroup>
-*/
   return (
     <>
       <Modal isOpen={modal} toggle={toggle} modalTransition={{ timeout: 700 }} backdropTransition={{ timeout: 1300 }} >
         <ModalHeader toggle={toggle}>Rename file/folder</ModalHeader>
         <ModalBody>
-          New name for {props.file.name} (include extentions for files)
+          New name for {props.file.name}
           <Input onChange={(e) => { updateNewName(e.target.value); }} value={newName} placeholder="New name" />
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={() => handleFolderRename(props.file)}>Rename</Button>{' '}
+          <Button color="success" onClick={() => handleRename(props.file)}>Rename</Button>{' '}
           <Button color="secondary" onClick={toggle}>Cancel</Button>
         </ModalFooter>
       </Modal>

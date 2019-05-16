@@ -17,7 +17,17 @@ body {
   background-color: #31572C;
 }
 
+.btn-success:disabled {
+  background-color: #6C844B;
+  border-color: #6C844B;
+}
+
 .show>.btn-outline-success.dropdown-toggle:focus, .btn-outline-success:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.btn-secondary, .btn-secondary:hover, .btn-secondary:active, .btn-secondary:visited {
   outline: none;
   box-shadow: none;
 }
