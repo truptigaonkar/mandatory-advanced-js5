@@ -5,7 +5,6 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, I
 import FolderList from "./FolderList.js";
 
 const AllFolders = (props) => {
-  const [data, updateData] = useState([]);
   const [folders, updateFolders] = useState([]);
   const [token, updateTokenState] = useState(token$.value);
   //const [destinationFolder, updateDestinationFolder] = useState("");
@@ -15,14 +14,14 @@ const AllFolders = (props) => {
     const dropbox = new Dropbox({ accessToken: token, fetch });
     dropbox.filesListFolder({ path: path, recursive: true })
       .then(function (response) {
-        updateData(response.entries);
+        console.log('response.entries: ', response.entries);
         let folderList = [];
-        for (let element of data) {
+        for (let element of response.entries) {
           if (element[".tag"] === "folder") {
             folderList.push({ name: element.name, path: element.path_lower })
           }
         }
-        //console.log("folderList", folderList);
+        console.log("folderList", folderList);
         updateFolders(folderList);
       })
       .catch(function (error) {
@@ -30,15 +29,17 @@ const AllFolders = (props) => {
       })
   },[]);
 
-  /* const allfolders = folders.map(folder => 
+  /* const allfolders = folders.map(folder =>
     <option key={folder.path} value={folder.path}>{folder.name}</option>
   ); */
   //console.log("data", data);
-  
+
   function onChangeGetFolder(event) {
     console.log(event.target.value);
     props.updateToFolder(event.target.value);
   }
+
+  console.log('Folders in MoveFile: ', folders);
 
   return (
     <>
@@ -64,7 +65,7 @@ const MoveFile = (props) => {
     updateModal(!modal)
   }
 
-  function handleMoveFile(fileToMove) {    
+  function handleMoveFile(fileToMove) {
     const dropbox = new Dropbox({ accessToken: token$.value, fetch });
     let to_path = toFolder;
     if (to_path === "/") {
@@ -74,7 +75,7 @@ const MoveFile = (props) => {
     dropbox.filesMoveV2({ from_path: fileToMove.path_lower, to_path: to_path, autorename: false })
     .then(response => {
       console.log("response", response);
-      
+
       props.onDataChange();
       toggle();
     })
