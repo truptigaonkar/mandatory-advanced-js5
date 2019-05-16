@@ -10,6 +10,7 @@ import { Star } from './Star.js';
 import { FilledStar } from './FilledStar.js';
 import Thumbnail from './Thumbnail';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label } from "reactstrap";
+import moment from 'moment';
 
 function Data(props) {
   const [modal, updateModal] = useState(false);
@@ -95,7 +96,7 @@ function Data(props) {
     day = day.replace(/^0+/, '');
     let monthShow = months[month - 1];
 
-    return <label>{day + ' ' + monthShow + ' ' + year}</label>
+    return <label>{day + ' ' + monthShow + ' ' + year + ', ' + moment(date).fromNow()}</label>
   }
 
   // Table data size calculations in Bytes, KB, MB, GB, TB, PB, EB, ZB, YB
@@ -137,7 +138,7 @@ function Data(props) {
       </div>
 
       {/* Table file/folder data */}
-      <Table striped hover responsive>
+      <Table hover responsive>
         <thead>
           <tr>
             <th>Type</th>
