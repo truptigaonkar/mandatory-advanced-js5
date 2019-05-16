@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import "./Dropdown.css";
 import Delete from "./Delete";
-import { Copy } from './Copy.js';
 import { token$ } from "../store.js";
 import { Dropbox } from 'dropbox';
 

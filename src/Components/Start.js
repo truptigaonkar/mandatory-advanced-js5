@@ -28,7 +28,8 @@ export default function Start(props) {
     let dropbox = new Dropbox({ clientId: CLIENT_ID });
 
     //Getting authentication url
-    let authUrl = dropbox.getAuthenticationUrl('http://localhost:3000/auth');
+    let authUrl = dropbox.getAuthenticationUrl('https://ayumina.github.io/mandatory-advanced-js5/auth');
+    //let authUrl = dropbox.getAuthenticationUrl('http://localhost:3000/auth'); //To test locally
 
     console.log(authUrl);
 
