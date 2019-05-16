@@ -45,7 +45,10 @@ Dropbox accomplishes this via the Oauth protocol; the process is described in de
 https://www.dropbox.com/developers/reference/oauth-guide
 * The result of the Oauth flow is an access token which is used in executing calls to the Dropbox API. This access token should be stored (in the client) and reused until the user logs out.
 * The application UI must contain
-
+  * A “main” area showing the files and folders in the current folder
+  * The complete path of the current folder displayed on the top. If the user is currently viewing a sub-folder, each part in the path should be made clickable to enable navigation to all folders higher in the hierarchy.
+  * If a file is an image, a thumbnail of the image should be displayed instead of the regular file icon
+  * Metadata for a file should be displayed and must include: filename, size (in a human-readable format), last modified timestamp
 * When a user clicks on a file, a download is started. No preview functionality is required
 * A user must be able to upload a file to the current folder
 * A user must be able to create a new folder in the current folder
