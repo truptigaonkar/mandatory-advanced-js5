@@ -7,13 +7,13 @@ import SideMenu from "./SideMenu";
 configure({ adapter: new Adapter() });
 
 describe("Side menu", () => {
-  it("Renders side menu with 2 items", () => {
-    const wrapper = render(<SideMenu location={{ pathname: "/home/foo" }} />);
-    expect(wrapper.find(".menu")).to.have.lengthOf(2);
-  });
-
-  it("Renders the title", () => {
+  it('Menu includes text "Upload File"', () => {
     const wrapper= render(<SideMenu location={{ pathname: "/home/foo" }} />);
-    expect(wrapper.text()).to.contain("Upload");
+    expect(wrapper.text()).to.contain("Upload File");
+  })
+
+  it('Menu includes text "New"', () => {
+    const wrapper= render(<SideMenu location={{ pathname: "/home/foo" }} />);
+    expect(wrapper.text()).to.contain("New Folder");
   })
 });
