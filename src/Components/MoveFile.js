@@ -30,9 +30,9 @@ const AllFolders = (props) => {
       })
   },[]);
 
-  /* const allfolders = folders.map(folder => 
+  const allfolders = folders.map(folder => 
     <option key={folder.path} value={folder.path}>{folder.name}</option>
-  ); */
+  ); 
   //console.log("data", data);
   
   function onChangeGetFolder(event) {
@@ -40,6 +40,20 @@ const AllFolders = (props) => {
     props.updateToFolder(event.target.value);
   }
 
+  /* Without FolderList Component
+  return (
+    <>
+      <form>
+        <select name="folder" onChange={onChangeGetFolder}>
+          <option value="">Select Folder</option>
+          {allfolders}
+        </select>
+      </form>
+    </>
+  )
+  */
+ 
+/* With FolderList Component*/
   return (
     <>
       <form>
@@ -50,6 +64,7 @@ const AllFolders = (props) => {
       </form>
     </>
   )
+
 }
 
 const MoveFile = (props) => {
