@@ -1,7 +1,15 @@
 .breadcrumb-item {
   color: #31572C;
 }
+a {
+  color: #31572C;
+}
 
-.breadcrumb-item:hover {
-  color: #132A13;
+a:hover {
+  color: rgb(15, 68, 15);
+}
+
+.link:hover {
+  cursor: pointer;
+  text-decoration: underline;
 }

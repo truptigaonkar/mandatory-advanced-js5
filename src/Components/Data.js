@@ -146,7 +146,7 @@ function Data(props) {
             <th>Last modified</th>
             <th>Size</th>
             <th>Menu</th>
-            <th><i class="material-icons">star_border</i></th>
+            <th><i class="material-icons" style={{ verticalAlign: "bottom", color: "#31572C" }}>star_border</i></th>
           </tr>
         </thead>
         <tbody>
@@ -163,13 +163,13 @@ function Data(props) {
 
             return (
               <tr key={file.id}>
-                <td style={{ color: 'green' }}><Thumbnail file={file} /></td>
-                <td>{file[".tag"] === "folder" ? <Link to={`/home${file.path_display}`}>{file.name}</Link> : <span onClick={() => handleDownloadFile(file.name, file.path_display)} style={{ cursor: 'pointer', color: 'blue' }}>{file.name}</span>}</td>
+                <td style={{color: "#31572C"}}><Thumbnail file={file} /></td>
+                <td className="link">{file[".tag"] === "folder" ? <Link to={`/home${file.path_display}`}>{file.name}</Link> : <span onClick={() => handleDownloadFile(file.name, file.path_display)} style={{ cursor: 'pointer', color: '#31572C' }}>{file.name}</span>}</td>
                 <td>{file.server_modified ? handleLastModified(file.server_modified) : null}</td>
                 <td>{handleSize(file.size)}</td>
-                <td><Dropdown file={file} onDelete={props.onDelete} /></td>
-                <td>
-                  { favorite ? <FilledStar id={file.id} onClickRemoveFavorite={onClickRemoveFavorite}/> : <Star id={file.id} onClickAddFavorite={onClickAddFavorite}/>}
+                <td><Dropdown file={file} onDataChange={props.onDataChange} location={props.location} /></td>
+                <td className="link">
+                  { favorite ? <FilledStar id={file.id} onClickRemoveFavorite={onClickRemoveFavorite} /> : <Star id={file.id} onClickAddFavorite={onClickAddFavorite} />}
                 </td>
               </tr>
             )

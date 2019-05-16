@@ -34,7 +34,7 @@ const Thumbnail = props => {
     // filetype: folder
   } else if (props.file['.tag'] === 'folder') {
     return (
-      <i class="material-icons">folder</i>
+      <i class="material-icons">folder_open</i>
     )
   } else {
     return null

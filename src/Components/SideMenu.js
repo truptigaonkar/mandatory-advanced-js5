@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Button, Input } from 'reactstrap';
 import UploadFile from './UploadFile';
-import "./SideMenu.css";
 import CreateFolder from './CreateFolder';
 
 const asideStyle = {
@@ -16,7 +15,7 @@ const ulStyle = {
 }
 
 const liStyle = {
-  marginTop: "15px",
+  marginBottom: "15px",
   padding: "0",
   fontSize: "large"
 }

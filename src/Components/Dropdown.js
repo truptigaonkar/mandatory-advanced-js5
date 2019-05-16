@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import "./Dropdown.css"
-import Delete from "./Delete"
+import "./Dropdown.css";
+import Delete from "./Delete";
+import MoveFile from "./MoveFile";
 
 class Action extends Component {
   constructor(props) {
@@ -11,11 +12,14 @@ class Action extends Component {
       dropdownOpen: false,
       file: props.file,
       deleteModal: false,
-      onDelete: props.onDelete
+      moveModal: false,
+      onDataChange: props.onDataChange,
+      location: props.location
     };
 
     this.toggle = this.toggle.bind(this);
     this.deleteToggle = this.deleteToggle.bind(this);
+    this.moveToggle = this.moveToggle.bind(this);
   }
 
   toggle() {
@@ -30,7 +34,11 @@ class Action extends Component {
     }))  
   }
 
-  //onClick={() => { updateFileToDelete(file); toggleFolder() }}
+  moveToggle() {
+    this.setState(prevState => ({
+      moveModal: !prevState.moveModal
+    }))
+  }
 
   render() {
     return (
@@ -40,9 +48,9 @@ class Action extends Component {
       >
         <DropdownToggle color="primary" outline caret><i class="material-icons">more_horiz</i></DropdownToggle>
         <DropdownMenu>
-          <DropdownItem onClick={this.deleteToggle}><Delete file={this.state.file} toggle={this.state.deleteModal} onDelete={this.state.onDelete} />Delete</DropdownItem> 
+          <DropdownItem onClick={this.deleteToggle}><Delete file={this.state.file} toggle={this.state.deleteModal} onDataChange={this.state.onDataChange} />Delete</DropdownItem> 
           <DropdownItem>Rename</DropdownItem>
-          <DropdownItem>Move</DropdownItem>
+          <DropdownItem onClick={this.moveToggle}><MoveFile file={this.state.file} toggle={this.state.moveModal} onDataChange={this.state.onDataChange} location={this.state.location} />Move</DropdownItem>
           <DropdownItem>Copy</DropdownItem>
         </DropdownMenu>
       </Dropdown>

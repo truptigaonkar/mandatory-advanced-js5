@@ -42,17 +42,24 @@ function Home(props) {
     dropbox.filesListFolder({ path: currentLocation })
       .then(function (response) {
         updateData(response.entries);
+        console.log(response.entries);
+        
       })
       .catch(function (error) {
         console.error(error);
       })
   }
+
   useEffect(() => {
+      renderData();
+  }, [currentLocation]);
+
+  /* useEffect(() => {
     const poll = setInterval(() => {
       renderData();
     }, 3000);
     return() => clearInterval(poll);
-  }, [currentLocation]);
+  }, [currentLocation]); */
 
   // Fetch user name
   useEffect(() => {
@@ -79,7 +86,7 @@ function Home(props) {
     renderData();
   }
 
-  function onDelete() {
+  function onDataChange() {
     renderData()
   }
 
@@ -140,7 +147,7 @@ function Home(props) {
                   data={data}
                   updateData={updateData}
                   renderData={renderData}
-                  onDelete={onDelete} />
+                  onDataChange={onDataChange} />
               </Col>
             </Row>
           </TabPane>

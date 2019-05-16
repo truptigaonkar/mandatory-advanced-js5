@@ -17,12 +17,11 @@ const Delete = (props) => {
       const dropbox = new Dropbox({ accessToken: token$.value, fetch });
       dropbox.filesDeleteV2({ path: fileToDelete.path_lower })
         .then(response => {
-          console.log("delete response: ", response);
           let folderToDelete = currentFolder.filter((t) => {
             return file !== t;
           })
           setCurrentFolder(folderToDelete);
-          props.onDelete();
+          props.onDataChange();
           toggle();
         })
         .catch(err => {
