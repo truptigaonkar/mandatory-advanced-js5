@@ -129,7 +129,7 @@ function Data(props) {
   }
   /*------------------------------------- End Download files ---------------------------------------------*/
 
-/*------------------------------------- Rename ---------------------------------------------*/
+/*------------------------------------- Rename ---------------------------------------------
 
 const [fileToDelete, updateFileToDelete] = useState(null);
 const [currentFolder, setCurrentFolder] = useState([]);
@@ -197,12 +197,12 @@ function handleRename() {
     <>
 
 
-     {/* ------------------------------------- Rename --------------------------------------------- */}
+     {/* ------------------------------------- Rename --------------------------------------------- 
      <Modal isOpen={modal} toggle={toggleFolder} modalTransition={{ timeout: 700 }} backdropTransition={{ timeout: 1300 }} >
         <ModalHeader toggle={exitModal}>Rename file/folder</ModalHeader>
         <ModalBody>
           <FormGroup>
-            {/* <Label>Are you sure want to delete "{fileToDelete && fileToDelete.name}"?</Label> */}
+            {
             <Label for="name">Rename file/folder</Label>
               <Input type="text" placeholder="Folder name" onChange={handleFolderName} value={folderName} />
           </FormGroup>
@@ -212,7 +212,7 @@ function handleRename() {
           <Button color="secondary" onClick={exitModal}>Cancel</Button>
         </ModalFooter>
       </Modal>
-      {/* ------------------------------------- End Rename --------------------------------------------- */}
+       ------------------------------------- End Rename --------------------------------------------- */}
 
 
       {/* ------------------------------------------ Search ----------------------------------------------- */}
@@ -245,6 +245,8 @@ function handleRename() {
               }
             }
 
+            //<Button file={file} onClick={() => { updateFileToDelete(file); toggleFolder() }}>Rename</Button>
+
             return (
               <tr key={file.id}>
                 <td style={{color: "#31572C"}}><Thumbnail file={file} /></td>
@@ -252,7 +254,7 @@ function handleRename() {
                 <td>{file.server_modified ? handleLastModified(file.server_modified) : null}</td>
                 <td>{handleSize(file.size)}</td>
                 
-                <td><Button file={file} onClick={() => { updateFileToDelete(file); toggleFolder() }}>Rename</Button><Dropdown file={file} onDataChange={props.onDataChange} location={props.location} /></td>
+                <td><Dropdown file={file} onDataChange={props.onDataChange} location={props.location} /></td>
                 <td className="link">
                   { favorite ? <FilledStar id={file.id} onClickRemoveFavorite={onClickRemoveFavorite} /> : <Star id={file.id} onClickAddFavorite={onClickAddFavorite} />}
                 </td>
