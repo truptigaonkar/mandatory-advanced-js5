@@ -152,8 +152,6 @@ function Data(props) {
         <tbody>
           {props.data.map(file => {
 
-            console.log(file);
-
             //Favorite logic
             let favorite = false;
             for (let object of favorites) {
