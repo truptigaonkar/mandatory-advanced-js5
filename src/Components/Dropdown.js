@@ -44,7 +44,7 @@ class Action extends Component {
           <DropdownItem onClick={this.deleteToggle}><Delete file={this.state.file} toggle={this.state.deleteModal} onDelete={this.state.onDelete} />Delete</DropdownItem>
           <DropdownItem>Rename</DropdownItem>
           <DropdownItem>Move</DropdownItem>
-          <DropdownItem onClick={this.onClickCopy}><Copy file={this.props.file}/></DropdownItem>
+          <DropdownItem>Copy</DropdownItem>
         </DropdownMenu>
       </Dropdown>
     )
