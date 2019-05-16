@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import "./Dropdown.css"
-import Delete from "./Delete"
+import "./Dropdown.css";
+import Delete from "./Delete";
+import { Copy } from './Copy.js';
 
 class Action extends Component {
   constructor(props) {
@@ -27,7 +28,7 @@ class Action extends Component {
   deleteToggle() {
     this.setState(prevState => ({
       deleteModal: !prevState.deleteModal
-    }))  
+    }))
   }
 
   //onClick={() => { updateFileToDelete(file); toggleFolder() }}
@@ -40,10 +41,10 @@ class Action extends Component {
       >
         <DropdownToggle color="primary" outline caret><i class="material-icons">more_horiz</i></DropdownToggle>
         <DropdownMenu>
-          <DropdownItem onClick={this.deleteToggle}><Delete file={this.state.file} toggle={this.state.deleteModal} onDelete={this.state.onDelete} />Delete</DropdownItem> 
+          <DropdownItem onClick={this.deleteToggle}><Delete file={this.state.file} toggle={this.state.deleteModal} onDelete={this.state.onDelete} />Delete</DropdownItem>
           <DropdownItem>Rename</DropdownItem>
           <DropdownItem>Move</DropdownItem>
-          <DropdownItem>Copy</DropdownItem>
+          <DropdownItem onClick={this.onClickCopy}><Copy file={this.props.file}/></DropdownItem>
         </DropdownMenu>
       </Dropdown>
     )
