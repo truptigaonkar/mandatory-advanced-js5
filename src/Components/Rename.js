@@ -30,7 +30,6 @@ const Rename = (props) => {
   function exitModal() {
     updateModal(false)
   }
-  
 
   // Handle input
   function handleFolderName(e) {
@@ -47,36 +46,39 @@ const Rename = (props) => {
   }
   */
 
-  function handleRename() {
-    console.log('rename test');
-    /* const currentPath = props.location.pathname.substr(5);
+  function handleRename(file) {
+    //const currentPath = props.location.pathname.substr(5);
+    const beforePath = file.path_lower;
+    let afterPath = newName;
+    afterPath = `/${afterPath}`;
+    /*
     let fileData = JSON.parse(JSON.stringify(renameFileData))
     let newPath = fileData.path;
     newPath = newPath.split('/');
     newPath[newPath.length - 1] = fileData.fileName;
     newPath = newPath.join('/');
+    */
 
-    const dbx = new Dropbox({ accessToken: token$.value, fetch });
-    dbx.filesMoveV2({
-      from_path: fileData.path,
-      to_path: newPath,
+    const dropbox = new Dropbox({ accessToken: token$.value, fetch });
+    dropbox.filesMoveV2({
+      from_path: beforePath,
+      to_path: afterPath,
+      autorename: true
     })
       .then((res) => {
-        let renamedFile = res.metadata
-        const dbx = new Dropbox({ accessToken: token$.value, fetch });
-        dbx.filesListFolder({ path: currentPath })
+        //let renamedFile = res.metadata
+        dropbox.filesListFolder({ path: afterPath })
           .then(res => {
-            //updateFavorites(renamedFile);
-            setCurrentFolder(res.entries);
-            updateModal(true)
+            //setCurrentFolder(res.entries);
+            props.onDataChange();
+            toggle();
           })
-      }) */
+      }) 
 
   }
 
 /*
   <FormGroup>
-            
             <Label for="name">Rename {fileToRename}</Label>
             <Input type="text" placeholder="Folder name" onChange={handleFolderName} value={folderName} />
           </FormGroup>
@@ -101,7 +103,6 @@ const Rename = (props) => {
       </Modal>
     </>
   )
-
 }
 
 export default Rename;
