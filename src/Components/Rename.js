@@ -7,10 +7,10 @@ const Rename = (props) => {
 
   const [modal, updateModal] = useState(props.toggle);
   const [newName, updateNewName] = useState("");
-  const [fileToRename, updateFileToRename] = useState(props.file);
-  const [currentFolder, setCurrentFolder] = useState([]);
-  const [folderName, updateFolderName] = useState("");
-  const [renameFileData, setRenameFileData] = useState({});
+  //const [fileToRename, updateFileToRename] = useState(props.file);
+  //const [currentFolder, setCurrentFolder] = useState([]);
+  //const [folderName, updateFolderName] = useState("");
+  //const [renameFileData, setRenameFileData] = useState({});
 
   function toggle() {
     updateModal(!modal)
@@ -46,13 +46,11 @@ const Rename = (props) => {
   }
   */
 
-  function handleRename(file) {
-    //const currentPath = props.location.pathname.substr(5);
-    const beforePath = file.path_lower;
+  function handleFolderRename(folder) {
+    const beforePath = folder.path_lower;
     let afterPath = newName;
     afterPath = `/${afterPath}`;
     /*
-    let fileData = JSON.parse(JSON.stringify(renameFileData))
     let newPath = fileData.path;
     newPath = newPath.split('/');
     newPath[newPath.length - 1] = fileData.fileName;
@@ -65,8 +63,7 @@ const Rename = (props) => {
       to_path: afterPath,
       autorename: true
     })
-      .then((res) => {
-        //let renamedFile = res.metadata
+      .then(res => {
         dropbox.filesListFolder({ path: afterPath })
           .then(res => {
             //setCurrentFolder(res.entries);
@@ -93,11 +90,11 @@ const Rename = (props) => {
       <Modal isOpen={modal} toggle={toggle} modalTransition={{ timeout: 700 }} backdropTransition={{ timeout: 1300 }} >
         <ModalHeader toggle={toggle}>Rename file/folder</ModalHeader>
         <ModalBody>
-          Please specify a new name
+          New name for {props.file.name} (include extentions for files)
           <Input onChange={(e) => { updateNewName(e.target.value); }} value={newName} placeholder="New name" />
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={() => handleRename(props.file)}>Rename</Button>{' '}
+          <Button color="primary" onClick={() => handleFolderRename(props.file)}>Rename</Button>{' '}
           <Button color="secondary" onClick={toggle}>Cancel</Button>
         </ModalFooter>
       </Modal>
