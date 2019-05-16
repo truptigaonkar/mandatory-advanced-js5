@@ -31,7 +31,7 @@ const AllFolders = (props) => {
 
   /* const allfolders = folders.map(folder =>
     <option key={folder.path} value={folder.path}>{folder.name}</option>
-  ); */
+  );
   //console.log("data", data);
 
   function onChangeGetFolder(event) {
@@ -39,7 +39,7 @@ const AllFolders = (props) => {
     props.updateToFolder(event.target.value);
   }
 
-  console.log('Folders in MoveFile: ', folders);
+  //console.log('Folders in MoveFile: ', folders);
 
   return (
     <>
@@ -51,6 +51,7 @@ const AllFolders = (props) => {
       </form>
     </>
   )
+
 }
 
 const MoveFile = (props) => {
