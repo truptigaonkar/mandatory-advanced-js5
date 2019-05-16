@@ -6,7 +6,8 @@ function Breadcrumbs(props) {
   let pathElements = props.path.substring(1).split("/");
   const directoryLinks = pathElements.map((directory, idx) => {
     linkToDirectory += `/${directory}`;
-    return <BreadcrumbItem active={idx === pathElements.length - 1} tag="a" href={linkToDirectory}>{idx === 0 ? "Home" : directory}</BreadcrumbItem>
+    let link = `/mandatory-advanced-js5${linkToDirectory}`
+    return <BreadcrumbItem active={idx === pathElements.length - 1} tag="a" href={link}>{idx === 0 ? "Home" : directory}</BreadcrumbItem>
   })
 
   return (

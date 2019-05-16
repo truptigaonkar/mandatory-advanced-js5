@@ -52,14 +52,14 @@ function Home(props) {
 
   useEffect(() => {
       renderData();
-  }, [currentLocation]);
+  }, []);
 
-  /* useEffect(() => {
+  useEffect(() => {
     const poll = setInterval(() => {
       renderData();
     }, 3000);
     return() => clearInterval(poll);
-  }, [currentLocation]); */
+  }, [currentLocation]); 
 
   // Fetch user name
   useEffect(() => {
