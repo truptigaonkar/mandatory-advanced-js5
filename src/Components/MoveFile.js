@@ -2,6 +2,7 @@ import React, { Component, useState, useEffect } from "react";
 import { Dropbox } from "dropbox";
 import { token$, updateToken } from "../store";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import FolderList from "./FolderList.js";
 
 const AllFolders = (props) => {
   const [data, updateData] = useState([]);
@@ -29,9 +30,9 @@ const AllFolders = (props) => {
       })
   },[]);
 
-  const allfolders = folders.map(folder => 
+  /* const allfolders = folders.map(folder => 
     <option key={folder.path} value={folder.path}>{folder.name}</option>
-  );
+  ); */
   //console.log("data", data);
   
   function onChangeGetFolder(event) {
@@ -44,7 +45,7 @@ const AllFolders = (props) => {
       <form>
         <select name="folder" onChange={onChangeGetFolder}>
           <option value="">Select Folder</option>
-          {allfolders}
+          <FolderList folders={folders} />
         </select>
       </form>
     </>
