@@ -3,6 +3,8 @@ import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap
 import "./Dropdown.css";
 import Delete from "./Delete";
 import MoveFile from "./MoveFile";
+import { token$ } from "../store.js";
+import { Dropbox } from 'dropbox';
 
 class Action extends Component {
   constructor(props) {
@@ -31,13 +33,24 @@ class Action extends Component {
   deleteToggle() {
     this.setState(prevState => ({
       deleteModal: !prevState.deleteModal
-    }))  
+    }))
   }
 
   moveToggle() {
     this.setState(prevState => ({
       moveModal: !prevState.moveModal
     }))
+  }
+
+  handleCopy(file) {
+    let path = file.path_lower;
+    const dropbox = new Dropbox({ accessToken: token$.value, fetch });
+    dropbox.filesCopy({
+      from_path: path,
+      to_path: path,
+      allow_shared_folder: true,
+      autorename: true,
+    });
   }
 
   render() {
@@ -51,7 +64,7 @@ class Action extends Component {
           <DropdownItem onClick={this.deleteToggle}><Delete file={this.state.file} toggle={this.state.deleteModal} onDataChange={this.state.onDataChange} />Delete</DropdownItem> 
           <DropdownItem>Rename</DropdownItem>
           <DropdownItem onClick={this.moveToggle}><MoveFile file={this.state.file} toggle={this.state.moveModal} onDataChange={this.state.onDataChange} location={this.state.location} />Move</DropdownItem>
-          <DropdownItem>Copy</DropdownItem>
+          <DropdownItem onClick={() => this.handleCopy(this.state.file)}>Copy</DropdownItem>
         </DropdownMenu>
       </Dropdown>
     )
