@@ -29,9 +29,9 @@ const AllFolders = (props) => {
       })
   },[]);
 
-  /* const allfolders = folders.map(folder =>
-    <option key={folder.path} value={folder.path}>{folder.name}</option>
-  );
+  // const allfolders = folders.map(folder =>
+  //   <option key={folder.path} value={folder.path}>{folder.name}</option>
+  // );
   //console.log("data", data);
 
   function onChangeGetFolder(event) {
@@ -66,17 +66,20 @@ const MoveFile = (props) => {
     updateModal(!modal)
   }
 
-  function handleMoveFile(fileToMove) {
+  function handleMoveFile() {
     const dropbox = new Dropbox({ accessToken: token$.value, fetch });
-    let to_path = toFolder;
+    let to_path = toFolder + fileToMove.path_lower;
     if (to_path === "/") {
       to_path = "";
     }
-    console.log(fileToMove.path_lower, to_path);
+
+    console.log('fileToMove: ', fileToMove);
+    console.log('fileToMove.path_lower: ', fileToMove.path_lower);
+    console.log('to_path: ', to_path);
+
     dropbox.filesMoveV2({ from_path: fileToMove.path_lower, to_path: to_path, autorename: false })
     .then(response => {
       console.log("response", response);
-
       props.onDataChange();
       toggle();
     })
@@ -93,7 +96,7 @@ const MoveFile = (props) => {
           Move "{fileToMove && fileToMove.name}" to <AllFolders updateToFolder={updateToFolder} />
         </ModalBody>
         <ModalFooter>
-          <Button color="success" onClick={() => handleMoveFile(props.file)}>Move</Button>{' '}
+          <Button color="success" onClick={handleMoveFile}>Move</Button>{' '}
           <Button color="secondary" onClick={toggle}>Cancel</Button>
         </ModalFooter>
       </Modal>
