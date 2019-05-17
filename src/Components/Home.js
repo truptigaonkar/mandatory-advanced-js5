@@ -42,7 +42,7 @@ function Home(props) {
       .then(function (response) {
         updateData(response.entries);
         console.log(response.entries);
-        
+
       })
       .catch(function (error) {
         console.error(error);
@@ -67,7 +67,7 @@ function Home(props) {
       renderData();
     }, 3000);
     return() => clearInterval(poll);
-  }, [currentLocation]); 
+  }, [currentLocation]);
 
   // Fetch user name
   useEffect(() => {
@@ -95,7 +95,7 @@ function Home(props) {
   }
 
   function onDataChange() {
-    renderData()
+    renderData();
   }
 
   function logOut(e) {

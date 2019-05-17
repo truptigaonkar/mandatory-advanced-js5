@@ -68,14 +68,13 @@ const MoveFile = (props) => {
   }
   */
 
-  function handleMoveFile(fileToMove) {    
+  function handleMoveFile() {
     const dropbox = new Dropbox({ accessToken: token$.value, fetch });
     let to_path = `${toFolder}/${fileToMove.path_lower.split("/").pop()}`;
 
     dropbox.filesMoveV2({ from_path: fileToMove.path_lower, to_path: to_path, autorename: false })
     .then(response => {
       console.log("response", response);
-      
       props.onDataChange();
       toggle();
     })
@@ -102,7 +101,7 @@ const MoveFile = (props) => {
           Move "{fileToMove && fileToMove.name}" to <AllFolders updateToFolder={updateToFolder} />
         </ModalBody>
         <ModalFooter>
-          <Button color="success" onClick={() => handleMoveFile(props.file)}>Move</Button>{' '}
+          <Button color="success" onClick={handleMoveFile}>Move</Button>{' '}
           <Button color="secondary" onClick={toggle}>Cancel</Button>
         </ModalFooter>
       </Modal>
