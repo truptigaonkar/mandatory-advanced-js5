@@ -18,6 +18,7 @@ class Action extends Component {
       renameModal: false,
       moveModal: false,
       onDataChange: props.onDataChange,
+      renderAfterMove: props.renderAfterMove,
       location: props.location
     };
 
@@ -72,7 +73,7 @@ class Action extends Component {
         <DropdownMenu>
           <DropdownItem onClick={this.deleteToggle}><Delete file={this.state.file} toggle={this.state.deleteModal} onDataChange={this.state.onDataChange} />Delete</DropdownItem> 
           <DropdownItem onClick={this.renameToggle}><Rename file={this.state.file} toggle={this.state.renameModal} onDataChange={this.state.onDataChange} location={this.state.location} />Rename</DropdownItem>
-          <DropdownItem onClick={this.moveToggle}><MoveFile file={this.state.file} toggle={this.state.moveModal} onDataChange={this.state.onDataChange} location={this.state.location} />Move</DropdownItem>
+          <DropdownItem onClick={this.moveToggle}><MoveFile file={this.state.file} toggle={this.state.moveModal} onDataChange={this.state.onDataChange} renderAfterMove={this.state.renderAfterMove} location={this.state.location} />Move</DropdownItem>
           <DropdownItem onClick={() => this.handleCopy(this.state.file)}>Copy</DropdownItem>
         </DropdownMenu>
       </Dropdown>

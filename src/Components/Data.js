@@ -166,7 +166,7 @@ function Data(props) {
                 <td>{file.server_modified ? handleLastModified(file.server_modified) : null}</td>
                 <td>{handleSize(file.size)}</td>
 
-                <td><Dropdown file={file} onDataChange={props.onDataChange} location={props.location} style={{ zIndex: "2" }} /></td>
+                <td><Dropdown file={file} onDataChange={props.onDataChange} renderAfterMove={props.renderAfterMove} location={props.location} style={{ zIndex: "2" }} /></td>
                 <td className="link">
                   {favorite ? <FilledStar id={file.id} onClickRemoveFavorite={onClickRemoveFavorite} /> : <Star id={file.id} onClickAddFavorite={onClickAddFavorite} />}
                 </td>

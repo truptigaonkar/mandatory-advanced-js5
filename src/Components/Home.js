@@ -49,6 +49,26 @@ function Home(props) {
       })
   }
 
+  function renderAfterMove(afterPath) {
+    if(currentLocation === "/favorites") {
+      return;
+    }
+
+    const dropbox = new Dropbox({ accessToken: token, fetch });
+    if (currentLocation === "/") {
+      currentLocation = "";
+    }
+    dropbox.filesListFolder({ path: afterPath })
+      .then(function (response) {
+        updateData(response.entries);
+        console.log(response.entries);
+
+      })
+      .catch(function (error) {
+        console.error(error);
+      })
+  }
+
   useEffect(() => {
       renderData();
   }, []);
@@ -150,7 +170,9 @@ function Home(props) {
                   data={data}
                   updateData={updateData}
                   renderData={renderData}
-                  onDataChange={onDataChange} />
+                  onDataChange={onDataChange}
+                  renderAfterMove={renderAfterMove}
+                  on />
               </Col>
             </Row>
           </TabPane>

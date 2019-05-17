@@ -70,12 +70,12 @@ const MoveFile = (props) => {
 
   function handleMoveFile() {
     const dropbox = new Dropbox({ accessToken: token$.value, fetch });
-    let to_path = `${toFolder}/${fileToMove.path_lower.split("/").pop()}`;
+    let to_path = `${toFolder}/${fileToMove.path_display.split("/").pop()}`;
 
-    dropbox.filesMoveV2({ from_path: fileToMove.path_lower, to_path: to_path, autorename: false })
-    .then(response => {
-      console.log("response", response);
-      props.onDataChange();
+    dropbox.filesMoveV2({ from_path: fileToMove.path_display, to_path: to_path, autorename: false })
+    .then(res => {
+      window.location.pathname = `/home${toFolder}`;
+      props.renderAfterMove(toFolder);
       toggle();
     })
     .catch(err => {
