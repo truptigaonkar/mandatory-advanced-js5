@@ -1,59 +1,36 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Dropbox } from "dropbox";
 import { token$, updateToken } from "../store";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import FolderList from "./FolderList.js";
 
 const AllFolders = (props) => {
-  const [data, updateData] = useState([]);
   const [folders, updateFolders] = useState([]);
   const [token, updateTokenState] = useState(token$.value);
-  //const [destinationFolder, updateDestinationFolder] = useState("");
   const path = "";
 
   useEffect(() => {
     const dropbox = new Dropbox({ accessToken: token, fetch });
     dropbox.filesListFolder({ path: path, recursive: true })
       .then(function (response) {
-        updateData(response.entries);
         let folderList = [];
-        for (let element of data) {
+        for (let element of response.entries) {
           if (element[".tag"] === "folder") {
             folderList.push({ name: element.name, path: element.path_lower })
           }
         }
-        //console.log("folderList", folderList);
         updateFolders(folderList);
       })
       .catch(function (error) {
         console.error(error);
       })
   },[]);
-
-  const allfolders = folders.map(folder => 
-    <option key={folder.path} value={folder.path}>{folder.name}</option>
-  ); 
-  //console.log("data", data);
   
   function onChangeGetFolder(event) {
     console.log(event.target.value);
     props.updateToFolder(event.target.value);
   }
 
-  /* Without FolderList Component
-  return (
-    <>
-      <form>
-        <select name="folder" onChange={onChangeGetFolder}>
-          <option value="">Select Folder</option>
-          {allfolders}
-        </select>
-      </form>
-    </>
-  )
-  */
- 
-/* With FolderList Component*/
   return (
     <>
       <form>
@@ -64,7 +41,6 @@ const AllFolders = (props) => {
       </form>
     </>
   )
-
 }
 
 const MoveFile = (props) => {
@@ -73,19 +49,29 @@ const MoveFile = (props) => {
   const [toFolder, updateToFolder] = useState("");
   const [currentFolder, setCurrentFolder] = useState([]);
 
-  //let currentLocation = props.location.pathname.substring(5);
-
   function toggle() {
     updateModal(!modal)
   }
+/*
+  function handleMoveFolder(fileToMove) {
+    const dropbox = new Dropbox({ accessToken: token$.value, fetch });
+    let to_path = toFolder;
+
+    dropbox.filesMoveV2({ from_path: fileToMove.path_lower, to_path: to_path, autorename: false })
+    .then(response => {
+      props.onDataChange();
+      toggle();
+    })
+    .catch(err => {
+      console.error(err);
+    })
+  }
+  */
 
   function handleMoveFile(fileToMove) {    
     const dropbox = new Dropbox({ accessToken: token$.value, fetch });
-    let to_path = toFolder;
-    if (to_path === "/") {
-      to_path = "";
-    }
-    console.log(fileToMove.path_lower, to_path);
+    let to_path = `${toFolder}/${fileToMove.path_lower.split("/").pop()}`;
+
     dropbox.filesMoveV2({ from_path: fileToMove.path_lower, to_path: to_path, autorename: false })
     .then(response => {
       console.log("response", response);
@@ -97,6 +83,16 @@ const MoveFile = (props) => {
       console.error(err);
     })
   }
+/*
+  function handleMove(file) {
+    if (file[".tag"] === "folder") {
+      handleMoveFolder(file);
+    }
+    else {
+      handleMoveFile(file);
+    }
+  }
+  */
 
   return (
     <>

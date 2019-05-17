@@ -23,7 +23,7 @@ const usernameStyle = {
 function SideMenu(props) {
   return (
     <aside style={asideStyle}>
-      <ButtonGroup vertical>
+      <ButtonGroup vertical className="menu">
         <UploadFile onUpload={props.onUpload} location={props.location} file={props.file} />
         <CreateFolder onNewFolder={props.onNewFolder} location={props.location} />
       </ButtonGroup>

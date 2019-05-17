@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, Route } from "react-router-dom";
-import { Table, TabContent, TabPane, Nav, NavItem, NavLink, Button, Row, Col, Input } from "reactstrap";
+import { TabContent, TabPane, Nav, NavItem, NavLink, Row, Col } from "reactstrap";
 import { Dropbox } from "dropbox";
 import { token$, updateToken, removeAllFavorites } from "../store";
 import { Redirect } from "react-router-dom";
-import moment from "moment";
 import Data from "./Data";
 import Favorite from "./Favorite";
 import SideMenu from "./SideMenu";
@@ -54,7 +53,16 @@ function Home(props) {
       renderData();
   }, []);
 
+//Without polling
+/*
   useEffect(() => {
+      renderData();
+  }, [currentLocation]); 
+*/
+
+//Continuous update with polling
+  useEffect(() => {
+    renderData();
     const poll = setInterval(() => {
       renderData();
     }, 3000);
@@ -135,11 +143,6 @@ function Home(props) {
         </Nav>
         <TabContent activeTab={activeTab}>
           <TabPane tabId="1">
-            <Row>
-              <Col sm="12">
-                {/*<Breadcrumbs path={props.location.pathname} />*/}
-              </Col>
-            </Row>
             <Row>
               <Col sm="12">
                 <Data

@@ -9,7 +9,7 @@ import Dropdown from './Dropdown';
 import { Star } from './Star.js';
 import { FilledStar } from './FilledStar.js';
 import Thumbnail from './Thumbnail';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label } from "reactstrap";
+import moment from 'moment';
 
 function Data(props) {
   const [modal, updateModal] = useState(false);
@@ -77,7 +77,6 @@ function Data(props) {
     updateFavoriteObservable(filteredFavorites);
   }
 
-
   /*------------------------------------- Render table data ---------------------------------------------*/
   // Table data Last modified calculations
   function handleLastModified(date) {
@@ -96,7 +95,7 @@ function Data(props) {
     day = day.replace(/^0+/, '');
     let monthShow = months[month - 1];
 
-    return <label>{day + ' ' + monthShow + ' ' + year}</label>
+    return <label>{day + ' ' + monthShow + ' ' + year + ', ' + moment(date).fromNow()}</label>
   }
 
   // Table data size calculations in Bytes, KB, MB, GB, TB, PB, EB, ZB, YB
@@ -129,100 +128,16 @@ function Data(props) {
   }
   /*------------------------------------- End Download files ---------------------------------------------*/
 
-/*------------------------------------- Rename ---------------------------------------------
-
-const [fileToDelete, updateFileToDelete] = useState(null);
-const [currentFolder, setCurrentFolder] = useState([]);
-const [folderName, updateFolderName] = useState("");
-const [renameFileData, setRenameFileData] = useState({});
-
-function toggleFolder(file) {
-  // let fileData = {
-  //   fileName: file.name,
-  //   path: file.path_display,
-  // }
-  // setRenameFileData(fileData);
-  updateModal(true)
-  
-}
-
-//Closing modal
-function exitModal() {
-  updateModal(false)
-}
-
-  // Handle input
-  function handleFolderName(e) {
-  
-      // let fileData = {
-  //   fileName: file.name,
-  //   path: file.path_display,
-  // }
-  // setRenameFileData(fileData);
-    console.log("console log input value: ", e.target.value);
-    let fileData = JSON.parse(JSON.stringify(renameFileData));
-    fileData.fileName = e.target.value;
-    updateFolderName(fileData);
-  }
-
-function handleRename() {
-  console.log('rename test');
-  const currentPath = props.location.pathname.substr(5);
-  let fileData = JSON.parse(JSON.stringify(renameFileData))
-  let newPath = fileData.path;
-  newPath = newPath.split('/');
-  newPath[newPath.length - 1] = fileData.fileName;
-  newPath = newPath.join('/');
-
-  const dbx = new Dropbox({accessToken: token$.value, fetch});
-  dbx.filesMoveV2({
-    from_path: fileData.path,
-    to_path: newPath,
-  })
-  .then((res) => {
-    let renamedFile = res.metadata
-    const dbx = new Dropbox({accessToken: token$.value, fetch});
-    dbx.filesListFolder({path: currentPath})
-    .then(res => {
-      updateFavorites(renamedFile);
-      setCurrentFolder(res.entries);
-      updateModal(true)
-    })
-  })
-  
-}
-------------------------------------- End Rename ---------------------------------------------*/
-
   return (
     <>
-
-
-     {/* ------------------------------------- Rename --------------------------------------------- 
-     <Modal isOpen={modal} toggle={toggleFolder} modalTransition={{ timeout: 700 }} backdropTransition={{ timeout: 1300 }} >
-        <ModalHeader toggle={exitModal}>Rename file/folder</ModalHeader>
-        <ModalBody>
-          <FormGroup>
-             <Label>Are you sure want to delete "{fileToDelete && fileToDelete.name}"?</Label> 
-            <Label for="name">Rename file/folder</Label>
-              <Input type="text" placeholder="Folder name" onChange={handleFolderName} value={folderName} />
-          </FormGroup>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={() => handleRename(props.file)}>Rename</Button>{' '}
-          <Button color="secondary" onClick={exitModal}>Cancel</Button>
-        </ModalFooter>
-      </Modal>
-      ------------------------------------- End Rename --------------------------------------------- */}
-
-
       {/* ------------------------------------------ Search ----------------------------------------------- */}
-      <div style={{ position:"relative", width: "100%" }}>
+      <div style={{ position: "relative", width: "100%" }}>
         <Breadcrumbs path={props.location.pathname} />
-        <Input type="text" size="lg" placeholder="Search" onChange={(e) => { updateSearch(e.target.value); }} value={props.search} style={{ position: "absolute", width: "30%", minWidth: "150px", right: "0px", top: "-1px" }} />
+        <Input type="text" size="lg" placeholder="Search" onChange={(e) => { updateSearch(e.target.value); }} style={{ position: "absolute", width: "30%", minWidth: "150px", right: "0px", top: "-1px" }} />
       </div>
 
       {/* Table file/folder data */}
-      <Table>
+      <Table hover responsive>
         <thead>
           <tr>
             <th>Type</th>
@@ -244,17 +159,16 @@ function handleRename() {
                 break;
               }
             }
-
             return (
               <tr key={file.id}>
-                <td style={{color: "#31572C"}}><Thumbnail file={file} /></td>
+                <td style={{ color: "#31572C" }}><Thumbnail file={file} /></td>
                 <td className="link">{file[".tag"] === "folder" ? <Link to={`/home${file.path_display}`}>{file.name}</Link> : <span onClick={() => handleDownloadFile(file.name, file.path_display)} style={{ cursor: 'pointer', color: '#31572C' }}>{file.name}</span>}</td>
                 <td>{file.server_modified ? handleLastModified(file.server_modified) : null}</td>
                 <td>{handleSize(file.size)}</td>
-                
-                <td><Button file={file} >Rename</Button><Dropdown file={file} onDataChange={props.onDataChange} location={props.location} /></td>
+
+                <td><Dropdown file={file} onDataChange={props.onDataChange} location={props.location} style={{ zIndex: "2" }} /></td>
                 <td className="link">
-                  { favorite ? <FilledStar id={file.id} onClickRemoveFavorite={onClickRemoveFavorite} /> : <Star id={file.id} onClickAddFavorite={onClickAddFavorite} />}
+                  {favorite ? <FilledStar id={file.id} onClickRemoveFavorite={onClickRemoveFavorite} /> : <Star id={file.id} onClickAddFavorite={onClickAddFavorite} />}
                 </td>
               </tr>
             )
@@ -266,5 +180,3 @@ function handleRename() {
 }
 
 export default Data;
-
-//onClick={() => { updateFileToDelete(file); toggleFolder() }}
