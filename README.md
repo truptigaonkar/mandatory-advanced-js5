@@ -1,5 +1,7 @@
 # Group assignment - Advanced JavaScript with React - TEACup-File Hosting Service
 
+## Deployment: Deployed using gh-pages: https://ayumina.github.io/mandatory-advanced-js5/
+
 ## Group members:
 * Trupti Gaonkar
 * Elin Björnetorp
