@@ -1,11 +1,10 @@
-# TEACup-File Hosting Service
-## Group assignment - Advanced JavaScript with React
-### Demo: [TEACup-File Hosting Service](https://ayumina.github.io/mandatory-advanced-js5/)
-## Group members:
+## TEACup-File Hosting Service - [Live Demo]( https://ayumina.github.io/mandatory-advanced-js5/)
+### Group assignment - Advanced JavaScript with React
+### Group members:
    * Trupti Gaonkar
    * Elin Björnetorp
    * Ayumi Nakamura
-## Instructions
+### Instructions
 * Create a web application that uses the Dropbox API. Dropbox (https://www.dropbox.com/) is a very popular cloud-based file storage service.
 * It allows users to sign in and view/manage their files, similar to the functionality in the actual Dropbox web service.
 * The interface contains the following:
