@@ -1,4 +1,7 @@
 ## TEACup-File Hosting Service - [Live Demo]( https://ayumina.github.io/mandatory-advanced-js5/)
+
+<img width="600" src="https://user-images.githubusercontent.com/14937374/79688036-a758e380-824b-11ea-9a22-97c87a2ca0eb.gif">
+
 ### Group assignment - Advanced JavaScript with React
 ### Group members:
    * Trupti Gaonkar
